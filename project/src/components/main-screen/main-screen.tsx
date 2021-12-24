@@ -19,6 +19,7 @@ function  MainScreen(): JSX.Element {
             <CatalogFilter />
             <CatalogSort />
             <div className="cards catalog__cards">
+              {}
               <ProductCard />
               <ProductCard />
               <ProductCard />

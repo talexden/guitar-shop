@@ -1,4 +1,4 @@
-import axios, {AxiosInstance, AxiosResponse, AxiosRequestConfig, AxiosError} from 'axios';
+import axios, {AxiosInstance} from 'axios';
 
 const BACKEND_URL = 'https://accelerator-guitar-shop-api-v1.glitch.me';
 const REQUEST_TIMEOUT = 5000;
