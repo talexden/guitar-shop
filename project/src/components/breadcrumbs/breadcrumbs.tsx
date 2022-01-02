@@ -1,5 +1,5 @@
 import {Link} from 'react-router-dom';
-import {AppRoute} from '../../const';
+import {AppRoute} from '../../common/const';
 
 function  Breadcrumbs(): JSX.Element {
   return (

@@ -9,7 +9,7 @@ export type Guitar = {
   previewImg: '',
   stringCount: number,
   rating: number,
-  price: number
+  price: number,
 };
 
 export type Comment = {
@@ -43,6 +43,7 @@ export type AppData = {
   guitars: Guitar[],
   guitarsById: Guitar | null,
   comments: Comment[],
+  isLoading: boolean,
 }
 
 export type AppProcess = {

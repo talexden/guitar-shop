@@ -12,7 +12,8 @@ const initialState: AppProcess = {
 export const appProcess = createReducer(initialState, (builder)=>{
   builder
     .addCase(setSortedGuitars, (state, action) => {
-      state.sortedGuitars = action.payload;
+      const {guitars} = action.payload;
+      state.sortedGuitars = guitars;
     });
 });
 

@@ -1,3 +1,4 @@
+import {StyleClassName} from '../../common/const';
 import Logo from '../logo/logo';
 
 const TAB_INDEX = 0;
@@ -6,7 +7,9 @@ function Header (): JSX.Element {
   return (
     <header className="header" id="header">
       <div className="container header__wrapper">
-        <Logo />
+
+        <Logo className={StyleClassName.HeaderLogo}/>
+
         <nav className="main-nav">
           <ul className="main-nav__list">
             <li>
@@ -24,7 +27,7 @@ function Header (): JSX.Element {
           <form className="form-search__form">
             <button className="form-search__submit" type="submit">
               <svg className="form-search__icon" width="14" height="15" aria-hidden="true">
-                <use href="#icon-search"></use>
+                <use xlinkHref="img/sprite_auto.svg#icon-search" />
               </svg>
               <span className="visually-hidden">Начать поиск</span>
             </button>
@@ -42,7 +45,7 @@ function Header (): JSX.Element {
         </div>
         <a className="header__cart-link" href="#top" aria-label="Корзина">
           <svg className="header__cart-icon" width="14" height="14" aria-hidden="true">
-            <use href="#icon-basket" />
+            <use xlinkHref="img/sprite_auto.svg#icon-basket" />
           </svg>
           <span className="visually-hidden">Перейти в корзину</span>
           <span className="header__cart-count">2</span>

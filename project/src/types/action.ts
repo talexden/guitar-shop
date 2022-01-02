@@ -4,9 +4,11 @@ import {State} from './state';
 import {Action} from 'redux';
 
 export enum ActionType {
+  SetIsLoading = 'data/setIsLoading',
+  SetIsLoaded = 'data/setIsLoaded',
   SetGuitars = 'data/setGuitars',
   SetSortedGuitars = 'data/setSortedGuitars',
-  RedirectToRoute = 'game/redirectToRoute',
+  RedirectToRoute = 'app/redirectToRoute',
 }
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, State, AxiosInstance, Action>;

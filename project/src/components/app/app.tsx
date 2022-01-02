@@ -2,7 +2,7 @@ import {Switch, Route, Router as BrowserRouter} from 'react-router-dom';
 import MainScreen from '../main-screen/main-screen';
 import ErrorScreen from '../error-screen/error-screen';
 import browserHistory from '../../browser-history';
-import {AppRoute} from '../../const';
+import {AppRoute} from '../../common/const';
 
 function App(): JSX.Element {
   return (

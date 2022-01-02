@@ -1,30 +1,33 @@
+import {StyleClassName} from '../../common/const';
+import Logo from '../logo/logo';
+
 function  Footer (): JSX.Element {
   return (
     <footer className="footer">
       <div className="footer__container container">
-        <a className="footer__logo logo" href="#top">
-          <img className="logo__img" width="70" height="70" src="img/svg/logo.svg" alt="Логотип" />
-        </a>
+
+        <Logo className={StyleClassName.FooterLogo} />
+
         <div className="socials footer__socials">
           <ul className="socials__list">
             <li className="socials-item">
               <a className="socials__link" href="https://www.facebook.com/" aria-label="facebook">
                 <svg className="socials__icon" width="24" height="24" aria-hidden="true">
-                  <use href="#icon-facebook" />
+                  <use xlinkHref="img/sprite_auto.svg#icon-facebook" />
                 </svg>
               </a>
             </li>
             <li className="socials-item">
               <a className="socials__link" href="https://www.instagram.com/" aria-label="instagram">
                 <svg className="socials__icon" width="24" height="24" aria-hidden="true">
-                  <use href="#icon-instagram" />
+                  <use xlinkHref="img/sprite_auto.svg#icon-instagram" />
                 </svg>
               </a>
             </li>
             <li className="socials-item">
               <a className="socials__link" href="https://www.twitter.com/" aria-label="twitter">
                 <svg className="socials__icon" width="24" height="24" aria-hidden="true">
-                  <use href="#icon-twitter" />
+                  <use xlinkHref="img/sprite_auto.svg#icon-twitter" />
                 </svg>
               </a>
             </li>
@@ -63,14 +66,14 @@ function  Footer (): JSX.Element {
           <p className="footer__nav-content">г. Санкт-Петербург,<br/> м. Невский проспект, <br/>ул. Казанская 6.</p>
           <div className="footer__nav-content">
             <svg className="footer__icon" width="8" height="8" aria-hidden="true">
-              <use href="#icon-phone" />
+              <use xlinkHref="img/sprite_auto.svg#icon-phone" />
             </svg>
             <a className="link" href="tel:88125005050"> 8-812-500-50-50</a>
           </div>
           <p className="footer__nav-content">Режим работы:<br/>
             <span className="footer__span">
               <svg className="footer__icon" width="13" height="13" aria-hidden="true">
-                <use href="#icon-clock" />
+                <use xlinkHref="img/sprite_auto.svg#icon-clock" />
               </svg><span> с 11:00 до 20:00</span><span>без выходных</span>
             </span>
           </p>

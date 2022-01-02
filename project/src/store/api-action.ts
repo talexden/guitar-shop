@@ -1,14 +1,18 @@
-import {APIRoute} from '../const';
+import {Adapter} from '../components/adapter/adapter';
+import {APIRoute} from '../common/const';
 import {ThunkActionResult} from '../types/action';
-import {setGuitars, setSortedGuitars} from './action';
+import {setGuitars, setIsLoading, setSortedGuitars, setIsLoaded} from './action';
 
 export const fetchGuitars = (): ThunkActionResult =>
   async (dispatch, _getState, api) => {
     try{
+      dispatch(setIsLoading());
       const {data} = await api.get(APIRoute.Guitars);
-      dispatch(setGuitars(data));
-      dispatch(setSortedGuitars(data));
+      const guitars = data.map(Adapter.adaptToClient);
+      dispatch(setGuitars(guitars));
+      dispatch(setSortedGuitars(guitars));
+      dispatch(setIsLoaded());
     } catch (error) {
-      // toast.warn(ErrorTexts.LoadQuestFailMessage);
+      // alert(ErrorTexts.LoadQuestFailMessage);
     }
   };
