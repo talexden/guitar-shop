@@ -1,10 +1,17 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {AppData} from '../../types/state';
-import {setGuitars, setIsLoading, setIsLoaded} from '../action';
+import {CommentType, GuitarType} from '../../types/stateType';
+import {setGuitars, setIsLoading, setIsLoaded, setGuitarById} from '../action';
 
-const initialState: AppData = {
+type AppDataType = {
+  guitars: GuitarType[],
+  guitarById: GuitarType | null,
+  comments: CommentType[],
+  isLoading: boolean,
+}
+
+const initialState: AppDataType = {
   guitars: [],
-  guitarsById: null,
+  guitarById: null,
   comments: [],
   isLoading: false,
 };
@@ -14,6 +21,10 @@ export const appData = createReducer(initialState, (builder)=>{
     .addCase(setGuitars, (state, action) => {
       const {guitars} = action.payload;
       state.guitars = guitars;
+    })
+    .addCase(setGuitarById, (state, action) => {
+      const {guitar} = action.payload;
+      state.guitarById = guitar;
     })
     .addCase(setIsLoading, (state, action) => {
       state.isLoading = true;

@@ -4,7 +4,7 @@ function  ReviewsList(): JSX.Element {
   return (
     <section className="reviews">
       <h3 className="reviews__title title title--bigger">Отзывы</h3>
-      <a className="button button--red-border button--big reviews__sumbit-button" href="#">Оставить отзыв</a>
+      <a className="button button--red-border button--big reviews__sumbit-button" href="#top">Оставить отзыв</a>
       <div>
         <Review />
         <Review />

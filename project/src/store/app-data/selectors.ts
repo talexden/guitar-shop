@@ -1,7 +1,7 @@
 import {NameSpace} from '../root-reducer';
-import {Comment, Guitar, State} from '../../types/state';
+import {CommentType, GuitarType, StateType} from '../../types/stateType';
 
-export const getGuitars = (state: State): Guitar[] => state[NameSpace.data].guitars;
-export const getGuitarsById = (state: State): Guitar | null => state[NameSpace.data].guitarsById;
-export const getComments = (state: State): Comment[] => state[NameSpace.data].comments;
-export const getIsLoading = (state: State): boolean => state[NameSpace.data].isLoading;
+export const getGuitars = (state: StateType): GuitarType[] => state[NameSpace.data].guitars;
+export const getGuitarsById = (state: StateType): GuitarType | null => state[NameSpace.data].guitarById;
+export const getComments = (state: StateType): CommentType[] => state[NameSpace.data].comments;
+export const getIsLoading = (state: StateType): boolean => state[NameSpace.data].isLoading;

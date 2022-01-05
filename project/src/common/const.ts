@@ -9,7 +9,7 @@ export enum AppRoute {
 
 export enum APIRoute {
   Guitars = '/guitars',
-  GuitarById = '/guitars/:id',
+  GuitarById = '/guitars/:id/',
   GuitarByIdComments = '/guitars/:id/comments',
   CommentPost = '/comments',
   CouponPost = '/coupons',
@@ -32,4 +32,16 @@ export enum StarIconUrl {
 // }
 
 export const RATING_STAR_COUNT = 5;
+
+export const FORM_SEARCH_ITEM_TAB_INDEX = 0;
+
+export enum SortKey {
+  Price = 'price',
+  Rating = 'rating',
+}
+
+export enum SortDirect {
+  LowToHigh = 1,
+  HighToLow = -1,
+}
 

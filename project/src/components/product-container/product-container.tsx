@@ -45,7 +45,7 @@ function  ProductContainer(): JSX.Element {
         <div className="product-container__price-wrapper">
           <p className="product-container__price-info product-container__price-info--title">Цена:</p>
           <p className="product-container__price-info product-container__price-info--value">{getTripleNumberString(price)} ₽</p>
-          <a className="button button--red button--big product-container__button" href="#">Добавить в корзину</a>
+          <a className="button button--red button--big product-container__button" href="#top">Добавить в корзину</a>
         </div>
       </div>
     );

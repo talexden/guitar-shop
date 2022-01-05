@@ -1,7 +1,7 @@
-import {Guitar} from '../../types/state';
+import {GuitarType} from '../../types/stateType';
 
 export class Adapter {
-  static adaptToClient(guitar: Guitar) {
+  static adaptToClient(guitar: GuitarType) {
     const adaptedGuitar = Object.assign(
       {},
       guitar,

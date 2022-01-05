@@ -1,7 +1,6 @@
 import {StyleClassName} from '../../common/const';
+import HeaderSearch from '../header-search/header-search';
 import Logo from '../logo/logo';
-
-const TAB_INDEX = 0;
 
 function Header (): JSX.Element {
   return (
@@ -23,26 +22,9 @@ function Header (): JSX.Element {
             </li>
           </ul>
         </nav>
-        <div className="form-search">
-          <form className="form-search__form">
-            <button className="form-search__submit" type="submit">
-              <svg className="form-search__icon" width="14" height="15" aria-hidden="true">
-                <use xlinkHref="img/sprite_auto.svg#icon-search" />
-              </svg>
-              <span className="visually-hidden">Начать поиск</span>
-            </button>
-            <input className="form-search__input" id="search" type="text" autoComplete="off" placeholder="что вы ищите?" />
-            <label className="visually-hidden" htmlFor="search">Поиск</label>
-          </form>
-          <ul className="form-search__select-list hidden">
-            <li className="form-search__select-item" tabIndex={TAB_INDEX}>Четстер Plus</li>
-            <li className="form-search__select-item" tabIndex={TAB_INDEX}>Четстер UX</li>
-            <li className="form-search__select-item" tabIndex={TAB_INDEX}>Четстер UX2</li>
-            <li className="form-search__select-item" tabIndex={TAB_INDEX}>Четстер UX3</li>
-            <li className="form-search__select-item" tabIndex={TAB_INDEX}>Четстер UX4</li>
-            <li className="form-search__select-item" tabIndex={TAB_INDEX}>Четстер UX5</li>
-          </ul>
-        </div>
+
+        <HeaderSearch />
+
         <a className="header__cart-link" href="#top" aria-label="Корзина">
           <svg className="header__cart-icon" width="14" height="14" aria-hidden="true">
             <use xlinkHref="img/sprite_auto.svg#icon-basket" />

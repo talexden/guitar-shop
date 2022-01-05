@@ -1,9 +1,9 @@
-import {Guitar} from '../../types/state';
+import {GuitarType} from '../../types/stateType';
 import {capitalizedString, getTripleNumberString} from '../../common/utils';
 import {StarRating} from '../star-rating/star-rating';
 
 type ProductCardProps = {
-  guitar: Guitar,
+  guitar: GuitarType,
 }
 
 function  ProductCard({guitar}: ProductCardProps): JSX.Element {

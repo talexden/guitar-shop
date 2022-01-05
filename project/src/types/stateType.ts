@@ -1,18 +1,18 @@
 import {RootState} from '../store/root-reducer';
 
-export type Guitar = {
+export type GuitarType = {
   id: number,
   name: string,
   vendorCode: string,
   type: string,
-  description:  '',
-  previewImg: '',
+  description:  string,
+  previewImg: string,
   stringCount: number,
   rating: number,
   price: number,
 };
 
-export type Comment = {
+export type CommentType = {
   id: string,
   userName: string,
   advantages: string,
@@ -23,7 +23,7 @@ export type Comment = {
   guitarId: number
 };
 
-export type CommentPost = {
+export type CommentPostType = {
   guitarId: number,
   userName: string,
   advantage: string,
@@ -32,25 +32,12 @@ export type CommentPost = {
   rating: number,
 };
 
-export type CouponPost = string;
+export type CouponPostType = string;
 
-export type OrderPost = {
+export type OrderPostType = {
   guitarsIds: [number, number],
-  coupon: CouponPost,
+  coupon: CouponPostType,
 };
 
-export type AppData = {
-  guitars: Guitar[],
-  guitarsById: Guitar | null,
-  comments: Comment[],
-  isLoading: boolean,
-}
 
-export type AppProcess = {
-  sortedGuitars: Guitar[],
-  commentPost: CommentPost | null,
-  couponPost: CouponPost,
-  orderPost: OrderPost | null,
-}
-
-export type State = RootState;
+export type StateType = RootState;
