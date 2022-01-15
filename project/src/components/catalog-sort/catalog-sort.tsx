@@ -1,10 +1,10 @@
 import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {SortDirect, SortKey} from '../../common/const';
-import {sort} from '../../common/sort/sort';
+import {sort} from '../../common/sort';
 import {setSortDirect, setSortedGuitars, setSortKey} from '../../store/action';
 import {getGuitars} from '../../store/app-data/selectors';
-import {getIsFilter, getSortDirect, getSortKey} from '../../store/app-process/selectors';
+import {getFilteredGuitars, getIsFilter, getSortDirect, getSortKey} from '../../store/app-process/selectors';
 
 // const SORT_TAB_INDEX = 0;
 const SORT_TYPE_BUTTON_ACTIVE = ' catalog-sort__type-button--active';
@@ -12,18 +12,18 @@ const SORT_ORDER_BUTTON_ACTIVE = ' catalog-sort__order-button--active';
 
 function  CatalogSort(): JSX.Element {
   const dispatch = useDispatch();
-  const guitars = useSelector(getGuitars);
+  const filteredGuitars = useSelector(getFilteredGuitars);
   const sortKey = useSelector(getSortKey);
   const sortDirect = useSelector(getSortDirect);
   const isFilter = useSelector(getIsFilter);
 
   useEffect(()=> {
-    let sortGuitars = [...guitars];
+    let sortGuitars = [...filteredGuitars];
     if (isFilter) {
-      sortGuitars = sort(guitars, sortKey, sortDirect);
+      sortGuitars = sort(filteredGuitars, sortKey, sortDirect);
     }
     dispatch(setSortedGuitars(sortGuitars));
-  }, [guitars, sortKey, sortDirect, dispatch, isFilter]);
+  }, [filteredGuitars, sortKey, sortDirect, dispatch, isFilter]);
 
 
   return (

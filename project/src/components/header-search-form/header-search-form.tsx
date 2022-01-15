@@ -1,6 +1,6 @@
 import {ChangeEvent, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {search} from '../../common/search/search';
+import {search} from '../../common/search';
 import {setSearchedGuitars} from '../../store/action';
 import {getGuitars} from '../../store/app-data/selectors';
 

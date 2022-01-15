@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import App from './components/app/app';
 import {createAPI} from './services/api';
 import {fetchGuitars} from './store/api-action';
@@ -26,6 +28,7 @@ store.dispatch(fetchGuitars());
 ReactDOM.render(
   <React.StrictMode>
     <Provider store = {store}>
+      <ToastContainer />
       <App />
     </Provider>
   </React.StrictMode>,

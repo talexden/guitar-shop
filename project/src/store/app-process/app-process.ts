@@ -1,10 +1,12 @@
 import {createReducer} from '@reduxjs/toolkit';
 import {SortDirect, SortKey} from '../../common/const';
 import {OrderPostType, CommentPostType, CouponPostType, GuitarType} from '../../types/stateType';
-import {setSortedGuitars, setSortKey, setSortDirect, setSearchedGuitars} from '../action';
+import {setSortedGuitars, setSortKey, setSortDirect, setSearchedGuitars, setFilteredGuitars} from '../action';
+
 
 export type AppProcessType = {
   sortedGuitars: GuitarType[],
+  filteredGuitars: GuitarType[],
   searchedGuitars: GuitarType[],
   commentPost: CommentPostType | null,
   couponPost: CouponPostType,
@@ -16,6 +18,7 @@ export type AppProcessType = {
 
 const initialState: AppProcessType = {
   sortedGuitars: [],
+  filteredGuitars: [],
   searchedGuitars: [],
   commentPost: null,
   couponPost: '',
@@ -27,6 +30,11 @@ const initialState: AppProcessType = {
 
 export const appProcess = createReducer(initialState, (builder)=>{
   builder
+
+    .addCase(setFilteredGuitars, (state, action) => {
+      const {guitars} = action.payload;
+      state.filteredGuitars = guitars;
+    })
 
     .addCase(setSortedGuitars, (state, action) => {
       const {guitars} = action.payload;

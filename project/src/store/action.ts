@@ -1,11 +1,17 @@
 import {createAction} from '@reduxjs/toolkit';
 import {SortDirect, SortKey} from '../common/const';
-import {ActionType} from '../types/actionType';
+import {ActionType} from '../types/action-type';
 import {GuitarType} from '../types/stateType';
 
 
 export const setGuitars = createAction(
   ActionType.SetGuitars,
+  (guitars: GuitarType[])=>(
+    {payload: {guitars}}
+  ));
+
+export const setFilteredGuitars = createAction(
+  ActionType.SetFilteredGuitars,
   (guitars: GuitarType[])=>(
     {payload: {guitars}}
   ));

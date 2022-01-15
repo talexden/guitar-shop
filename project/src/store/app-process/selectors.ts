@@ -9,6 +9,7 @@ import {
 } from '../../types/stateType';
 
 export const getSortedGuitars = (state: StateType): GuitarType[] => state[NameSpace.process].sortedGuitars;
+export const getFilteredGuitars = (state: StateType): GuitarType[] => state[NameSpace.process].filteredGuitars;
 export const getSearchedGuitars = (state: StateType): GuitarType[] => state[NameSpace.process].searchedGuitars;
 export const getCommentPost = (state: StateType): CommentPostType | null => state[NameSpace.process].commentPost;
 export const getCouponPost = (state: StateType): CouponPostType => state[NameSpace.process].couponPost;

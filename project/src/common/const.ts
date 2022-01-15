@@ -1,3 +1,6 @@
+import checkbox from '../components/checkbox/checkbox';
+import {CheckboxType} from '../types/const-type';
+
 export const VIEW_CATALOG_COUNT = 9;
 
 export enum AppRoute {
@@ -26,10 +29,10 @@ export enum StarIconUrl {
   iconStar = 'img/sprite_auto.svg#icon-star',
 }
 
-// export enum ErrorTexts {
-//   LoadQuestFailMessage = 'Сервер не доступен. Попробуйте попозже',
-//   CommentPostFailMessage = 'Не удалось отправить комментарий. Попробуйте попозже',
-// }
+export enum ErrorTexts {
+  LoadGuitarsFailMessage = 'Сервер не доступен. Попробуйте попозже',
+  CommentPostFailMessage = 'Не удалось отправить комментарий. Попробуйте попозже',
+}
 
 export const RATING_STAR_COUNT = 5;
 
@@ -44,4 +47,45 @@ export enum SortDirect {
   LowToHigh = 1,
   HighToLow = -1,
 }
+
+export const CHECKBOX_GUITAR_TYPE: CheckboxType[] = [
+  {
+    label: 'Акустические гитары',
+    name: 'acoustic',
+    string: [6, 7, 12],
+  },
+  {
+    label: 'Электрогитары',
+    name: 'electric',
+    string: [4, 6, 7],
+  },
+  {
+    label: 'Укулеле',
+    name: 'ukulele',
+    string: [4],
+  },
+];
+
+export const CHECKBOX_STRING_TYPE: CheckboxType[] = [
+  {
+    label: '4',
+    name: '4-strings',
+    string: [4],
+  },
+  {
+    label: '6',
+    name: '6-strings',
+    string: [6],
+  },
+  {
+    label: '7',
+    name: '7-strings',
+    string: [7],
+  },
+  {
+    label: '12',
+    name: '12-strings',
+    string: [12],
+  },
+];
 

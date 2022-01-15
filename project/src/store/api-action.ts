@@ -1,7 +1,8 @@
+import {toast} from 'react-toastify';
 import {mockGuitars} from '../common/mock-guitars';
 import {Adapter} from '../components/adapter/adapter';
-import {APIRoute} from '../common/const';
-import {ThunkActionResult} from '../types/actionType';
+import {APIRoute, ErrorTexts} from '../common/const';
+import {ThunkActionResult} from '../types/action-type';
 import {setGuitars, setIsLoading, setIsLoaded, setGuitarById} from './action';
 
 export const fetchGuitars = (): ThunkActionResult =>
@@ -13,9 +14,9 @@ export const fetchGuitars = (): ThunkActionResult =>
       dispatch(setGuitars(guitars));
       dispatch(setIsLoaded());
     } catch (error) {
-      dispatch(setGuitars(mockGuitars));
-      dispatch(setIsLoaded());
-      // alert(ErrorTexts.LoadQuestFailMessage);
+      dispatch(setGuitars(mockGuitars)); // моки, удалить
+      dispatch(setIsLoaded()); // моки, удалить
+      toast.info(ErrorTexts.LoadGuitarsFailMessage);
     }
   };
 
@@ -28,6 +29,6 @@ export const fetchGuitarById = (guitarId: number): ThunkActionResult =>
       dispatch(setGuitarById(guitar));
       dispatch(setIsLoaded());
     } catch (error) {
-      // alert(ErrorTexts.LoadQuestFailMessage);
+      toast.info(ErrorTexts.LoadGuitarsFailMessage);
     }
   };
