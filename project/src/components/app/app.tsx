@@ -1,4 +1,4 @@
-import {Switch, Route, Router as BrowserRouter} from 'react-router-dom';
+import {Switch, Route, Router as BrowserRouter, Redirect} from 'react-router-dom';
 import MainScreen from '../main-screen/main-screen';
 import ErrorScreen from '../error-screen/error-screen';
 import browserHistory from '../../browser-history';
@@ -8,11 +8,11 @@ function App(): JSX.Element {
   return (
     <BrowserRouter history={browserHistory}>
       <Switch>
-        <Route exact path={AppRoute.Catalogue}>
+        <Route exact path={`${AppRoute.Catalog}:pageIdx`}>
           <MainScreen />
         </Route>
         <Route exact path={AppRoute.Main}>
-          <MainScreen />
+          <Redirect to={`${AppRoute.Catalog}1`} />
         </Route>
         <Route>
           <ErrorScreen />

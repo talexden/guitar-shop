@@ -9,6 +9,8 @@ import {
 } from '../../types/stateType';
 
 export const getSortedGuitars = (state: StateType): GuitarType[] => state[NameSpace.process].sortedGuitars;
+export const getGuitarsByPages = (state: StateType): GuitarType[][] => state[NameSpace.process].guitarsByPages;
+export const getPaginationPages = (state: StateType): number[] => state[NameSpace.process].paginationPages;
 export const getFilteredGuitars = (state: StateType): GuitarType[] => state[NameSpace.process].filteredGuitars;
 export const getSearchedGuitars = (state: StateType): GuitarType[] => state[NameSpace.process].searchedGuitars;
 export const getCommentPost = (state: StateType): CommentPostType | null => state[NameSpace.process].commentPost;
@@ -17,3 +19,4 @@ export const getOrderPost = (state: StateType): OrderPostType | null => state[Na
 export const getSortKey = (state: StateType): SortKey => state[NameSpace.process].sortKey;
 export const getSortDirect = (state: StateType): SortDirect => state[NameSpace.process].sortDirect;
 export const getIsFilter = (state: StateType): boolean => state[NameSpace.process].isFilter;
+export const getCurrentPage = (state: StateType): number => state[NameSpace.process].currentPage;

@@ -5,3 +5,9 @@ export type CheckboxType = {
   name: string,
   string: StringsType,
 }
+
+export type PaginationNavigationType = {
+    label: string,
+    id: string,
+    navigationClass: string,
+};

@@ -3,7 +3,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {SortDirect, SortKey} from '../../common/const';
 import {sort} from '../../common/sort';
 import {setSortDirect, setSortedGuitars, setSortKey} from '../../store/action';
-import {getGuitars} from '../../store/app-data/selectors';
 import {getFilteredGuitars, getIsFilter, getSortDirect, getSortKey} from '../../store/app-process/selectors';
 
 // const SORT_TAB_INDEX = 0;

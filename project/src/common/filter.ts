@@ -6,7 +6,7 @@ import {GuitarType} from '../types/stateType';
 export const getMinMaxPrice = (guitars: GuitarType[]): priceStateType => {
   let priceMin = guitars[0].price;
   let priceMax = guitars[0].price;
-  guitars.map((guitar) => {
+  guitars.forEach((guitar) => {
     if (guitar.price > priceMax) {priceMax = guitar.price;}
     if (guitar.price < priceMin) {priceMin = guitar.price;}
   });
@@ -24,7 +24,7 @@ export const getFilteredByString = (guitars: GuitarType[], strings: StringsType)
   if (strings.length > 0) {
     filteredGuitars = guitars.filter((guitar) => {
       let isGuitar = false;
-      strings.map((string) => {
+      strings.forEach((string) => {
         if (guitar.stringCount === string) {
           isGuitar = true;
         }
@@ -38,7 +38,7 @@ export const getFilteredByString = (guitars: GuitarType[], strings: StringsType)
 
 export const getCheckboxStrings = (checkboxType: CheckboxType[], state: checkboxStateType) => {
   let checkboxStrings: number[] = [];
-  checkboxType.map((checkbox, idx) => {
+  checkboxType.forEach((checkbox, idx) => {
     const strings: StringsType = state[checkbox.name] === true ? checkbox.string : [];
     checkboxStrings = [...new Set([...checkboxStrings,...strings])];
   });

@@ -1,24 +1,23 @@
 import {nanoid} from '@reduxjs/toolkit';
 import {ChangeEvent, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {CHECKBOX_GUITAR_TYPE, CHECKBOX_STRING_TYPE} from '../../common/const';
+import {CHECKBOX_GUITAR_TYPE, CHECKBOX_STRING_TYPE, CURRENT_PAGE_INIT} from '../../common/const';
 import {getFilterByPrice, getCheckboxStrings, getMinMaxPrice, getFilteredByString} from '../../common/filter';
-import {setFilteredGuitars} from '../../store/action';
+import {setCurrentPage, setFilteredGuitars} from '../../store/action';
 import {getGuitars} from '../../store/app-data/selectors';
 import {CheckboxType, StringsType} from '../../types/const-type';
 import {checkboxStateType, priceStateType} from '../../types/filter-types';
-import {GuitarType} from '../../types/stateType';
 import Checkbox from '../checkbox/checkbox';
 
 const getCheckboxState = (checkboxType: CheckboxType[]): checkboxStateType => {
-  checkboxType.map((checkbox) => {
+  checkboxType.map((checkbox) => (
     Object.assign(
       {},
       {
         [checkbox.name]: false,
       },
-    );
-  });
+    )
+  ));
   return {};
 };
 
@@ -26,7 +25,6 @@ const getCheckboxState = (checkboxType: CheckboxType[]): checkboxStateType => {
 function  CatalogFilter(): JSX.Element {
   const guitars = useSelector(getGuitars);
   const dispatch = useDispatch();
-  let guitarsByPrice: GuitarType[] = [];
 
   const checkboxStateInit: checkboxStateType = Object.assign(
     {},
@@ -42,15 +40,8 @@ function  CatalogFilter(): JSX.Element {
   const [guitarTypeStrungState, setGuitarTypeStrungState] = useState(guitarTypeStrungStateInit);
 
   useEffect(() => {
-    if (priceStateInit.priceMin > priceState.priceMin) {
-      setPriceState({...priceState, priceMin: priceStateInit.priceMin});
-    }
 
-    if (priceState.priceMin > priceState.priceMax) {
-      setPriceState({...priceState, priceMax: priceState.priceMin});
-    }
-
-    guitarsByPrice = getFilterByPrice(guitars, priceState.priceMin, priceState.priceMax);
+    const guitarsByPrice = getFilterByPrice(guitars, priceState.priceMin, priceState.priceMax);
 
     const guitarTypeStrings = getCheckboxStrings(CHECKBOX_GUITAR_TYPE, stringCheckboxState);
     setGuitarTypeStrungState(guitarTypeStrings);
@@ -59,8 +50,9 @@ function  CatalogFilter(): JSX.Element {
     const guitarsSortedByGuitarType = getFilteredByString(guitarsByPrice, guitarTypeStrings);
     const guitarsSortedByString = getFilteredByString(guitarsSortedByGuitarType, strings);
 
+    dispatch(setCurrentPage(CURRENT_PAGE_INIT));
     dispatch(setFilteredGuitars(guitarsSortedByString));
-  }, [priceState, dispatch, stringCheckboxState]);
+  }, [priceState, dispatch, stringCheckboxState, guitars]);
 
 
   const handleChangeCheckbox = ( evt: ChangeEvent<HTMLInputElement>) => {
@@ -131,7 +123,7 @@ function  CatalogFilter(): JSX.Element {
           <Checkbox
             key={nanoid()}
             isChecked={stringCheckboxState[checkbox.name]}
-            isDisabled={ checkbox.string.some((string) => guitarTypeStrungState.length > 0 && !guitarTypeStrungState.includes(string)) }
+            isDisabled={checkbox.string.some((string) => guitarTypeStrungState.length > 0 && !guitarTypeStrungState.includes(string))}
             checkbox={checkbox}
             cb={handleChangeCheckbox}
           />

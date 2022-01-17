@@ -22,6 +22,24 @@ export const setSortedGuitars = createAction(
     {payload: {guitars}}
   ));
 
+export const setGuitarsByPages = createAction(
+  ActionType.SetGuitarsByPages,
+  (guitarsByPages: GuitarType[][])=>(
+    {payload: {guitarsByPages}}
+  ));
+
+export const setPaginationPages = createAction(
+  ActionType.SetPaginationPages,
+  (paginationPages: number[])=>(
+    {payload: {paginationPages}}
+  ));
+
+export const setCurrentPage = createAction(
+  ActionType.SetCurrentPage,
+  (currentPage: number)=>(
+    {payload: {currentPage}}
+  ));
+
 export const setSearchedGuitars = createAction(
   ActionType.SetSearchedGuitars,
   (guitars: GuitarType[])=>(

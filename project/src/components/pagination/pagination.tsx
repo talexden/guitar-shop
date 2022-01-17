@@ -1,19 +1,67 @@
+import {nanoid} from '@reduxjs/toolkit';
+import {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppRoute, CURRENT_PAGE_INIT, PAGINATION_COUNT, PaginationNav} from '../../common/const';
+import {getIntegersArrayFromTo} from '../../common/utils';
+import {setPaginationPages} from '../../store/action';
+import {getCurrentPage, getGuitarsByPages, getPaginationPages} from '../../store/app-process/selectors';
+import PaginationItem from '../pagination-item/pagination-item';
+import PaginationNavigation from '../pagination-navigation/pagination-navigatin';
+
+
 function  Pagination(): JSX.Element {
+  const currentPage = useSelector(getCurrentPage);
+  const guitarsByPages = useSelector(getGuitarsByPages);
+  const paginationPages = useSelector(getPaginationPages);
+  const dispatch = useDispatch();
+  const paginationCenter = Math.round(PAGINATION_COUNT / 2);
+
+  useEffect(() => {
+    const guitarsByPagesSize = guitarsByPages.length;
+    let startPage = CURRENT_PAGE_INIT;
+    let endPage = guitarsByPagesSize;
+    if (guitarsByPagesSize > PAGINATION_COUNT) {
+      if (currentPage === guitarsByPagesSize) {
+        startPage = currentPage - paginationCenter;
+        endPage = currentPage;
+      } else {
+        startPage = currentPage - (PAGINATION_COUNT - paginationCenter);
+        endPage = currentPage + (PAGINATION_COUNT - paginationCenter);
+      }
+    }
+
+    dispatch(setPaginationPages(getIntegersArrayFromTo(startPage, endPage)));
+  }, [currentPage, guitarsByPages, dispatch, paginationCenter]);
+
   return (
     <div className="pagination page-content__pagination">
       <ul className="pagination__list">
-        <li className="pagination__page pagination__page--active">
-          <a className="link pagination__page-link" href="1">1</a>
-        </li>
-        <li className="pagination__page">
-          <a className="link pagination__page-link" href="2">2</a>
-        </li>
-        <li className="pagination__page">
-          <a className="link pagination__page-link" href="3">3</a>
-        </li>
-        <li className="pagination__page pagination__page--next" id="next">
-          <a className="link pagination__page-link" href="2">Далее</a>
-        </li>
+
+        {
+          currentPage > 1 &&
+          <PaginationNavigation
+            navigator={PaginationNav.Previous}
+            url={`${AppRoute.Catalog}${currentPage - 1}`}
+          />
+        }
+
+
+        {paginationPages.map((pageIdx) => (
+          <PaginationItem
+            key={nanoid()}
+            isActive={currentPage === pageIdx}
+            pageIdx={pageIdx}
+          />
+        ))}
+
+        {
+          currentPage < guitarsByPages.length &&
+          <PaginationNavigation
+            navigator={PaginationNav.Next}
+            url={`${AppRoute.Catalog}${currentPage + 1}`}
+          />
+        }
+
       </ul>
     </div>
   );

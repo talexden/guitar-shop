@@ -1,11 +1,10 @@
-import checkbox from '../components/checkbox/checkbox';
 import {CheckboxType} from '../types/const-type';
 
 export const VIEW_CATALOG_COUNT = 9;
 
 export enum AppRoute {
-  Main = '/main',
-  Catalogue = '/catalogue',
+  Main = '/',
+  Catalog = '/page',
   ProductInfo = '/product-info',
   Cart = '/cart'
 }
@@ -89,3 +88,20 @@ export const CHECKBOX_STRING_TYPE: CheckboxType[] = [
   },
 ];
 
+export const CARD_COUNT = 9;
+
+export const PaginationNav = Object.freeze({
+  Next: {
+    label: 'Далее',
+    id: 'next',
+    navigationClass: 'pagination__page--next',
+  },
+  Previous: {
+    label: 'Назад',
+    id: 'prev',
+    navigationClass: 'pagination__page--prev',
+  },
+});
+
+export const CURRENT_PAGE_INIT = 1;
+export const PAGINATION_COUNT = 3;
