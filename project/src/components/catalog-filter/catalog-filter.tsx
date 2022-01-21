@@ -8,7 +8,7 @@ import {getGuitars} from '../../store/app-data/selectors';
 import {CheckboxType, StringsType} from '../../types/const-type';
 import {checkboxStateType, priceStateType} from '../../types/filter-types';
 import Checkbox from '../checkbox/checkbox';
-import {debounce} from "../../common/utils";
+import {debounce} from '../../common/utils';
 
 const getCheckboxState = (checkboxType: CheckboxType[]): checkboxStateType => {
   checkboxType.map((checkbox) => (
@@ -65,7 +65,6 @@ function  CatalogFilter(): JSX.Element {
   };
 
   const checkPrice = debounce(() => {
-    console.log('debounce');
     if (priceStateInit.priceMin > priceState.priceMin) {
       setPriceState({...priceState, priceMin: priceStateInit.priceMin});
     }
@@ -76,7 +75,7 @@ function  CatalogFilter(): JSX.Element {
 
   useEffect(() => {
     checkPrice();
-  }, [priceState]);
+  }, [checkPrice]);
 
 
   const handleChangePrice = ( evt: ChangeEvent<HTMLInputElement>) => {
