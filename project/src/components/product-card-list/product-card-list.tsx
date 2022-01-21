@@ -21,13 +21,17 @@ function ProductCardList (): JSX.Element {
 
   const pageIdx: {pageIdx: string} = useParams();
   useEffect(() => {
-    const pageIdxNumber = Number(pageIdx.pageIdx);
-    dispatch(setCurrentPage(pageIdxNumber));
-  }, [dispatch, pageIdx]);
+    let pageNumber = Number(pageIdx.pageIdx);
+    const pageCatalogLength = guitarsByPages.length;
+    if (pageCatalogLength > 0 && pageNumber > pageCatalogLength) {
+      pageNumber = pageCatalogLength;
+    }
+    dispatch(setCurrentPage(pageNumber));
+  }, [dispatch, pageIdx, guitarsByPages]);
 
   return (
     <div className="cards catalog__cards">
-      {guitarsByPages.length > 0 ? guitarsByPages[currentPage - 1].map((guitar)=>(<ProductCard key={nanoid()} guitar={guitar}/>)) : ''}
+      {guitarsByPages.length > 0 && guitarsByPages[currentPage - 1].map((guitar)=>(<ProductCard key={nanoid()} guitar={guitar}/>))}
     </div>
   );
 }

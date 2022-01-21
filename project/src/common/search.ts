@@ -8,5 +8,3 @@ export const search = (guitars: GuitarType[], searchKey: string): GuitarType[] =
   ));
   return searchGuitars;
 };
-
-
