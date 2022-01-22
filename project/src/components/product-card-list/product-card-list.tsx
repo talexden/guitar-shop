@@ -20,6 +20,10 @@ function ProductCardList (): JSX.Element {
 
 
   const pageIdx: {pageIdx: string} = useParams();
+  const pageNumber = Number(pageIdx.pageIdx);
+  const page = guitarsByPages.length < pageNumber ? guitarsByPages.length : pageNumber - 1;
+  console.log(page);
+
   useEffect(() => {
     let pageNumber = Number(pageIdx.pageIdx);
     const pageCatalogLength = guitarsByPages.length;
@@ -31,7 +35,9 @@ function ProductCardList (): JSX.Element {
 
   return (
     <div className="cards catalog__cards">
-      {guitarsByPages.length > 0 && guitarsByPages[currentPage - 1].map((guitar)=>(<ProductCard key={nanoid()} guitar={guitar}/>))}
+      {guitarsByPages.length > 0 && guitarsByPages[currentPage - 1].map((guitar)=>(
+        <ProductCard key={nanoid()} guitar={guitar}/>
+      ))}
     </div>
   );
 }

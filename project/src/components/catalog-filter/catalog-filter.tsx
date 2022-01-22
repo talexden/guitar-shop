@@ -1,14 +1,13 @@
 import {nanoid} from '@reduxjs/toolkit';
 import {ChangeEvent, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {CHECKBOX_GUITAR_TYPE, CHECKBOX_STRING_TYPE, CURRENT_PAGE_INIT} from '../../common/const';
+import {CHECKBOX_GUITAR_TYPE, CHECKBOX_STRING_TYPE, CORRECT_PRICE_DELAY, CURRENT_PAGE_INIT} from '../../common/const';
 import {getFilterByPrice, getCheckboxStrings, getMinMaxPrice, getFilteredByString} from '../../common/filter';
 import {setCurrentPage, setFilteredGuitars} from '../../store/action';
 import {getGuitars} from '../../store/app-data/selectors';
 import {CheckboxType, StringsType} from '../../types/const-type';
 import {checkboxStateType, priceStateType} from '../../types/filter-types';
 import Checkbox from '../checkbox/checkbox';
-import {debounce} from '../../common/utils';
 
 const getCheckboxState = (checkboxType: CheckboxType[]): checkboxStateType => {
   checkboxType.map((checkbox) => (
@@ -22,6 +21,19 @@ const getCheckboxState = (checkboxType: CheckboxType[]): checkboxStateType => {
   return {};
 };
 
+let timeout: ReturnType<typeof setTimeout>;
+
+const debounce = <T extends (...args: any[]) => any>(
+  callback: T,
+  waitFor: number,
+) => (...args: Parameters<T>): ReturnType<T> => {
+    let result: any;
+    timeout && clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      result = callback(...args);
+    }, waitFor);
+    return result;
+  };
 
 function  CatalogFilter(): JSX.Element {
   const guitars = useSelector(getGuitars);
@@ -64,18 +76,20 @@ function  CatalogFilter(): JSX.Element {
     }
   };
 
-  const checkPrice = debounce(() => {
-    if (priceStateInit.priceMin > priceState.priceMin) {
+  const correctPrice = debounce(() => {
+    if (priceState.priceMin < priceStateInit.priceMin) {
       setPriceState({...priceState, priceMin: priceStateInit.priceMin});
     }
-    if (priceStateInit.priceMax < priceState.priceMax) {
+    if (priceState.priceMin > priceStateInit.priceMax) {
+      setPriceState({...priceState, priceMin: priceStateInit.priceMax});
+    }
+    if (priceState.priceMax > priceStateInit.priceMax) {
       setPriceState({...priceState, priceMax: priceStateInit.priceMax});
     }
-  }, 1000);
-
-  useEffect(() => {
-    checkPrice();
-  }, [checkPrice]);
+    if (priceState.priceMax < priceStateInit.priceMin) {
+      setPriceState({...priceState, priceMax: priceStateInit.priceMin});
+    }
+  }, CORRECT_PRICE_DELAY);
 
 
   const handleChangePrice = ( evt: ChangeEvent<HTMLInputElement>) => {
@@ -84,6 +98,7 @@ function  CatalogFilter(): JSX.Element {
     if (priceState[name] !== Number(value)) {
       setPriceState({...priceState, [name]: Number(value)});
     }
+    correctPrice();
   };
 
 

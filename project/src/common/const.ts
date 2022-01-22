@@ -105,3 +105,4 @@ export const PaginationNav = Object.freeze({
 
 export const CURRENT_PAGE_INIT = 1;
 export const PAGINATION_COUNT = 3;
+export const CORRECT_PRICE_DELAY = 700;
