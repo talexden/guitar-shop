@@ -1,24 +1,24 @@
 import {useSelector} from 'react-redux';
-import {getGuitarsById} from '../../store/app-data/selectors';
 import {getTripleNumberString} from '../../common/utils';
+import {getCurrentGuitar} from '../../store/app-process/selectors';
 import LoadingScreen from '../loading-screen/loading-screen';
 import {StarRating} from '../star-rating/star-rating';
 
 
 function  ProductContainer(): JSX.Element {
-  const guitar = useSelector(getGuitarsById);
+  const guitar = useSelector(getCurrentGuitar);
 
   if (guitar === null) {
     return(<LoadingScreen />);
   } else {
-    const {previewImg, name, rating, vendorCode, type, stringCount, description, price} = guitar;
+    const {previewImg, name, rating, vendorCode, type, stringCount, description, price, comments} = guitar;
     return (
       <div className="product-container">
         <img className="product-container__img" src={previewImg} width="90" height="235" alt="" />
         <div className="product-container__info-wrapper">
           <h2 className="product-container__title title title--big title--uppercase">{name}</h2>
 
-          <StarRating rating={rating} />
+          <StarRating rating={rating} commentsCount={comments.length}/>
 
           <div className="tabs">
             <a className="button button--medium tabs__button" href="#characteristics">Характеристики</a>

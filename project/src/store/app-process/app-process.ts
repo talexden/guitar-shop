@@ -9,7 +9,8 @@ import {
   setFilteredGuitars,
   setGuitarsByPages,
   setPaginationPages,
-  setCurrentPage
+  setCurrentPage,
+  setCurrentGuitar
 } from '../action';
 
 
@@ -24,6 +25,7 @@ export type AppProcessType = {
   sortDirect: SortDirect,
   isFilter: boolean,
   guitarsByPages: GuitarType[][],
+  currentGuitar: GuitarType | null,
   currentPage: number,
   paginationPages: number[],
 }
@@ -39,6 +41,7 @@ const initialState: AppProcessType = {
   sortDirect: SortDirect.LowToHigh,
   isFilter: false,
   guitarsByPages: [],
+  currentGuitar: null,
   currentPage: 1,
   paginationPages: [],
 };
@@ -64,6 +67,11 @@ export const appProcess = createReducer(initialState, (builder)=>{
     .addCase(setPaginationPages, (state, action) => {
       const {paginationPages} = action.payload;
       state.paginationPages = paginationPages;
+    })
+
+    .addCase(setCurrentGuitar, (state, action) => {
+      const {currentGuitar} = action.payload;
+      state.currentGuitar = currentGuitar;
     })
 
     .addCase(setCurrentPage, (state, action) => {

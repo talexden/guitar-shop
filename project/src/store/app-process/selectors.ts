@@ -19,4 +19,5 @@ export const getOrderPost = (state: StateType): OrderPostType | null => state[Na
 export const getSortKey = (state: StateType): SortKey => state[NameSpace.process].sortKey;
 export const getSortDirect = (state: StateType): SortDirect => state[NameSpace.process].sortDirect;
 export const getIsFilter = (state: StateType): boolean => state[NameSpace.process].isFilter;
+export const getCurrentGuitar = (state: StateType): GuitarType | null => state[NameSpace.process].currentGuitar;
 export const getCurrentPage = (state: StateType): number => state[NameSpace.process].currentPage;

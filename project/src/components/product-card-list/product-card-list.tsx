@@ -2,7 +2,7 @@ import {nanoid} from '@reduxjs/toolkit';
 import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useParams} from 'react-router-dom';
-import {CARD_COUNT} from '../../common/const';
+import {CARD_COUNT, CURRENT_PAGE_INIT} from '../../common/const';
 import {sortGuitarsByPages} from '../../common/sort';
 import {setCurrentPage, setGuitarsByPages} from '../../store/action';
 import {getCurrentPage, getGuitarsByPages, getSortedGuitars} from '../../store/app-process/selectors';
@@ -13,25 +13,24 @@ function ProductCardList (): JSX.Element {
   const guitarsByPages = useSelector(getGuitarsByPages);
   const dispatch = useDispatch();
   const currentPage = useSelector(getCurrentPage);
+  const pageIdx: {pageIdx: string} = useParams();
+  const pageNumber = Number(pageIdx.pageIdx);
 
   useEffect(() => {
     dispatch(setGuitarsByPages(sortGuitarsByPages(sortedGuitars, CARD_COUNT)));
   }, [sortedGuitars, dispatch]);
 
 
-  const pageIdx: {pageIdx: string} = useParams();
-  const pageNumber = Number(pageIdx.pageIdx);
-  const page = guitarsByPages.length < pageNumber ? guitarsByPages.length : pageNumber - 1;
-  console.log(page);
-
   useEffect(() => {
-    let pageNumber = Number(pageIdx.pageIdx);
-    const pageCatalogLength = guitarsByPages.length;
-    if (pageCatalogLength > 0 && pageNumber > pageCatalogLength) {
-      pageNumber = pageCatalogLength;
+    const guitarsByPagesLength = guitarsByPages.length;
+    let page = CURRENT_PAGE_INIT;
+    if (guitarsByPagesLength > 0) {
+      page = guitarsByPagesLength < pageNumber ? guitarsByPagesLength : pageNumber;
     }
-    dispatch(setCurrentPage(pageNumber));
-  }, [dispatch, pageIdx, guitarsByPages]);
+
+    dispatch(setCurrentPage(page));
+  }, [dispatch, guitarsByPages, pageNumber]);
+
 
   return (
     <div className="cards catalog__cards">

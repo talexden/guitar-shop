@@ -40,16 +40,16 @@ export const setCurrentPage = createAction(
     {payload: {currentPage}}
   ));
 
+export const setCurrentGuitar = createAction(
+  ActionType.SetCurrentGuitar,
+  (currentGuitar: GuitarType)=>(
+    {payload: {currentGuitar}}
+  ));
+
 export const setSearchedGuitars = createAction(
   ActionType.SetSearchedGuitars,
   (guitars: GuitarType[])=>(
     {payload: {guitars}}
-  ));
-
-export const setGuitarById = createAction(
-  ActionType.SetGuitarById,
-  (guitar: GuitarType)=>(
-    {payload: {guitar}}
   ));
 
 export const setSortKey = createAction(

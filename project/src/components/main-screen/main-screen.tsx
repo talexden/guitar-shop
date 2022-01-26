@@ -13,6 +13,7 @@ import ProductCardList from '../product-card-list/product-card-list';
 function  MainScreen(): JSX.Element {
   const isLoading = useSelector(getIsLoading);
 
+
   if (isLoading) {
     return (<LoadingScreen />);
   } else {

@@ -7,13 +7,13 @@ type ProductCardProps = {
 }
 
 function  ProductCard({guitar}: ProductCardProps): JSX.Element {
-  const {name, type, price, rating, previewImg} = guitar;
+  const {name, type, price, rating, previewImg, comments} = guitar;
 
   return (
     <div className="product-card">
       <img src={previewImg} width="75" height="190" alt={`${name} ${type}`} />
       <div className="product-card__info">
-        <StarRating rating={rating}/>
+        <StarRating rating={rating} commentsCount={comments.length}/>
         <p className="product-card__title">{`${name} ${capitalizedString(type)}`}</p>
         <p className="product-card__price">
           <span className="visually-hidden">Цена:</span>

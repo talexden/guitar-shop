@@ -1,6 +1,7 @@
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {FORM_SEARCH_ITEM_TAB_INDEX} from '../../common/const';
-import {fetchGuitarById} from '../../store/api-action';
+import {setCurrentGuitar} from '../../store/action';
+import {getGuitars} from '../../store/app-data/selectors';
 
 
 type HeaderSearchItem = {
@@ -9,9 +10,13 @@ type HeaderSearchItem = {
 }
 
 function HeaderFormSearchItem ({guitarName, guitarId}: HeaderSearchItem): JSX.Element {
+  const guitars = useSelector(getGuitars);
   const dispatch = useDispatch();
   const handleClick = () => {
-    dispatch(fetchGuitarById(guitarId));
+    const selectedGuitar = guitars.find((guitar) => guitar.id === guitarId);
+    if (selectedGuitar) {
+      dispatch(setCurrentGuitar(selectedGuitar));
+    }
   };
 
   return (

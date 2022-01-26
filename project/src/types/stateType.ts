@@ -1,5 +1,17 @@
 import {RootState} from '../store/root-reducer';
 
+export type CommentType = {
+  id: string,
+  userName: string,
+  advantage: string,
+  disadvantage: string,
+  comment: string,
+  rating: number,
+  createAt: string,
+  guitarId: number
+};
+
+
 export type GuitarType = {
   id: number,
   name: string,
@@ -10,19 +22,8 @@ export type GuitarType = {
   stringCount: number,
   rating: number,
   price: number,
+  comments: CommentType[],
 };
-
-export type CommentType = {
-  id: string,
-  userName: string,
-  advantages: string,
-  disadvantages: string,
-  comment: string,
-  rating: number,
-  createAt: string,
-  guitarId: number
-};
-
 export type CommentPostType = {
   guitarId: number,
   userName: string,
