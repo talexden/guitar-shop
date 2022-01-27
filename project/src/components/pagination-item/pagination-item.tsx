@@ -1,20 +1,27 @@
-import { Link } from 'react-router-dom';
-import {AppRoute} from '../../common/const';
+import {useDispatch} from 'react-redux';
+import {setCurrentPage} from '../../store/action';
 
 type PaginationItemProps = {
   isActive: boolean,
   pageIdx: number,
 }
 
+
 function PaginationItem ({isActive, pageIdx}: PaginationItemProps): JSX.Element {
+  const dispatch = useDispatch();
+  const handleOnClick = () => {
+    dispatch(setCurrentPage(pageIdx));
+  };
+
   return (
     <li className={`pagination__page${isActive ? ' pagination__page--active' : ''}`}>
-      <Link
+      <a
         className="link pagination__page-link"
-        to={`${AppRoute.Catalog}${pageIdx}`}
+        onClick={handleOnClick}
+        href="#top"
       >
         {pageIdx}
-      </Link>
+      </a>
     </li>
   );
 }

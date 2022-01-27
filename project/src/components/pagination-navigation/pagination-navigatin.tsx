@@ -1,24 +1,31 @@
-import { Link } from 'react-router-dom';
 import {PaginationNavigationType} from '../../types/const-type';
+import {useDispatch} from 'react-redux';
+import {setCurrentPage} from '../../store/action';
 
 type PaginationNavigationProps = {
   navigator: PaginationNavigationType;
-  url: string,
+  pageIdx: number,
 }
 
 
-function PaginationNavigation ({navigator, url}: PaginationNavigationProps): JSX.Element {
+function PaginationNavigation ({navigator, pageIdx}: PaginationNavigationProps): JSX.Element {
   const {navigationClass, id, label} = navigator;
+  const dispatch = useDispatch();
+  const handleOnClick = (page: number) => {
+    dispatch(setCurrentPage(page));
+  };
+
 
   return (
     <li className={`pagination__page ${navigationClass}`}>
-      <Link
+      <a
         className="link pagination__page-link"
         id={id}
-        to={url}
+        onClick={() => handleOnClick(pageIdx)}
+        href="#top"
       >
         {label}
-      </Link>
+      </a>
     </li>
   );
 }

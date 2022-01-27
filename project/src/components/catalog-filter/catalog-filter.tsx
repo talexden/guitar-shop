@@ -1,30 +1,39 @@
 import {nanoid} from '@reduxjs/toolkit';
 import {ChangeEvent, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {CHECKBOX_GUITAR_TYPE, CHECKBOX_STRING_TYPE, CORRECT_PRICE_DELAY, CURRENT_PAGE_INIT} from '../../common/const';
+import {
+  AppRoute,
+  CHECKBOX_GUITAR_TYPE,
+  CHECKBOX_STRING_TYPE,
+  CORRECT_PRICE_DELAY,
+  CURRENT_PAGE_INIT
+} from '../../common/const';
 import {getFilterByPrice, getCheckboxStrings, getMinMaxPrice, getFilteredByString} from '../../common/filter';
 import useDebounce from '../../hooks/use-debounce';
-import {setCurrentPage, setFilteredGuitars} from '../../store/action';
+import {redirectToRoute, setCurrentPage, setFilteredGuitars} from '../../store/action';
 import {getGuitars} from '../../store/app-data/selectors';
 import {CheckboxType, StringsType} from '../../types/const-type';
 import {checkboxStateType, priceStateType} from '../../types/filter-types';
 import Checkbox from '../checkbox/checkbox';
+import {getCurrentPage} from '../../store/app-process/selectors';
 
 const getCheckboxState = (checkboxType: CheckboxType[]): checkboxStateType => {
-  checkboxType.map((checkbox) => (
+  const checkboxState: checkboxStateType = {};
+  checkboxType.forEach((checkbox) => {
     Object.assign(
-      {},
+      checkboxState,
       {
         [checkbox.name]: false,
       },
-    )
-  ));
-  return {};
+    );
+  });
+  return checkboxState;
 };
 
 
 function  CatalogFilter(): JSX.Element {
   const guitars = useSelector(getGuitars);
+  const currentPage = useSelector(getCurrentPage);
   const dispatch = useDispatch();
 
   const checkboxStateInit: checkboxStateType = Object.assign(
@@ -40,9 +49,13 @@ function  CatalogFilter(): JSX.Element {
   const [stringCheckboxState, setStringCheckboxState] = useState(checkboxStateInit);
   const [guitarTypeStrungState, setGuitarTypeStringState] = useState(guitarTypeStrungStateInit);
 
-  // const queryString = window.location.search;
-  // const urlParams = new URLSearchParams(queryString);
-  // console.log(urlParams);
+  // const urlSearchParams = new URLSearchParams(window.location.search);
+  // const params = Object.fromEntries(urlSearchParams.entries());
+  // console.log('params: ', params);
+
+  useEffect(() => {
+    dispatch(redirectToRoute(`${AppRoute.Catalog}${currentPage}`));
+  }, [currentPage, dispatch]);
 
   const handleCorrectPrice = () => {
     if (priceState.priceMin < priceStateInit.priceMin) {

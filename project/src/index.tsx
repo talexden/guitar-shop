@@ -25,6 +25,7 @@ const store = configureStore({
 
 store.dispatch(fetchGuitars());
 
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store = {store}>

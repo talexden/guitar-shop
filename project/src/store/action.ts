@@ -1,8 +1,15 @@
 import {createAction} from '@reduxjs/toolkit';
-import {SortDirect, SortKey} from '../common/const';
+import {APIRoute, SortDirect, SortKey} from '../common/const';
 import {ActionType} from '../types/action-type';
 import {GuitarType} from '../types/stateType';
 
+
+export const redirectToRoute = createAction(
+  ActionType.RedirectToRoute,
+  (url: APIRoute | string) => ({
+    payload: url,
+  }),
+);
 
 export const setGuitars = createAction(
   ActionType.SetGuitars,

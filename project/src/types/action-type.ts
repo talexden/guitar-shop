@@ -13,10 +13,10 @@ export enum ActionType {
   SetPaginationPages = 'app/setPaginationPages',
   SetCurrentGuitar = 'app/setCurrentGuitar',
   SetCurrentPage = 'app/setCurrentPage',
-  RedirectToRoute = 'app/redirectToRoute',
   SetSortKey = 'app/setSortKey',
   SetSortDirect = 'app/setSortDirect',
   SetSearchedGuitars = 'app/setSearchedGuitars',
+  RedirectToRoute = 'route/redirectToRoute',
 }
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, StateType, AxiosInstance, Action>;

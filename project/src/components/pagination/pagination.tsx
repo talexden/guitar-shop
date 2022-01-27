@@ -1,7 +1,7 @@
 import {nanoid} from '@reduxjs/toolkit';
 import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRoute, CURRENT_PAGE_INIT, PAGINATION_COUNT, PaginationNav} from '../../common/const';
+import {CURRENT_PAGE_INIT, PAGINATION_COUNT, PaginationNav} from '../../common/const';
 import {getIntegersArrayFromTo} from '../../common/utils';
 import {setPaginationPages} from '../../store/action';
 import {getCurrentPage, getGuitarsByPages, getPaginationPages} from '../../store/app-process/selectors';
@@ -41,7 +41,7 @@ function  Pagination(): JSX.Element {
           currentPage > 1 &&
           <PaginationNavigation
             navigator={PaginationNav.Previous}
-            url={`${AppRoute.Catalog}${currentPage - 1}`}
+            pageIdx={currentPage - 1}
           />
         }
 
@@ -58,7 +58,7 @@ function  Pagination(): JSX.Element {
           currentPage < guitarsByPages.length &&
           <PaginationNavigation
             navigator={PaginationNav.Next}
-            url={`${AppRoute.Catalog}${currentPage + 1}`}
+            pageIdx={currentPage + 1}
           />
         }
 
