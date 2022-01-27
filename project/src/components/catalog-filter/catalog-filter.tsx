@@ -1,13 +1,7 @@
 import {nanoid} from '@reduxjs/toolkit';
 import {ChangeEvent, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  AppRoute,
-  CHECKBOX_GUITAR_TYPE,
-  CHECKBOX_STRING_TYPE,
-  CORRECT_PRICE_DELAY,
-  CURRENT_PAGE_INIT
-} from '../../common/const';
+import {AppRoute, CHECKBOX_GUITAR_TYPE, CHECKBOX_STRING_TYPE, CORRECT_PRICE_DELAY, CURRENT_PAGE_INIT} from '../../common/const';
 import {getFilterByPrice, getCheckboxStrings, getMinMaxPrice, getFilteredByString} from '../../common/filter';
 import useDebounce from '../../hooks/use-debounce';
 import {redirectToRoute, setCurrentPage, setFilteredGuitars} from '../../store/action';
@@ -36,11 +30,12 @@ function  CatalogFilter(): JSX.Element {
   const currentPage = useSelector(getCurrentPage);
   const dispatch = useDispatch();
 
-  const checkboxStateInit: checkboxStateType = Object.assign(
-    {},
-    getCheckboxState(CHECKBOX_GUITAR_TYPE),
-    getCheckboxState(CHECKBOX_STRING_TYPE),
-  );
+  const checkboxStateInit: checkboxStateType =
+    Object.assign(
+      {},
+      getCheckboxState(CHECKBOX_GUITAR_TYPE),
+      getCheckboxState(CHECKBOX_STRING_TYPE),
+    );
 
   const priceStateInit: priceStateType = getMinMaxPrice(guitars);
   const guitarTypeStrungStateInit: StringsType = [];
@@ -49,13 +44,26 @@ function  CatalogFilter(): JSX.Element {
   const [stringCheckboxState, setStringCheckboxState] = useState(checkboxStateInit);
   const [guitarTypeStrungState, setGuitarTypeStringState] = useState(guitarTypeStrungStateInit);
 
-  // const urlSearchParams = new URLSearchParams(window.location.search);
-  // const params = Object.fromEntries(urlSearchParams.entries());
-  // console.log('params: ', params);
-
+  // create search URL
   useEffect(() => {
-    dispatch(redirectToRoute(`${AppRoute.Catalog}${currentPage}`));
-  }, [currentPage, dispatch]);
+    const priceParams: string[] = [];
+    if (priceState.priceMin > priceStateInit.priceMin) {
+      priceParams.push(`priceMin=${priceState.priceMin}`);
+    }
+    if (priceState.priceMax < priceStateInit.priceMax) {
+      priceParams.push(`priceMin=${priceState.priceMax}`);
+    }
+
+    const checkboxParams: string[] = [];
+    Object.keys(stringCheckboxState).forEach((key) => {
+      if (stringCheckboxState[key]) {
+        checkboxParams.push(`${key}=${stringCheckboxState[key]}`);
+      }
+    });
+
+    const search = `?${[...priceParams, ...checkboxParams].join('&')}`;
+    dispatch(redirectToRoute(`${AppRoute.Catalog}${currentPage}${search}`));
+  }, [currentPage, stringCheckboxState, priceState, priceStateInit, dispatch]);
 
   const handleCorrectPrice = () => {
     if (priceState.priceMin < priceStateInit.priceMin) {
