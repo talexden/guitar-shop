@@ -46,7 +46,7 @@ const initialState: AppProcessType = {
   paginationPages: [],
 };
 
-export const appProcess = createReducer(initialState, (builder)=>{
+export const AppProcess = createReducer(initialState, (builder)=>{
   builder
 
     .addCase(setFilteredGuitars, (state, action) => {
