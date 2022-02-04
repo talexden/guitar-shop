@@ -2,7 +2,6 @@ import {createMemoryHistory} from 'history';
 import {render, screen} from '@testing-library/react';
 import {Route, Router, Switch} from 'react-router-dom';
 import Logo from './logo';
-// import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 
 

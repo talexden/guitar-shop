@@ -1,6 +1,6 @@
 import {nanoid} from '@reduxjs/toolkit';
 import {RATING_STAR_COUNT} from '../../common/const';
-import StarRatingItem from '../star-rating-item/star-rating-item';
+import StarRatingItem from '../star-rating-item/star-rating-item.test';
 
 type StarRatingProps = {
   rating: number,
