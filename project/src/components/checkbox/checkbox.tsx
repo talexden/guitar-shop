@@ -21,6 +21,7 @@ function Checkbox (props: CheckboxProps): JSX.Element {
         checked={isChecked}
         disabled={isDisabled}
         onChange={cb}
+        data-testid={`checkbox-${name}`}
       />
       <label htmlFor={name}>{label}</label>
     </div>

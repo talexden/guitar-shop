@@ -1,11 +1,11 @@
-import {mockGuitars} from './mock-guitars';
+import {mockGuitarsLongArray} from './mock-guitars';
 import {search} from './search';
 
 describe('Business logic: check search functions', () => {
   describe('Function: search', () => {
     it('should be return GUITARS structure filtered by keywords', () => {
       const searchKey = 'чест';
-      expect(search(mockGuitars, searchKey))
+      expect(search(mockGuitarsLongArray, searchKey))
         .toEqual(
           [
             {

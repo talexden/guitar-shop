@@ -1,19 +1,19 @@
 import {Link} from 'react-router-dom';
-import {AppRoute, BreadcrumbsLabel} from '../../common/const';
+import {AppRoute, NavigationLabel} from '../../common/const';
 import {nanoid} from '@reduxjs/toolkit';
 
 const BreadcrumbsItem = [
   {
     route: AppRoute.Main,
-    label: BreadcrumbsLabel.Main,
+    label: NavigationLabel.Main,
   },
   {
     route: AppRoute.Catalog,
-    label: BreadcrumbsLabel.Catalog,
+    label: NavigationLabel.Catalog,
   },
   {
     route: AppRoute.About,
-    label: BreadcrumbsLabel.About,
+    label: NavigationLabel.About,
   },
 ];
 

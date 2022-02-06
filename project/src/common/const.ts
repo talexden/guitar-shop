@@ -5,6 +5,7 @@ export const VIEW_CATALOG_COUNT = 9;
 export enum AppRoute {
   Main = '/',
   Catalog = '/page',
+  Shops = '/shops',
   About = '/about',
   ProductInfo = '/product-info',
   Cart = '/cart'
@@ -19,11 +20,27 @@ export enum APIRoute {
   OrderPost = '/orders'
 }
 
-export enum BreadcrumbsLabel {
+export enum NavigationLabel {
   Main = 'Главная',
   Catalog = 'Каталог',
   About = 'О компании',
+  Shops = 'Где купить',
 }
+
+export const navigationItems = [
+  {
+    url: AppRoute.Catalog,
+    label: NavigationLabel.Catalog,
+  },
+  {
+    url: AppRoute.Shops,
+    label: NavigationLabel.Shops,
+  },
+  {
+    url: AppRoute.About,
+    label: NavigationLabel.About,
+  },
+];
 
 export enum StyleClassName {
   HeaderLogo = 'header__logo',

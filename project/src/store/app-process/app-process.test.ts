@@ -1,5 +1,5 @@
 import {
-  setCurrentGuitar,
+  setCurrentGuitar, setCurrentNavigationLabel,
   setCurrentPage,
   setFilteredGuitars,
   setGuitarsByPages,
@@ -7,7 +7,7 @@ import {
   setSortedGuitars,
   setSortKey
 } from '../action';
-import {mockGuitars, mockGuitarsSortedByPages} from '../../common/mock-guitars';
+import {mockGuitarsLongArray, mockGuitarsSortedByPages} from '../../common/mock-guitars';
 import {AppProcess, AppProcessType} from './app-process';
 import {SortDirect, SortKey} from '../../common/const';
 
@@ -29,6 +29,7 @@ describe('Reducer', () => {
         currentGuitar: null,
         currentPage: 1,
         paginationPages: [],
+        currentNavigationLabel: '',
       };
     });
 
@@ -38,13 +39,13 @@ describe('Reducer', () => {
     });
 
     it('setFilteredGuitars: should update filteredGuitars', () => {
-      expect(AppProcess(state, setFilteredGuitars(mockGuitars)))
-        .toEqual({...state, filteredGuitars: mockGuitars});
+      expect(AppProcess(state, setFilteredGuitars(mockGuitarsLongArray)))
+        .toEqual({...state, filteredGuitars: mockGuitarsLongArray});
     });
 
     it('setSortedGuitars: should update sortedGuitars', () => {
-      expect(AppProcess(state, setSortedGuitars(mockGuitars)))
-        .toEqual({...state, sortedGuitars: mockGuitars});
+      expect(AppProcess(state, setSortedGuitars(mockGuitarsLongArray)))
+        .toEqual({...state, sortedGuitars: mockGuitarsLongArray});
     });
 
     it('setGuitarsByPages: should update sortedGuitars', () => {
@@ -59,7 +60,7 @@ describe('Reducer', () => {
     });
 
     it('setCurrentGuitar: should update currentGuitar', () => {
-      const guitar = mockGuitars[1];
+      const guitar = mockGuitarsLongArray[1];
       expect(AppProcess(state, setCurrentGuitar(guitar)))
         .toEqual({...state, currentGuitar: guitar});
     });
@@ -71,7 +72,7 @@ describe('Reducer', () => {
     });
 
     it('setSearchedGuitars: should update searchedGuitars', () => {
-      const guitars = mockGuitars;
+      const guitars = mockGuitarsLongArray;
       expect(AppProcess(state, setSearchedGuitars(guitars)))
         .toEqual({...state, searchedGuitars: guitars});
     });
@@ -95,6 +96,14 @@ describe('Reducer', () => {
       it('setSortDirect: should update isFilter & sortKey by SortDirect.HighToLow', () => {
         expect(AppProcess(state, setSortDirect(SortDirect.HighToLow)))
           .toEqual({...state, isFilter: true, sortDirect: SortDirect.HighToLow});
+      });
+    });
+
+    describe('Reducer: setCurrentNavigationPage', () => {
+      it('setCurrentNavigationPage: should update currentNavigationPageLabel', () => {
+        const pageLabel = 'Каталог';
+        expect(AppProcess(state, setCurrentNavigationLabel(pageLabel)))
+          .toEqual({...state, currentNavigationLabel: 'Каталог'});
       });
     });
   });

@@ -71,5 +71,11 @@ export const setSortDirect = createAction(
     {payload: sortDirect}
   ));
 
+export const setCurrentNavigationLabel = createAction(
+  ActionType.SetCurrentNavigationLabel,
+  (navigationLabel: string)=>(
+    {payload: navigationLabel}
+  ));
+
 export const setIsLoading = createAction(ActionType.SetIsLoading);
 export const setIsLoaded = createAction(ActionType.SetIsLoaded);

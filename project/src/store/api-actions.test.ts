@@ -6,7 +6,7 @@ import {createAPI} from '../services/api';
 import {APIRoute, SUCCESSFUL_SENDING_CODE} from '../common/const';
 import {RootState} from './root-reducer';
 import {setGuitars, setIsLoaded, setIsLoading} from './action';
-import {mockGuitars} from '../common/mock-guitars';
+import {mockGuitarsLongArray} from '../common/mock-guitars';
 import {fetchGuitars} from './api-action';
 
 describe('Async actions', () => {
@@ -24,7 +24,7 @@ describe('Async actions', () => {
     const store = mockStore();
     mockAPI
       .onGet(APIRoute.Guitars)
-      .reply(SUCCESSFUL_SENDING_CODE, mockGuitars);
+      .reply(SUCCESSFUL_SENDING_CODE, mockGuitarsLongArray);
 
     expect(store.getActions()).toEqual([]);
 
@@ -32,7 +32,7 @@ describe('Async actions', () => {
 
     expect(store.getActions()).toEqual([
       setIsLoading(),
-      setGuitars(mockGuitars),
+      setGuitars(mockGuitarsLongArray),
       setIsLoaded(),
     ]);
   });

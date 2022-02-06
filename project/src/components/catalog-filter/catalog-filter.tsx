@@ -133,6 +133,7 @@ function  CatalogFilter(): JSX.Element {
               name="priceMin"
               value={priceState.priceMin}
               onChange={handleChangePrice}
+              data-testid={'inputPriceMin'}
             />
           </div>
           <div className="form-input">
@@ -144,7 +145,7 @@ function  CatalogFilter(): JSX.Element {
               name="priceMax"
               value={priceState.priceMax}
               onChange={handleChangePrice}
-
+              data-testid={'inputPriceMax'}
             />
           </div>
         </div>

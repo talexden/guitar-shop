@@ -1,6 +1,6 @@
 import {AppData, AppDataType} from './app-data';
 import {setGuitars, setIsLoaded, setIsLoading} from '../action';
-import {mockGuitars} from '../../common/mock-guitars';
+import {mockGuitarsLongArray} from '../../common/mock-guitars';
 
 describe('Reducer', () => {
   describe('Reducer: AppData', () => {
@@ -18,8 +18,8 @@ describe('Reducer', () => {
     });
 
     it('setGuitars: should update guitars', () => {
-      expect(AppData(state, setGuitars(mockGuitars)))
-        .toEqual({...state, guitars: mockGuitars});
+      expect(AppData(state, setGuitars(mockGuitarsLongArray)))
+        .toEqual({...state, guitars: mockGuitarsLongArray});
     });
 
     it('setIsLoading: should update isLoading: true', () => {

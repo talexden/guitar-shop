@@ -1,10 +1,10 @@
 import {getCheckboxStrings, getFilterByPrice, getFilteredByString, getMinMaxPrice} from './filter';
-import {mockGuitars, mockGuitarsFilterByPrice, mockGuitarsFilteredByString} from './mock-guitars';
+import {mockGuitarsLongArray, mockGuitarsFilterByPrice, mockGuitarsFilteredByString} from './mock-guitars';
 
 describe('Business logic: check filter functions', () => {
   describe('Function: getMinMaxPrice', () => {
     it('should be return min end max price from structure GUITARS', () => {
-      expect(getMinMaxPrice(mockGuitars))
+      expect(getMinMaxPrice(mockGuitarsLongArray))
         .toEqual({priceMax: 35000, priceMin: 1700});
     });
   });
@@ -12,14 +12,14 @@ describe('Business logic: check filter functions', () => {
     it('should be filter structure GUITARS by min end max price', () => {
       const minPrice  = 1700;
       const maxPrice = 1900;
-      expect(getFilterByPrice(mockGuitars, minPrice, maxPrice))
+      expect(getFilterByPrice(mockGuitarsLongArray, minPrice, maxPrice))
         .toEqual(mockGuitarsFilterByPrice);
     });
   });
   describe('Function: getFilteredByString', () => {
     it('should be filter structure GUITARS by string count array', () => {
       const strings  = [4, 12];
-      expect(getFilteredByString(mockGuitars, strings))
+      expect(getFilteredByString(mockGuitarsLongArray, strings))
         .toEqual(mockGuitarsFilteredByString);
     });
   });

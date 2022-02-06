@@ -1,27 +1,25 @@
-import {createMemoryHistory} from 'history';
 import {render, screen} from '@testing-library/react';
-import {Route, Router, Switch} from 'react-router-dom';
-import Logo from './logo';
 import userEvent from '@testing-library/user-event';
-
+import {Route, Router, Switch} from 'react-router-dom';
+import ErrorScreen from './error-screen';
+import {createMemoryHistory} from 'history';
 
 const history = createMemoryHistory();
-describe('Component: Logo', () => {
-  it('should render correctly', () => {
-    const styleClassName = 'logo__fake';
 
+describe('Component: ErrorScreen', () => {
+  it('should render correctly', () => {
     render(
       <Router history={history}>
-        <Logo className={styleClassName}/>
+        <ErrorScreen />
       </Router>);
 
-    expect(screen.getByAltText(/Логотип/i)).toBeInTheDocument();
+    expect(screen.getByText(/404 Not Found/i)).toBeInTheDocument();
+    expect(screen.getByText(/Перейти на главную страницу/i)).toBeInTheDocument();
     expect(screen.getByRole('link')).toBeInTheDocument();
   });
 
   it('should redirect to root url when user clicked to link', () => {
     history.push('/fake');
-    const styleClassName = 'logo__fake';
 
     render(
       <Router history={history}>
@@ -30,7 +28,7 @@ describe('Component: Logo', () => {
             <h1>This is main page</h1>
           </Route>
           <Route>
-            <Logo className={styleClassName}/>
+            <ErrorScreen />
           </Route>
         </Switch>
       </Router>);

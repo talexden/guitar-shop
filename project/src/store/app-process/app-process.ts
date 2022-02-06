@@ -10,7 +10,8 @@ import {
   setGuitarsByPages,
   setPaginationPages,
   setCurrentPage,
-  setCurrentGuitar
+  setCurrentGuitar,
+  setCurrentNavigationLabel
 } from '../action';
 
 
@@ -28,6 +29,7 @@ export type AppProcessType = {
   currentGuitar: GuitarType | null,
   currentPage: number,
   paginationPages: number[],
+  currentNavigationLabel: string
 }
 
 const initialState: AppProcessType = {
@@ -44,6 +46,8 @@ const initialState: AppProcessType = {
   currentGuitar: null,
   currentPage: 1,
   paginationPages: [],
+  currentNavigationLabel: '',
+
 };
 
 export const AppProcess = createReducer(initialState, (builder)=>{
@@ -92,6 +96,10 @@ export const AppProcess = createReducer(initialState, (builder)=>{
     .addCase(setSortDirect, (state, action) => {
       state.sortDirect = action.payload;
       state.isFilter = true;
+    })
+
+    .addCase(setCurrentNavigationLabel, (state, action) => {
+      state.currentNavigationLabel = action.payload;
     });
 });
 

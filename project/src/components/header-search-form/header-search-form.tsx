@@ -38,6 +38,7 @@ function HeaderSearchForm (): JSX.Element {
         autoComplete="off"
         placeholder="что вы ищите?"
         onChange={handleChange}
+        data-testid="search-input"
       />
       <label className="visually-hidden" htmlFor="search">Поиск</label>
     </form>
