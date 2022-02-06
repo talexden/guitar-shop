@@ -12,9 +12,7 @@ const mockStore = configureMockStore();
 describe('Component: Header', () => {
   it('should render correctly', () => {
     const store = mockStore({
-      'PROCESS': {
-        searchedGuitars: [],
-      },
+      'PROCESS': {searchedGuitars: []},
       'DATA': {guitars: mockGuitars},
     });
 

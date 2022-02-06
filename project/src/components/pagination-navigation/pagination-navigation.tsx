@@ -3,16 +3,16 @@ import {useDispatch} from 'react-redux';
 import {setCurrentPage} from '../../store/action';
 
 type PaginationNavigationProps = {
-  navigator: PaginationNavigationType;
+  navigation: PaginationNavigationType;
   pageIdx: number,
 }
 
 
-function PaginationNavigation ({navigator, pageIdx}: PaginationNavigationProps): JSX.Element {
-  const {navigationClass, id, label} = navigator;
+function PaginationNavigation ({navigation, pageIdx}: PaginationNavigationProps): JSX.Element {
+  const {navigationClass, id, label} = navigation;
   const dispatch = useDispatch();
-  const handleOnClick = (page: number) => {
-    dispatch(setCurrentPage(page));
+  const handleOnClick = () => {
+    dispatch(setCurrentPage(pageIdx));
   };
 
 
@@ -21,7 +21,7 @@ function PaginationNavigation ({navigator, pageIdx}: PaginationNavigationProps):
       <a
         className="link pagination__page-link"
         id={id}
-        onClick={() => handleOnClick(pageIdx)}
+        onClick={handleOnClick}
         href="#top"
       >
         {label}

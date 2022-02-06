@@ -6,7 +6,7 @@ import {getIntegersArrayFromTo} from '../../common/utils';
 import {setPaginationPages} from '../../store/action';
 import {getCurrentPage, getGuitarsByPages, getPaginationPages} from '../../store/app-process/selectors';
 import PaginationItem from '../pagination-item/pagination-item';
-import PaginationNavigation from '../pagination-navigation/pagination-navigatin';
+import PaginationNavigation from '../pagination-navigation/pagination-navigation';
 
 
 function  Pagination(): JSX.Element {
@@ -40,7 +40,7 @@ function  Pagination(): JSX.Element {
         {
           currentPage > 1 &&
           <PaginationNavigation
-            navigator={PaginationNav.Previous}
+            navigation={PaginationNav.Previous}
             pageIdx={currentPage - 1}
           />
         }
@@ -57,7 +57,7 @@ function  Pagination(): JSX.Element {
         {
           currentPage < guitarsByPages.length &&
           <PaginationNavigation
-            navigator={PaginationNav.Next}
+            navigation={PaginationNav.Next}
             pageIdx={currentPage + 1}
           />
         }
