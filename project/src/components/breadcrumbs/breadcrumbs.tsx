@@ -20,7 +20,7 @@ const BreadcrumbsItem = [
 
 function  Breadcrumbs(): JSX.Element {
   return (
-    <ul className="breadcrumbs page-content__breadcrumbs">
+    <ul className="breadcrumbs page-content__breadcrumbs" data-testid={'breadcrumbs'}>
       {BreadcrumbsItem.map((item) => (
         <li className="breadcrumbs__item" key={nanoid()}>
           <Link className="link" to={item.route}>{item.label}</Link>

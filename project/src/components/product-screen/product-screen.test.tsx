@@ -3,16 +3,17 @@ import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 import {render, screen} from '@testing-library/react';
-import {mockGuitars} from '../../common/mock-guitars';
-import MainScreen from './main-screen';
+import {mockGuitar, mockGuitars} from '../../common/mock-guitars';
+import ProductScreen from './product-screen';
 
 const mockStore = configureMockStore();
 const history = createMemoryHistory();
 
-describe('Component: CatalogSort', () => {
+describe('Component: ProductScreen', () => {
   it('should render correctly', () => {
     const store = mockStore({
       PROCESS: {
+        currentGuitar: mockGuitar,
         searchedGuitars: [],
         guitarsByPages: [],
         currentPage: 1,
@@ -29,13 +30,15 @@ describe('Component: CatalogSort', () => {
     render(
       <Provider store={store}>
         <Router history={history}>
-          <MainScreen />
+          <ProductScreen />
         </Router>
       </Provider>);
 
     expect(screen.getByText(/Начать поиск/i)).toBeInTheDocument();
+    expect(screen.getByText(/Товар/i)).toBeInTheDocument();
     expect(screen.getByTestId(/breadcrumbs/i)).toBeInTheDocument();
-    expect(screen.getByText(/Каталог гитар/i)).toBeInTheDocument();
+    expect(screen.getByText(/Характеристики/i)).toBeInTheDocument();
+    expect(screen.getByText(/Оставить отзыв/i)).toBeInTheDocument();
     expect(screen.getByText(/Информация/i)).toBeInTheDocument();
   });
 });

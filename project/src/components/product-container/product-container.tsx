@@ -14,7 +14,7 @@ function  ProductContainer(): JSX.Element {
     const {previewImg, name, rating, vendorCode, type, stringCount, description, price, comments} = guitar;
     return (
       <div className="product-container">
-        <img className="product-container__img" src={previewImg} width="90" height="235" alt="" />
+        <img className="product-container__img" src={previewImg} width="90" height="235" alt={name} />
         <div className="product-container__info-wrapper">
           <h2 className="product-container__title title title--big title--uppercase">{name}</h2>
 

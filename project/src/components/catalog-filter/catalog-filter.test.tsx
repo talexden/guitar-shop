@@ -13,8 +13,8 @@ const mockStore = configureMockStore();
 describe('Component: CatalogFilter', () => {
   it('should render correctly', () => {
     const store = mockStore({
-      'PROCESS': {currentPage: 1},
-      'DATA': {guitars: mockGuitarsLongArray},
+      PROCESS: {currentPage: 1},
+      DATA: {guitars: mockGuitarsLongArray},
     });
     render(
       <Provider store={store}>
