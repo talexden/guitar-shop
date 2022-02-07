@@ -4,12 +4,13 @@ import StarRatingItem from '../star-rating-item/star-rating-item';
 
 type StarRatingProps = {
   rating: number,
-  commentsCount: number,
+  commentsCount: string,
+  className: string,
 }
 
-export function StarRating ({rating, commentsCount}:StarRatingProps):JSX.Element {
+export function StarRating ({rating, commentsCount, className}:StarRatingProps):JSX.Element {
   return (
-    <div className="rate product-card__rate" aria-hidden="true">
+    <div className={`rate${className}`} aria-hidden="true">
       <span className="visually-hidden">Рейтинг:</span>
 
       {[...Array(RATING_STAR_COUNT)].map((_x, i) => <StarRatingItem key={nanoid()} starNumber={i+1} rating={rating}/> )}

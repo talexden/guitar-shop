@@ -3,6 +3,7 @@ import {getTripleNumberString} from '../../common/utils';
 import {getCurrentGuitar} from '../../store/app-process/selectors';
 import LoadingScreen from '../loading-screen/loading-screen';
 import {StarRating} from '../star-rating/star-rating';
+import {StarRatingClassName} from '../../common/const';
 
 
 function  ProductContainer(): JSX.Element {
@@ -18,7 +19,7 @@ function  ProductContainer(): JSX.Element {
         <div className="product-container__info-wrapper">
           <h2 className="product-container__title title title--big title--uppercase">{name}</h2>
 
-          <StarRating rating={rating} commentsCount={comments.length}/>
+          <StarRating rating={rating} commentsCount={String(comments.length)} className={StarRatingClassName.ProductContainer}/>
 
           <div className="tabs">
             <a className="button button--medium tabs__button" href="#characteristics">Характеристики</a>
