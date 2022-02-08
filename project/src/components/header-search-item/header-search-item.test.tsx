@@ -4,7 +4,7 @@ import {Router} from 'react-router-dom';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import { Provider } from 'react-redux';
 import {mockGuitars} from '../../common/mock-guitars';
-import HeaderFormSearchItem from './header-search-item';
+import HeaderSearchItem from './header-search-item';
 
 const history = createMemoryHistory();
 const mockStore = configureMockStore();
@@ -22,7 +22,7 @@ describe('Component: HeaderFormSearchItem', () => {
     render(
       <Provider store={store}>
         <Router history={history}>
-          <HeaderFormSearchItem
+          <HeaderSearchItem
             guitarName={guitarName}
             guitarId={guitarId}
           />

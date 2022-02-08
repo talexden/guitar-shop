@@ -4,12 +4,12 @@ import {setCurrentGuitar} from '../../store/action';
 import {getGuitars} from '../../store/app-data/selectors';
 
 
-type HeaderSearchItem = {
+type HeaderSearchItemProps = {
   guitarName: string;
   guitarId: number;
 }
 
-function HeaderFormSearchItem ({guitarName, guitarId}: HeaderSearchItem): JSX.Element {
+function HeaderSearchItem ({guitarName, guitarId}: HeaderSearchItemProps): JSX.Element {
   const guitars = useSelector(getGuitars);
   const dispatch = useDispatch();
   const handleClick = () => {
@@ -30,4 +30,4 @@ function HeaderFormSearchItem ({guitarName, guitarId}: HeaderSearchItem): JSX.El
   );
 }
 
-export default HeaderFormSearchItem;
+export default HeaderSearchItem;
