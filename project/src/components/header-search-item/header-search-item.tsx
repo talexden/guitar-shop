@@ -3,7 +3,6 @@ import {FORM_SEARCH_ITEM_TAB_INDEX} from '../../common/const';
 import {setCurrentGuitar} from '../../store/action';
 import {getGuitars} from '../../store/app-data/selectors';
 
-
 type HeaderSearchItemProps = {
   guitarName: string;
   guitarId: number;
@@ -12,7 +11,8 @@ type HeaderSearchItemProps = {
 function HeaderSearchItem ({guitarName, guitarId}: HeaderSearchItemProps): JSX.Element {
   const guitars = useSelector(getGuitars);
   const dispatch = useDispatch();
-  const handleClick = () => {
+  const handleClick = (evt: MouseEvent) => {
+    evt.stopPropagation();
     const selectedGuitar = guitars.find((guitar) => guitar.id === guitarId);
     if (selectedGuitar) {
       dispatch(setCurrentGuitar(selectedGuitar));
@@ -23,7 +23,7 @@ function HeaderSearchItem ({guitarName, guitarId}: HeaderSearchItemProps): JSX.E
     <li
       className="form-search__select-item"
       tabIndex={FORM_SEARCH_ITEM_TAB_INDEX}
-      onClick={handleClick}
+      onClick={() => handleClick}
     >
       {guitarName}
     </li>

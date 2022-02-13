@@ -2,7 +2,14 @@ import {nanoid} from '@reduxjs/toolkit';
 import {ChangeEvent, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRoute, CHECKBOX_GUITAR_TYPE, CHECKBOX_STRING_TYPE, CORRECT_PRICE_DELAY, CURRENT_PAGE_INIT} from '../../common/const';
-import {getFilterByPrice, getCheckboxStrings, getMinMaxPrice, getFilteredByString} from '../../common/filter';
+import {
+  getFilterByPrice,
+  getCheckboxStrings,
+  getMinMaxPrice,
+  getFilteredByString,
+  filterGuitarsByType,
+  getGuitarTypeStrings
+} from '../../common/filter';
 import useDebounce from '../../hooks/use-debounce';
 import {redirectToRoute, setCurrentPage, setFilteredGuitars} from '../../store/action';
 import {getGuitars} from '../../store/app-data/selectors';
@@ -38,11 +45,16 @@ function  CatalogFilter(): JSX.Element {
     );
 
   const priceStateInit: priceStateType = getMinMaxPrice(guitars);
-  const guitarTypeStrungStateInit: StringsType = [];
+  const guitarTypeStringStateInit: StringsType = [];
+  const changePriceStateInit = {
+    priceMinIsChange: false,
+    priceMaxIsChange: false,
+  };
 
   const [priceState, setPriceState] = useState(priceStateInit);
   const [stringCheckboxState, setStringCheckboxState] = useState(checkboxStateInit);
-  const [guitarTypeStrungState, setGuitarTypeStringState] = useState(guitarTypeStrungStateInit);
+  const [guitarTypeStringState, setGuitarTypeStringState] = useState(guitarTypeStringStateInit);
+  const [changePriceState, setChangePriceState] = useState(changePriceStateInit);
 
   // create search URL
   useEffect(() => {
@@ -65,33 +77,15 @@ function  CatalogFilter(): JSX.Element {
     dispatch(redirectToRoute(`${AppRoute.Catalog}${currentPage}${search}`));
   }, [currentPage, stringCheckboxState, priceState, priceStateInit, dispatch]);
 
-  const handleCorrectPrice = () => {
-    if (priceState.priceMin < priceStateInit.priceMin) {
-      setPriceState({...priceState, priceMin: priceStateInit.priceMin});
-    }
-    if (priceState.priceMin > priceStateInit.priceMax) {
-      setPriceState({...priceState, priceMin: priceStateInit.priceMax});
-    }
-    if (priceState.priceMax > priceStateInit.priceMax) {
-      setPriceState({...priceState, priceMax: priceStateInit.priceMax});
-    }
-    if (priceState.priceMax < priceStateInit.priceMin) {
-      setPriceState({...priceState, priceMax: priceStateInit.priceMin});
-    }
-  };
 
-  const debouncePrice = useDebounce(handleCorrectPrice, CORRECT_PRICE_DELAY);
-
+  // Sorting
   useEffect(() => {
-
     const guitarsByPrice = getFilterByPrice(guitars, priceState.priceMin, priceState.priceMax);
-
-    const guitarTypeStrings = getCheckboxStrings(CHECKBOX_GUITAR_TYPE, stringCheckboxState);
-    setGuitarTypeStringState(guitarTypeStrings);
+    const guitarsByType = filterGuitarsByType(guitarsByPrice, CHECKBOX_GUITAR_TYPE, stringCheckboxState);
+    setGuitarTypeStringState(getGuitarTypeStrings(guitarsByType));
     const strings = getCheckboxStrings(CHECKBOX_STRING_TYPE, stringCheckboxState);
 
-    const guitarsSortedByGuitarType = getFilteredByString(guitarsByPrice, guitarTypeStrings);
-    const guitarsSortedByString = getFilteredByString(guitarsSortedByGuitarType, strings);
+    const guitarsSortedByString = getFilteredByString(guitarsByType, strings);
 
     dispatch(setCurrentPage(CURRENT_PAGE_INIT));
     dispatch(setFilteredGuitars(guitarsSortedByString));
@@ -111,10 +105,34 @@ function  CatalogFilter(): JSX.Element {
 
     if (priceState[name] !== Number(value)) {
       setPriceState({...priceState, [name]: Number(value)});
+      setChangePriceState({...changePriceState, [`${name}IsChange`]: true});
+    }
+  };
+
+  const handleCorrectPrice = () => {
+    let isCorrect = false;
+    let state = priceState;
+    for (const key in state) {
+      if (state[key] < priceStateInit.priceMin) {
+        state = ({...state, [key]: priceStateInit.priceMin});
+        isCorrect = true;
+      }
+      if (state[key] > priceStateInit.priceMax) {
+        state = ({...state, [key]: priceStateInit.priceMax});
+        isCorrect = true;
+      }
     }
 
-    debouncePrice();
+    if (isCorrect) {
+      setPriceState(state);
+    }
   };
+
+  const debouncedCorrectPrice = useDebounce(handleCorrectPrice, CORRECT_PRICE_DELAY);
+
+  useEffect(()=>{
+    debouncedCorrectPrice();
+  }, [priceState, debouncedCorrectPrice]);
 
 
   return (
@@ -128,10 +146,10 @@ function  CatalogFilter(): JSX.Element {
             <label className="visually-hidden">Минимальная цена</label>
             <input
               type="number"
-              placeholder="1 000"
+              placeholder={`${priceStateInit.priceMin}`}
               id="priceMin"
               name="priceMin"
-              value={priceState.priceMin}
+              value={changePriceState.priceMinIsChange ? priceState.priceMin : ''}
               onChange={handleChangePrice}
               data-testid={'inputPriceMin'}
             />
@@ -140,10 +158,10 @@ function  CatalogFilter(): JSX.Element {
             <label className="visually-hidden">Максимальная цена</label>
             <input
               type="number"
-              placeholder="30 000"
+              placeholder={`${priceState.priceMax}`}
               id="priceMax"
               name="priceMax"
-              value={priceState.priceMax}
+              value={changePriceState.priceMaxIsChange ? priceState.priceMax : ''}
               onChange={handleChangePrice}
               data-testid={'inputPriceMax'}
             />
@@ -170,7 +188,7 @@ function  CatalogFilter(): JSX.Element {
           <Checkbox
             key={nanoid()}
             isChecked={stringCheckboxState[checkbox.name]}
-            isDisabled={checkbox.string.some((string) => guitarTypeStrungState.length > 0 && !guitarTypeStrungState.includes(string))}
+            isDisabled={checkbox.string.some((string) => guitarTypeStringState.length > 0 && !guitarTypeStringState.includes(string))}
             checkbox={checkbox}
             cb={handleChangeCheckbox}
           />

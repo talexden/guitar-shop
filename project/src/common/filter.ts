@@ -14,9 +14,13 @@ export const getMinMaxPrice = (guitars: GuitarType[]): priceStateType => {
 };
 
 
-export const getFilterByPrice = (guitars: GuitarType[], minPrice: number, maxPrice: number): GuitarType[] => (
-  guitars.filter((guitar) => guitar.price >= minPrice && guitar.price <= maxPrice)
-);
+export const getFilterByPrice = (guitars: GuitarType[], minPrice: number, maxPrice: number): GuitarType[] => {
+  if (minPrice > maxPrice) {
+    [minPrice, maxPrice] = [maxPrice, minPrice];
+  }
+
+  return guitars.filter((guitar) => guitar.price >= minPrice && guitar.price <= maxPrice);
+};
 
 
 export const getFilteredByString = (guitars: GuitarType[], strings: StringsType) => {
@@ -35,11 +39,27 @@ export const getFilteredByString = (guitars: GuitarType[], strings: StringsType)
   return filteredGuitars;
 };
 
+export const filterGuitarsByType = (guitares: GuitarType[], checkboxType: CheckboxType[], state: checkboxStateType): GuitarType[] => {
+  let sortedGuitars: GuitarType[] = [];
+  let noChecked = true;
+  checkboxType.forEach((type) => {
+    if (state[type.name]) {
+      noChecked = false;
+      const filteredGuitars = guitares.filter((guitar) => state[type.name] && guitar.type === type.name);
+      sortedGuitars = [...new Set([...sortedGuitars, ...filteredGuitars])];
+    }
+  });
 
-export const getCheckboxStrings = (checkboxType: CheckboxType[], state: checkboxStateType) => {
+  return noChecked ? guitares: sortedGuitars;
+};
+
+
+export const getGuitarTypeStrings = (guitars: GuitarType[]) => [...new Set(guitars.map((guitar)=> guitar.stringCount))];
+
+export const getCheckboxStrings = (checkboxType: CheckboxType[], state: checkboxStateType): number[] => {
   let checkboxStrings: number[] = [];
-  checkboxType.forEach((checkbox, idx) => {
-    const strings: StringsType = state[checkbox.name] === true ? checkbox.string : [];
+  checkboxType.forEach((checkbox) => {
+    const strings: StringsType = state[checkbox.name] ? checkbox.string : [];
     checkboxStrings = [...new Set([...checkboxStrings,...strings])];
   });
   return checkboxStrings;

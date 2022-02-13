@@ -71,6 +71,7 @@ export enum SortDirect {
   HighToLow = -1,
 }
 
+
 export const CHECKBOX_GUITAR_TYPE: CheckboxType[] = [
   {
     label: 'Акустические гитары',
@@ -136,6 +137,6 @@ export enum StarRatingClassName {
 
 export const CURRENT_PAGE_INIT = 1;
 export const PAGINATION_COUNT = 3;
-export const CORRECT_PRICE_DELAY = 700;
+export const CORRECT_PRICE_DELAY = 3000;
 
 export const SUCCESSFUL_SENDING_CODE = 200;

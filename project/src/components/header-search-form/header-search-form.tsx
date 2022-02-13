@@ -23,6 +23,7 @@ function HeaderSearchForm (): JSX.Element {
     setSearchKey(value);
   };
 
+
   return (
     <form className="form-search__form">
       <button className="form-search__submit" type="submit">
@@ -38,6 +39,7 @@ function HeaderSearchForm (): JSX.Element {
         autoComplete="off"
         placeholder="что вы ищите?"
         onChange={handleChange}
+        value={searchKey}
         data-testid="search-input"
       />
       <label className="visually-hidden" htmlFor="search">Поиск</label>
