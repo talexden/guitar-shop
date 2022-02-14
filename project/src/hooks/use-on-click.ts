@@ -1,5 +1,4 @@
 import { useEffect, RefObject } from 'react';
-import {toast} from 'react-toastify';
 
 export const useOnClick = (
   ref: RefObject<HTMLElement>,
@@ -16,7 +15,6 @@ export const useOnClick = (
         cbOnElement();
         return;
       }
-      toast('click-hook');
       cbOutside();
     };
 
