@@ -16,6 +16,7 @@ export enum ActionType {
   SetSortKey = 'app/setSortKey',
   SetSortDirect = 'app/setSortDirect',
   SetCurrentNavigationLabel = 'app/setCurrentNavigationLabel',
+  SetSearchKey = 'app/setSearchKey',
   SetSearchedGuitars = 'app/setSearchedGuitars',
   RedirectToRoute = 'route/redirectToRoute',
 }

@@ -11,7 +11,8 @@ import {
   setPaginationPages,
   setCurrentPage,
   setCurrentGuitar,
-  setCurrentNavigationLabel
+  setCurrentNavigationLabel,
+  setSearchKey
 } from '../action';
 
 
@@ -30,6 +31,7 @@ export type AppProcessType = {
   currentPage: number,
   paginationPages: number[],
   currentNavigationLabel: string
+  searchKey: string,
 }
 
 const initialState: AppProcessType = {
@@ -47,7 +49,7 @@ const initialState: AppProcessType = {
   currentPage: 1,
   paginationPages: [],
   currentNavigationLabel: '',
-
+  searchKey: '',
 };
 
 export const AppProcess = createReducer(initialState, (builder)=>{
@@ -100,6 +102,10 @@ export const AppProcess = createReducer(initialState, (builder)=>{
 
     .addCase(setCurrentNavigationLabel, (state, action) => {
       state.currentNavigationLabel = action.payload;
+    })
+
+    .addCase(setSearchKey, (state, action) => {
+      state.searchKey = action.payload;
     });
 });
 

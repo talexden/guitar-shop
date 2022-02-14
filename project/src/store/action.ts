@@ -77,5 +77,11 @@ export const setCurrentNavigationLabel = createAction(
     {payload: navigationLabel}
   ));
 
+export const setSearchKey = createAction(
+  ActionType.SetSearchKey,
+  (searchKey: string)=>(
+    {payload: searchKey}
+  ));
+
 export const setIsLoading = createAction(ActionType.SetIsLoading);
 export const setIsLoaded = createAction(ActionType.SetIsLoaded);

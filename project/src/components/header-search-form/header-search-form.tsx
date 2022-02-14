@@ -1,13 +1,14 @@
-import {ChangeEvent, useEffect, useState} from 'react';
+import {ChangeEvent, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {search} from '../../common/search';
-import {setSearchedGuitars} from '../../store/action';
+import {setSearchedGuitars, setSearchKey} from '../../store/action';
 import {getGuitars} from '../../store/app-data/selectors';
+import {getSearchKey} from '../../store/app-process/selectors';
 
 function HeaderSearchForm (): JSX.Element {
   const dispatch = useDispatch();
   const guitars = useSelector(getGuitars);
-  const [searchKey, setSearchKey] = useState('');
+  const searchKey = useSelector(getSearchKey);
 
   useEffect(() => {
     if (searchKey) {
@@ -20,7 +21,7 @@ function HeaderSearchForm (): JSX.Element {
 
   const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const {value} = evt.target;
-    setSearchKey(value);
+    dispatch(setSearchKey(value));
   };
 
 

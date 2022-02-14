@@ -3,7 +3,10 @@ import {
   setCurrentPage,
   setFilteredGuitars,
   setGuitarsByPages,
-  setPaginationPages, setSearchedGuitars, setSortDirect,
+  setPaginationPages,
+  setSearchedGuitars,
+  setSearchKey,
+  setSortDirect,
   setSortedGuitars,
   setSortKey
 } from '../action';
@@ -30,6 +33,7 @@ describe('Reducer', () => {
         currentPage: 1,
         paginationPages: [],
         currentNavigationLabel: '',
+        searchKey: '',
       };
     });
 
@@ -104,6 +108,17 @@ describe('Reducer', () => {
         const pageLabel = 'Каталог';
         expect(AppProcess(state, setCurrentNavigationLabel(pageLabel)))
           .toEqual({...state, currentNavigationLabel: 'Каталог'});
+      });
+    });
+
+    describe('Reducer: searchKey', () => {
+      it('setSearchKey: should update searchKey with key', () => {
+        const searchKey = 'Каталог';
+        const resetSearchKey = '';
+        expect(AppProcess(state, setSearchKey(searchKey)))
+          .toEqual({...state, searchKey: 'Каталог'});
+        expect(AppProcess(state, setSearchKey(resetSearchKey)))
+          .toEqual({...state, searchKey: ''});
       });
     });
   });

@@ -23,3 +23,4 @@ export const getIsFilter = (state: StateType): boolean => state[NameSpace.proces
 export const getCurrentGuitar = (state: StateType): GuitarType | null => state[NameSpace.process].currentGuitar;
 export const getCurrentPage = (state: StateType): number => state[NameSpace.process].currentPage;
 export const getCurrentNavigationLabel = (state: StateType): string => state[NameSpace.process].currentNavigationLabel;
+export const getSearchKey = (state: StateType): string => state[NameSpace.process].searchKey;
