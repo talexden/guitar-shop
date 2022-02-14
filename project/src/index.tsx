@@ -29,8 +29,10 @@ store.dispatch(fetchGuitars());
 ReactDOM.render(
   <React.StrictMode>
     <Provider store = {store}>
-      <ToastContainer />
-      <App />
+      <div className="wrapper">
+        <ToastContainer />
+        <App />
+      </div>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'));
