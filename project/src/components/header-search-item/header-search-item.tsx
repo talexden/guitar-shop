@@ -4,6 +4,7 @@ import {setCurrentGuitar, setSearchKey} from '../../store/action';
 import {getGuitars} from '../../store/app-data/selectors';
 import {useOnClick} from '../../hooks/use-on-click';
 import {useRef} from 'react';
+import {getSearchKey} from '../../store/app-process/selectors';
 
 
 type HeaderSearchItemProps = {
@@ -13,6 +14,7 @@ type HeaderSearchItemProps = {
 
 function HeaderSearchItem ({guitarName, guitarId}: HeaderSearchItemProps): JSX.Element {
   const guitars = useSelector(getGuitars);
+  const searchKey = useSelector(getSearchKey);
   const dispatch = useDispatch();
   const node = useRef<HTMLLIElement>(null);
 
@@ -25,7 +27,11 @@ function HeaderSearchItem ({guitarName, guitarId}: HeaderSearchItemProps): JSX.E
   };
 
 
-  useOnClick(node, handleClick, () => dispatch(setSearchKey('')));
+  useOnClick(node, handleClick, () => {
+    if (searchKey !== '') {
+      dispatch(setSearchKey(''));
+    }
+  });
 
   return (
     <li

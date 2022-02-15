@@ -63,7 +63,7 @@ function  CatalogFilter(): JSX.Element {
       priceParams.push(`priceMin=${priceState.priceMin}`);
     }
     if (priceState.priceMax < priceStateInit.priceMax) {
-      priceParams.push(`priceMin=${priceState.priceMax}`);
+      priceParams.push(`priceMax=${priceState.priceMax}`);
     }
 
     const checkboxParams: string[] = [];
@@ -149,7 +149,7 @@ function  CatalogFilter(): JSX.Element {
               placeholder={`${priceStateInit.priceMin}`}
               id="priceMin"
               name="priceMin"
-              value={changePriceState.priceMinIsChange ? priceState.priceMin : ''}
+              value={changePriceState.priceMinIsChange ? `${String(priceState.priceMin)}` : ''}
               onChange={handleChangePrice}
               data-testid={'inputPriceMin'}
             />
@@ -161,7 +161,7 @@ function  CatalogFilter(): JSX.Element {
               placeholder={`${priceState.priceMax}`}
               id="priceMax"
               name="priceMax"
-              value={changePriceState.priceMaxIsChange ? priceState.priceMax : ''}
+              value={changePriceState.priceMaxIsChange ? `${String(priceState.priceMax)}` : ''}
               onChange={handleChangePrice}
               data-testid={'inputPriceMax'}
             />
