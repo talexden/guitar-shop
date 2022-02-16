@@ -10,7 +10,7 @@ export const getMinMaxPrice = (guitars: GuitarType[]): priceStateType => {
     if (guitar.price > priceMax) {priceMax = guitar.price;}
     if (guitar.price < priceMin) {priceMin = guitar.price;}
   });
-  return {priceMin: String(priceMin), priceMax: String(priceMax)};
+  return {filteredPriceMin: String(priceMin), filteredPriceMax: String(priceMax)};
 };
 
 

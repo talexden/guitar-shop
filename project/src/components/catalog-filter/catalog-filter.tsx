@@ -13,10 +13,10 @@ import {
 import useDebounce from '../../hooks/use-debounce';
 import {redirectToRoute, setCurrentPage, setFilteredGuitars} from '../../store/action';
 import {getGuitars} from '../../store/app-data/selectors';
-import {CheckboxType, StringsType} from '../../types/const-type';
-import {checkboxStateType, priceStateType} from '../../types/filter-types';
+import {CheckboxType} from '../../types/const-type';
+import {checkboxStateType} from '../../types/filter-types';
 import Checkbox from '../checkbox/checkbox';
-import {getCurrentPage} from '../../store/app-process/selectors';
+import {getCurrentPage, getFilteredGuitars} from '../../store/app-process/selectors';
 
 const getCheckboxState = (checkboxType: CheckboxType[]): checkboxStateType => {
   const checkboxState: checkboxStateType = {};
@@ -32,72 +32,88 @@ const getCheckboxState = (checkboxType: CheckboxType[]): checkboxStateType => {
 };
 
 
+
+
+
 function  CatalogFilter(): JSX.Element {
   const guitars = useSelector(getGuitars);
   const currentPage = useSelector(getCurrentPage);
+  const filteredGuitars = useSelector(getFilteredGuitars);
   const dispatch = useDispatch();
 
-  const checkboxStateInit: checkboxStateType =
+  const initPrice = getMinMaxPrice(guitars);
+  const filtersStateInit =
     Object.assign(
       {},
       getCheckboxState(CHECKBOX_GUITAR_TYPE),
       getCheckboxState(CHECKBOX_STRING_TYPE),
+      {priceMin: '0'},
+      {priceMax: '0'},
+      {filteredPriceMin: '0'},
+      {filteredPriceMax: '0'},
+      {priceMinIsChange: false},
+      {priceMaxIsChange: false},
     );
 
-  const priceStateInit: priceStateType = getMinMaxPrice(guitars);
-  const guitarTypeStringStateInit: StringsType = [];
-
-  const [priceState, setPriceState] = useState(priceStateInit);
-  const [stringCheckboxState, setStringCheckboxState] = useState(checkboxStateInit);
+  const [filtersState, setFiltersState] = useState(filtersStateInit);
+  const guitarTypeStringStateInit: number[] = [];
   const [guitarTypeStringState, setGuitarTypeStringState] = useState(guitarTypeStringStateInit);
 
+
+  useEffect(()=> {
+    const initPrice = getMinMaxPrice(filteredGuitars);
+    setFiltersState({...filtersState, initPrice});
+  }, []);
+
+
+
   // create search URL
-  useEffect(() => {
-    const priceParams: string[] = [];
-    if (priceState.priceMin > priceStateInit.priceMin) {
-      priceParams.push(`priceMin=${priceState.priceMin}`);
-    }
-    if (priceState.priceMax < priceStateInit.priceMax) {
-      priceParams.push(`priceMax=${priceState.priceMax}`);
-    }
-
-    const checkboxParams: string[] = [];
-    Object.keys(stringCheckboxState).forEach((key) => {
-      if (stringCheckboxState[key]) {
-        checkboxParams.push(`${key}=${stringCheckboxState[key]}`);
-      }
-    });
-
-    const search = `?${[...priceParams, ...checkboxParams].join('&')}`;
-    dispatch(redirectToRoute(`${AppRoute.Catalog}${currentPage}${search}`));
-  }, [currentPage, stringCheckboxState, priceState, priceStateInit, dispatch]);
+  // useEffect(() => {
+  //   const priceParams: string[] = [];
+  //   if (filtersState.priceMin > filtersState.filteredPriceMin) {
+  //     priceParams.push(`priceMin=${filtersState.priceMin}`);
+  //   }
+  //   if (filtersState.priceMax < filtersState.filteredPriceMax) {
+  //     priceParams.push(`priceMax=${filtersState.priceMax}`);
+  //   }
+  //
+  //   const checkboxParams: string[] = [];
+  //   Object.keys(filtersState).forEach((key) => {
+  //     if (filtersState[key]) {
+  //       checkboxParams.push(`${key}=${filtersState[key]}`);
+  //     }
+  //   });
+  //
+  //   const search = `?${[...priceParams, ...checkboxParams].join('&')}`;
+  //   dispatch(redirectToRoute(`${AppRoute.Catalog}${currentPage}${search}`));
+  // }, [currentPage, filtersState, filtersState, initPrice, dispatch]);
 
 
   //parsing Url
-  const urlSearchParams = new URLSearchParams(window.location.search);
-  const params = Object.fromEntries(urlSearchParams.entries());
-  console.log(params);
+  // const urlSearchParams = new URLSearchParams(window.location.search);
+  // const params = Object.fromEntries(urlSearchParams.entries());
+  // console.log(params);
 
 
   // Sorting
   useEffect(() => {
-    const guitarsByPrice = getFilterByPrice(guitars, Number(priceState.priceMin), Number(priceState.priceMax));
-    const guitarsByType = filterGuitarsByType(guitarsByPrice, CHECKBOX_GUITAR_TYPE, stringCheckboxState);
+    const guitarsByType = filterGuitarsByType(guitars, CHECKBOX_GUITAR_TYPE, filtersState);
     setGuitarTypeStringState(getGuitarTypeStrings(guitarsByType));
-    const strings = getCheckboxStrings(CHECKBOX_STRING_TYPE, stringCheckboxState);
-
+    const strings = getCheckboxStrings(CHECKBOX_STRING_TYPE, filtersState);
     const guitarsSortedByString = getFilteredByString(guitarsByType, strings);
+    const guitarsByPrice = getFilterByPrice(guitarsSortedByString, Number(filtersState.priceMin), Number(filtersState.priceMax));
+
 
     dispatch(setCurrentPage(CURRENT_PAGE_INIT));
-    dispatch(setFilteredGuitars(guitarsSortedByString));
-  }, [priceState, dispatch, stringCheckboxState, guitars]);
+    dispatch(setFilteredGuitars(guitarsByPrice));
+  }, [dispatch, filtersState, guitars]);
 
 
   const handleChangeCheckbox = ( evt: ChangeEvent<HTMLInputElement>) => {
     const {name, checked} = evt.target;
 
-    if (stringCheckboxState[name] !== checked) {
-      setStringCheckboxState({...stringCheckboxState, [name]: checked});
+    if (filtersState[name] !== checked) {
+      setFiltersState({...filtersState, [name]: checked});
     }
   };
 
@@ -110,28 +126,33 @@ function  CatalogFilter(): JSX.Element {
     }
 
     correctedValue = correctedValue.replace(/[^0-9]/g, '');
-
-    if ( priceState[name] !== value || correctedValue !== value) {
-      setPriceState({...priceState, [name]: correctedValue});
+    if ( filtersState[name] !== value || correctedValue !== value) {
+      setFiltersState({...filtersState, [name]: correctedValue, [`${name}IsChange`]: true});
     }
   };
 
+
+
   const handleCorrectPrice = () => {
+    const currentInitPrice = getMinMaxPrice(filteredGuitars);
     let isCorrect = false;
-    let state = priceState;
-    for (const key in state) {
-      if (Number(state[key]) < Number(priceStateInit.priceMin)) {
-        state = ({...state, [key]: priceStateInit.priceMin});
+    let state = filtersState;
+    const correctPrice = (key: string) => {
+      if (Number(state[key]) < Number(currentInitPrice.filteredPriceMin)) {
+        state = ({...state, [key]: currentInitPrice.filteredPriceMin});
         isCorrect = true;
       }
-      if (Number(state[key]) > Number(priceStateInit.priceMax)) {
-        state = ({...state, [key]: priceStateInit.priceMax});
+      if (Number(state[key]) > Number(currentInitPrice.filteredPriceMax)) {
+        state = ({...state, [key]: currentInitPrice.filteredPriceMax});
         isCorrect = true;
       }
-    }
+    };
+
+    correctPrice('priceMin');
+    correctPrice('priceMax');
 
     if (isCorrect) {
-      setPriceState(state);
+      setFiltersState(state);
     }
   };
 
@@ -139,7 +160,7 @@ function  CatalogFilter(): JSX.Element {
 
   useEffect(()=>{
     debouncedCorrectPrice();
-  }, [priceState, debouncedCorrectPrice]);
+  }, [debouncedCorrectPrice]);
 
 
   return (
@@ -153,10 +174,10 @@ function  CatalogFilter(): JSX.Element {
             <label className="visually-hidden">Минимальная цена</label>
             <input
               type="text"
-              placeholder={priceStateInit.priceMin}
+              placeholder={filtersState.filteredPriceMin}
               id="priceMin"
               name="priceMin"
-              value={priceState.priceMin}
+              value={filtersState.priceMinIsChange ? filtersState.priceMin : ''}
               onChange={handleChangePrice}
               data-testid={'inputPriceMin'}
             />
@@ -165,10 +186,10 @@ function  CatalogFilter(): JSX.Element {
             <label className="visually-hidden">Максимальная цена</label>
             <input
               type="text"
-              placeholder={priceState.priceMax}
+              placeholder={filtersState.filteredPriceMax}
               id="priceMax"
               name="priceMax"
-              value={priceState.priceMax}
+              value={filtersState.priceMaxIsChange ? filtersState.priceMax : ''}
               onChange={handleChangePrice}
               data-testid={'inputPriceMax'}
             />
@@ -181,7 +202,7 @@ function  CatalogFilter(): JSX.Element {
         {CHECKBOX_GUITAR_TYPE.map((checkbox) => (
           <Checkbox
             key={nanoid()}
-            isChecked={stringCheckboxState[checkbox.name]}
+            isChecked={filtersState[checkbox.name]}
             isDisabled={false}
             checkbox={checkbox}
             cb={handleChangeCheckbox}
@@ -194,7 +215,7 @@ function  CatalogFilter(): JSX.Element {
         {CHECKBOX_STRING_TYPE.map((checkbox) => (
           <Checkbox
             key={nanoid()}
-            isChecked={stringCheckboxState[checkbox.name]}
+            isChecked={filtersState[checkbox.name]}
             isDisabled={checkbox.string.some((string) => guitarTypeStringState.length > 0 && !guitarTypeStringState.includes(string))}
             checkbox={checkbox}
             cb={handleChangeCheckbox}
