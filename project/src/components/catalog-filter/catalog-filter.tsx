@@ -46,15 +46,10 @@ function  CatalogFilter(): JSX.Element {
 
   const priceStateInit: priceStateType = getMinMaxPrice(guitars);
   const guitarTypeStringStateInit: StringsType = [];
-  const changePriceStateInit = {
-    priceMinIsChange: false,
-    priceMaxIsChange: false,
-  };
 
   const [priceState, setPriceState] = useState(priceStateInit);
   const [stringCheckboxState, setStringCheckboxState] = useState(checkboxStateInit);
   const [guitarTypeStringState, setGuitarTypeStringState] = useState(guitarTypeStringStateInit);
-  const [changePriceState, setChangePriceState] = useState(changePriceStateInit);
 
   // create search URL
   useEffect(() => {
@@ -78,9 +73,15 @@ function  CatalogFilter(): JSX.Element {
   }, [currentPage, stringCheckboxState, priceState, priceStateInit, dispatch]);
 
 
+  //parsing Url
+  const urlSearchParams = new URLSearchParams(window.location.search);
+  const params = Object.fromEntries(urlSearchParams.entries());
+  console.log(params);
+
+
   // Sorting
   useEffect(() => {
-    const guitarsByPrice = getFilterByPrice(guitars, priceState.priceMin, priceState.priceMax);
+    const guitarsByPrice = getFilterByPrice(guitars, Number(priceState.priceMin), Number(priceState.priceMax));
     const guitarsByType = filterGuitarsByType(guitarsByPrice, CHECKBOX_GUITAR_TYPE, stringCheckboxState);
     setGuitarTypeStringState(getGuitarTypeStrings(guitarsByType));
     const strings = getCheckboxStrings(CHECKBOX_STRING_TYPE, stringCheckboxState);
@@ -102,10 +103,16 @@ function  CatalogFilter(): JSX.Element {
 
   const handleChangePrice = ( evt: ChangeEvent<HTMLInputElement>) => {
     const {name, value} = evt.target;
+    let correctedValue = value;
 
-    if (priceState[name] !== Number(value)) {
-      setPriceState({...priceState, [name]: Number(value)});
-      setChangePriceState({...changePriceState, [`${name}IsChange`]: true});
+    while (correctedValue[0] === '0') {
+      correctedValue = correctedValue.replace(/^0/, '');
+    }
+
+    correctedValue = correctedValue.replace(/[^0-9]/g, '');
+
+    if ( priceState[name] !== value || correctedValue !== value) {
+      setPriceState({...priceState, [name]: correctedValue});
     }
   };
 
@@ -113,11 +120,11 @@ function  CatalogFilter(): JSX.Element {
     let isCorrect = false;
     let state = priceState;
     for (const key in state) {
-      if (state[key] < priceStateInit.priceMin) {
+      if (Number(state[key]) < Number(priceStateInit.priceMin)) {
         state = ({...state, [key]: priceStateInit.priceMin});
         isCorrect = true;
       }
-      if (state[key] > priceStateInit.priceMax) {
+      if (Number(state[key]) > Number(priceStateInit.priceMax)) {
         state = ({...state, [key]: priceStateInit.priceMax});
         isCorrect = true;
       }
@@ -145,11 +152,11 @@ function  CatalogFilter(): JSX.Element {
           <div className="form-input">
             <label className="visually-hidden">Минимальная цена</label>
             <input
-              type="number"
-              placeholder={`${priceStateInit.priceMin}`}
+              type="text"
+              placeholder={priceStateInit.priceMin}
               id="priceMin"
               name="priceMin"
-              value={changePriceState.priceMinIsChange ? `${String(priceState.priceMin)}` : ''}
+              value={priceState.priceMin}
               onChange={handleChangePrice}
               data-testid={'inputPriceMin'}
             />
@@ -157,11 +164,11 @@ function  CatalogFilter(): JSX.Element {
           <div className="form-input">
             <label className="visually-hidden">Максимальная цена</label>
             <input
-              type="number"
-              placeholder={`${priceState.priceMax}`}
+              type="text"
+              placeholder={priceState.priceMax}
               id="priceMax"
               name="priceMax"
-              value={changePriceState.priceMaxIsChange ? `${String(priceState.priceMax)}` : ''}
+              value={priceState.priceMax}
               onChange={handleChangePrice}
               data-testid={'inputPriceMax'}
             />

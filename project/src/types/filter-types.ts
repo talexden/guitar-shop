@@ -1,5 +1,5 @@
 export type priceStateType = {
-  [key: string]: number,
+  [key: string]: string,
 };
 
 export type valueStateType = {
