@@ -1,94 +1,94 @@
 import {ChangeEvent, useEffect} from 'react';
 import {getMinMaxPrice} from '../../common/filter';
 import useDebounce from '../../hooks/use-debounce';
-import {CORRECT_PRICE_DELAY} from '../../common/const';
+import {CORRECT_PRICE_DELAY, priceName} from '../../common/const';
 import {priceStateType, priceType} from '../../types/filter-types';
-import {company} from 'faker';
+import {useSelector} from 'react-redux';
+import {getFilteredGuitars} from '../../store/app-process/selectors';
 
 type CatalogFilterPriceProps = {
-  priceName: string,
-  priceState: priceStateType,
+  namePrice: string,
+  labelPrice: string,
+  state: priceStateType,
   cb: (data: priceType) => void;
 };
 
+type isChangePriceType = {
+  [key: string]: boolean,
+}
+
+const isChangePrice: isChangePriceType = {
+  priceMin: false,
+  priceMax: false,
+};
+
 function CatalogFilterPrice (props: CatalogFilterPriceProps): JSX.Element {
-  const {priceState, cb, priceName} = props;
-  const {inlet} = priceState
+  const {state, cb, namePrice, labelPrice} = props;
+  const {filtered, outlet} = state;
+  const filteredGuitars = useSelector(getFilteredGuitars);
+
+  const handleCorrectPrice = () => {
+    const filteredInitPrice = getMinMaxPrice(filteredGuitars);
+    let isCorrect = false;
+    let correctedPrice = outlet;
+    const correctPrice = (key: string) => {
+      if (Number(correctedPrice[key]) < Number(filteredInitPrice.priceMin)) {
+        correctedPrice = ({...correctedPrice, [key]: filteredInitPrice.priceMin});
+        isCorrect = true;
+      }
+      if (Number(correctedPrice[key]) > Number(filteredInitPrice.priceMax)) {
+        correctedPrice = ({...correctedPrice, [key]: filteredInitPrice.priceMax});
+        isCorrect = true;
+      }
+    };
+
+    correctPrice(priceName.priceMin);
+    correctPrice(priceName.priceMax);
+
+    if (isCorrect) {
+      cb(correctedPrice);
+    }
+  };
+
+  const debouncedCorrectPrice = useDebounce(handleCorrectPrice, CORRECT_PRICE_DELAY);
 
   const handleChangePrice = ( evt: ChangeEvent<HTMLInputElement>) => {
     const {name, value} = evt.target;
-    let outletPrice = inlet;
-    console.log(inlet);
-    let correctedValue = value;
+    let changePrice = outlet;
+    let changedValue = value;
 
-    while (correctedValue[0] === '0') {
-      correctedValue = correctedValue.replace(/^0/, '');
+    while (changedValue[0] === '0') {
+      changedValue = changedValue.replace(/^0/, '');
     }
 
-    correctedValue = correctedValue.replace(/[^0-9]/g, '');
-    outletPrice = {...outletPrice, [name]: correctedValue}
-    if (correctedValue !== value) {
+    changedValue = changedValue.replace(/[^0-9]/g, '');
 
-      // priceState({...priceState, [name]: correctedValue, [`${name}IsChange`]: true});
+    if ( changePrice[name] !== value || changedValue !== value) {
+      changePrice = {...changePrice, [name]: changedValue};
     }
-    console.log(priceState.outlet.priceMin);
-    cb(outletPrice)
+
+    isChangePrice[name] = true;
+
+    cb(changePrice);
   };
 
-  // const handleCorrectPrice = () => {
-  //   const currentInitPrice = getMinMaxPrice(filteredGuitars);
-  //   let isCorrect = false;
-  //   let state = filtersState;
-  //   const correctPrice = (key: string) => {
-  //     if (Number(state[key]) < Number(currentInitPrice.filteredPriceMin)) {
-  //       state = ({...state, [key]: currentInitPrice.filteredPriceMin});
-  //       isCorrect = true;
-  //     }
-  //     if (Number(state[key]) > Number(currentInitPrice.filteredPriceMax)) {
-  //       state = ({...state, [key]: currentInitPrice.filteredPriceMax});
-  //       isCorrect = true;
-  //     }
-  //   };
-  //
-  //   correctPrice('priceMin');
-  //   correctPrice('priceMax');
-  //
-  //   if (isCorrect) {
-  //     setFiltersState(state);
-  //   }
-  // };
-  //
-  // const debouncedCorrectPrice = useDebounce(handleCorrectPrice, CORRECT_PRICE_DELAY);
-  // useEffect(()=>{
-  //   debouncedCorrectPrice();
-  // }, [debouncedCorrectPrice]);
-
+  useEffect(()=>{
+    debouncedCorrectPrice();
+  }, [state, debouncedCorrectPrice]);
 
   return (
-        <div className="form-input">
-          <label className="visually-hidden">Минимальная цена</label>
-          <input
-            type="text"
-            placeholder={priceState.filtered.priceMin}
-            id="priceMin"
-            name="priceMin"
-            value={priceState.outlet.priceMin}
-            onChange={handleChangePrice}
-            data-testid={'inputPriceMin'}
-          />
-        </div>
-        // <div className="form-input">
-        //   <label className="visually-hidden">Максимальная цена</label>
-        //   <input
-        //     type="text"
-        //     placeholder={filtersState.filteredPriceMax}
-        //     id="priceMax"
-        //     name="priceMax"
-        //     value={filtersState.priceMaxIsChange ? filtersState.priceMax : ''}
-        //     onChange={handleChangePrice}
-        //     data-testid={'inputPriceMax'}
-        //   />
-        // </div>
+    <div className="form-input">
+      <label className="visually-hidden">{labelPrice}</label>
+      <input
+        type="text"
+        placeholder={filtered[namePrice]}
+        id={namePrice}
+        name={namePrice}
+        value={isChangePrice[namePrice] ? outlet[namePrice] : ''}
+        onChange={handleChangePrice}
+        data-testid={namePrice}
+      />
+    </div>
   );
 }
 

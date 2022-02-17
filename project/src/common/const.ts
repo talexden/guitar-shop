@@ -134,6 +134,15 @@ export enum StarRatingClassName {
   Review = ' review__rating-panel',
 }
 
+export const priceLabel  = {
+  priceMin: 'Минимальная цена',
+  priceMax: 'Максимальная цена',
+};
+
+export const priceName = {
+  priceMin: 'priceMin',
+  priceMax: 'priceMax',
+};
 
 export const CURRENT_PAGE_INIT = 1;
 export const PAGINATION_COUNT = 3;

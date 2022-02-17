@@ -1,7 +1,14 @@
 import {nanoid} from '@reduxjs/toolkit';
 import {ChangeEvent, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRoute, CHECKBOX_GUITAR_TYPE, CHECKBOX_STRING_TYPE, CORRECT_PRICE_DELAY, CURRENT_PAGE_INIT} from '../../common/const';
+import {
+  AppRoute,
+  CHECKBOX_GUITAR_TYPE,
+  CHECKBOX_STRING_TYPE,
+  CORRECT_PRICE_DELAY,
+  CURRENT_PAGE_INIT,
+  priceLabel, priceName,
+} from '../../common/const';
 import {
   getFilterByPrice,
   getCheckboxStrings,
@@ -36,23 +43,18 @@ const getCheckboxState = (checkboxType: CheckboxType[]): checkboxStateType => {
             isChecked: false,
             isDisabled: false,
           },
-        }
+        },
       },
     );
   });
   return checkboxState;
 };
 
-
-
-
-
 function  CatalogFilter(): JSX.Element {
   const guitars = useSelector(getGuitars);
   const currentPage = useSelector(getCurrentPage);
   const filteredGuitars = useSelector(getFilteredGuitars);
   const dispatch = useDispatch();
-
 
   const checkboxStateInit: checkboxStateType =
     Object.assign(
@@ -61,7 +63,6 @@ function  CatalogFilter(): JSX.Element {
       getCheckboxState(CHECKBOX_STRING_TYPE),
     );
 
-
   const filteredPriceInit = getMinMaxPrice(guitars);
   const initPrice = {
     priceMin: '',
@@ -69,22 +70,20 @@ function  CatalogFilter(): JSX.Element {
   };
   const priceStateInit: priceStateType = {
     filtered: filteredPriceInit,
-    inlet: initPrice,
-    outlet: initPrice,
+    outlet: filteredPriceInit,
   };
 
   const [priceState, setPriceState] = useState(priceStateInit);
-  const [checkboxState, setCheckboxState] = useState(checkboxStateInit);
+  // const [checkboxState, setCheckboxState] = useState(checkboxStateInit);
 
-  const guitarTypeStringStateInit: number[] = [];
-  const [guitarTypeStringState, setGuitarTypeStringState] = useState(guitarTypeStringStateInit);
+  // const guitarTypeStringStateInit: number[] = [];
+  // const [guitarTypeStringState, setGuitarTypeStringState] = useState(guitarTypeStringStateInit);
 
 
   // useEffect(()=> {
   //   const initPrice = getMinMaxPrice(filteredGuitars);
   //   setFiltersState({...filtersState, initPrice});
   // }, []);
-
 
 
   // create search URL
@@ -148,8 +147,19 @@ function  CatalogFilter(): JSX.Element {
         <legend className="catalog-filter__block-title">Цена, ₽</legend>
         <div className="catalog-filter__price-range">
 
-          <CatalogFilterPrice priceState={priceState} priceName='fff' cb={handleSetPriceState}/>
+          <CatalogFilterPrice
+            state={priceState}
+            namePrice={priceName.priceMin}
+            labelPrice={priceLabel.priceMin}
+            cb={handleSetPriceState}
+          />
 
+          <CatalogFilterPrice
+            state={priceState}
+            namePrice={priceName.priceMax}
+            labelPrice={priceLabel.priceMax}
+            cb={handleSetPriceState}
+          />
 
         </div>
       </fieldset>

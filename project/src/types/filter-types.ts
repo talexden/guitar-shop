@@ -1,9 +1,9 @@
 export type priceType = {
-  priceMin: string,
-  priceMax: string,
+  [key: string]: string,
 };
 export type priceStateType = {
-  [key: string]: priceType,
+  filtered: priceType,
+  outlet: priceType,
 };
 
 export type checkboxType = {

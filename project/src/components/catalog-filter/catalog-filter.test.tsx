@@ -26,9 +26,9 @@ describe('Component: CatalogFilter', () => {
     expect(screen.getByText(/Фильтр/i)).toBeInTheDocument();
     expect(screen.getByText(/Цена, ₽/i)).toBeInTheDocument();
     expect(screen.getByText(/Минимальная цена/i)).toBeInTheDocument();
-    expect(screen.getByTestId('inputPriceMin')).toBeInTheDocument();
+    expect(screen.getByTestId('priceMin')).toBeInTheDocument();
     expect(screen.getByText(/Максимальная цена/i)).toBeInTheDocument();
-    expect(screen.getByTestId('inputPriceMax')).toBeInTheDocument();
+    expect(screen.getByTestId('priceMax')).toBeInTheDocument();
     expect(screen.getByText(/Тип гитар/i)).toBeInTheDocument();
     expect(screen.getByText(/Количество струн/i)).toBeInTheDocument();
   });
@@ -48,8 +48,8 @@ describe('Component: CatalogFilter', () => {
         </Router>
       </Provider>);
 
-    userEvent.type(screen.getByTestId('inputPriceMin'), PRICE_LOW);
-    userEvent.type(screen.getByTestId('inputPriceMax'), PRICE_HIGH);
+    userEvent.type(screen.getByTestId('priceMin'), PRICE_LOW);
+    userEvent.type(screen.getByTestId('priceMax'), PRICE_HIGH);
     expect(screen.getByDisplayValue(/22000/i)).toBeInTheDocument();
     expect(screen.getByDisplayValue(/25000/i)).toBeInTheDocument();
   });
