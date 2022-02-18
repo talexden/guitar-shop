@@ -21,59 +21,48 @@ import useDebounce from '../../hooks/use-debounce';
 import {redirectToRoute, setCurrentPage, setFilteredGuitars} from '../../store/action';
 import {getGuitars} from '../../store/app-data/selectors';
 import {CheckboxType} from '../../types/const-type';
-import {checkboxStateType, priceStateType, priceType} from '../../types/filter-types';
+import {checkboxStateType} from '../../types/filter-types';
 import Checkbox from '../checkbox/checkbox';
 import {getCurrentPage, getFilteredGuitars} from '../../store/app-process/selectors';
 import CatalogFilterPrice from '../catalog-filter-price/catalog-filter-price';
 
-const getCheckboxState = (checkboxType: CheckboxType[]): checkboxStateType => {
-  const checkboxState: checkboxStateType = {inlet: {}, outlet: {}};
-  checkboxType.forEach((checkbox) => {
-    Object.assign(
-      checkboxState,
-      {
-        inlet: {
-          [checkbox.name]: {
-            isChecked: false,
-            isDisabled: false,
-          },
-        },
-        outlet: {
-          [checkbox.name]: {
-            isChecked: false,
-            isDisabled: false,
-          },
-        },
-      },
-    );
-  });
-  return checkboxState;
-};
+// const getCheckboxState = (checkboxType: CheckboxType[]): checkboxStateType => {
+//   const checkboxState: checkboxStateType = {inlet: {}, outlet: {}};
+//   checkboxType.forEach((checkbox) => {
+//     Object.assign(
+//       checkboxState,
+//       {
+//         inlet: {
+//           [checkbox.name]: {
+//             isChecked: false,
+//             isDisabled: false,
+//           },
+//         },
+//         outlet: {
+//           [checkbox.name]: {
+//             isChecked: false,
+//             isDisabled: false,
+//           },
+//         },
+//       },
+//     );
+//   });
+//   return checkboxState;
+// };
 
 function  CatalogFilter(): JSX.Element {
-  const guitars = useSelector(getGuitars);
-  const currentPage = useSelector(getCurrentPage);
-  const filteredGuitars = useSelector(getFilteredGuitars);
-  const dispatch = useDispatch();
+  // const guitars = useSelector(getGuitars);
+  // const currentPage = useSelector(getCurrentPage);
+  // const filteredGuitars = useSelector(getFilteredGuitars);
+  // const dispatch = useDispatch();
+  //
+  // const checkboxStateInit: checkboxStateType =
+  //   Object.assign(
+  //     {},
+  //     getCheckboxState(CHECKBOX_GUITAR_TYPE),
+  //     getCheckboxState(CHECKBOX_STRING_TYPE),
+  //   );
 
-  const checkboxStateInit: checkboxStateType =
-    Object.assign(
-      {},
-      getCheckboxState(CHECKBOX_GUITAR_TYPE),
-      getCheckboxState(CHECKBOX_STRING_TYPE),
-    );
-
-  const filteredPriceInit = getMinMaxPrice(guitars);
-  const initPrice = {
-    priceMin: '',
-    priceMax: '',
-  };
-  const priceStateInit: priceStateType = {
-    filtered: filteredPriceInit,
-    outlet: filteredPriceInit,
-  };
-
-  const [priceState, setPriceState] = useState(priceStateInit);
   // const [checkboxState, setCheckboxState] = useState(checkboxStateInit);
 
   // const guitarTypeStringStateInit: number[] = [];
@@ -135,9 +124,6 @@ function  CatalogFilter(): JSX.Element {
   //     setFiltersState({...filtersState, [name]: checked});
   //   }
   // };
-  const handleSetPriceState = (data: priceType) => {
-    setPriceState({...priceState, outlet: data});
-  };
 
   return (
     <form className="catalog-filter">
@@ -148,17 +134,13 @@ function  CatalogFilter(): JSX.Element {
         <div className="catalog-filter__price-range">
 
           <CatalogFilterPrice
-            state={priceState}
             namePrice={priceName.priceMin}
             labelPrice={priceLabel.priceMin}
-            cb={handleSetPriceState}
           />
 
           <CatalogFilterPrice
-            state={priceState}
             namePrice={priceName.priceMax}
             labelPrice={priceLabel.priceMax}
-            cb={handleSetPriceState}
           />
 
         </div>

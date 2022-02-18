@@ -2,6 +2,7 @@ import {createAction} from '@reduxjs/toolkit';
 import {APIRoute, SortDirect, SortKey} from '../common/const';
 import {ActionType} from '../types/action-type';
 import {GuitarType} from '../types/stateType';
+import {PriceType} from '../types/filter-types';
 
 
 export const redirectToRoute = createAction(
@@ -85,3 +86,15 @@ export const setSearchKey = createAction(
 
 export const setIsLoading = createAction(ActionType.SetIsLoading);
 export const setIsLoaded = createAction(ActionType.SetIsLoaded);
+
+export const setFilteredPrice = createAction(
+  ActionType.SetFilteredPrice,
+  (price: PriceType)=>(
+    {payload: price}
+  ));
+
+export const setCurrentPrice = createAction(
+  ActionType.SetCurrentPrice,
+  (price: PriceType)=>(
+    {payload: price}
+  ));

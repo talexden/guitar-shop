@@ -1,9 +1,9 @@
 import {CheckboxType, StringsType} from '../types/const-type';
-import {checkboxStateType, priceStateType, priceType} from '../types/filter-types';
+import {checkboxStateType, PriceType} from '../types/filter-types';
 import {GuitarType} from '../types/stateType';
 
 
-export const getMinMaxPrice = (guitars: GuitarType[]): priceType => {
+export const getMinMaxPrice = (guitars: GuitarType[]): PriceType => {
   let priceMin = guitars[0].price;
   let priceMax = guitars[0].price;
   guitars.forEach((guitar) => {

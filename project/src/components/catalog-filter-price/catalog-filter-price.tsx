@@ -1,20 +1,20 @@
 import {ChangeEvent, useEffect} from 'react';
-import {getMinMaxPrice} from '../../common/filter';
 import useDebounce from '../../hooks/use-debounce';
 import {CORRECT_PRICE_DELAY, priceName} from '../../common/const';
-import {priceStateType, priceType} from '../../types/filter-types';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {getCurrentPrice, getFilteredPrice} from '../../store/app-filter/selectors';
+import {setCurrentPrice, setFilteredPrice} from '../../store/action';
 import {getFilteredGuitars} from '../../store/app-process/selectors';
+import {getMinMaxPrice} from '../../common/filter';
 
 type CatalogFilterPriceProps = {
   namePrice: string,
   labelPrice: string,
-  state: priceStateType,
-  cb: (data: priceType) => void;
 };
 
 type isChangePriceType = {
-  [key: string]: boolean,
+  [key:string]: boolean,
+  priceMax: boolean,
 }
 
 const isChangePrice: isChangePriceType = {
@@ -22,39 +22,33 @@ const isChangePrice: isChangePriceType = {
   priceMax: false,
 };
 
-function CatalogFilterPrice (props: CatalogFilterPriceProps): JSX.Element {
-  const {state, cb, namePrice, labelPrice} = props;
-  const {filtered, outlet} = state;
+function CatalogFilterPrice ({namePrice, labelPrice}: CatalogFilterPriceProps): JSX.Element {
   const filteredGuitars = useSelector(getFilteredGuitars);
+  const filteredPrice = useSelector(getFilteredPrice);
+  const currentPrice = useSelector(getCurrentPrice);
+  const dispatch = useDispatch();
 
-  const handleCorrectPrice = () => {
-    const filteredInitPrice = getMinMaxPrice(filteredGuitars);
-    let isCorrect = false;
-    let correctedPrice = outlet;
-    const correctPrice = (key: string) => {
-      if (Number(correctedPrice[key]) < Number(filteredInitPrice.priceMin)) {
-        correctedPrice = ({...correctedPrice, [key]: filteredInitPrice.priceMin});
-        isCorrect = true;
-      }
-      if (Number(correctedPrice[key]) > Number(filteredInitPrice.priceMax)) {
-        correctedPrice = ({...correctedPrice, [key]: filteredInitPrice.priceMax});
-        isCorrect = true;
-      }
-    };
+  useEffect(()=>{
+    const price = getMinMaxPrice(filteredGuitars);
+    dispatch(setFilteredPrice(price));
+  }, [filteredGuitars, dispatch]);
 
-    correctPrice(priceName.priceMin);
-    correctPrice(priceName.priceMax);
-
-    if (isCorrect) {
-      cb(correctedPrice);
+  const correctPrice = (key: string) => {
+    let correctedPrice = currentPrice;
+    if (Number(correctedPrice[key]) < Number(filteredPrice.priceMin)) {
+      correctedPrice = ({...correctedPrice, [key]: filteredPrice.priceMin});
+      dispatch(setCurrentPrice(correctedPrice));
+    }
+    if (Number(correctedPrice[key]) > Number(filteredPrice.priceMax)) {
+      correctedPrice = ({...correctedPrice, [key]: filteredPrice.priceMax});
+      dispatch(setCurrentPrice(correctedPrice));
     }
   };
 
-  const debouncedCorrectPrice = useDebounce(handleCorrectPrice, CORRECT_PRICE_DELAY);
 
   const handleChangePrice = ( evt: ChangeEvent<HTMLInputElement>) => {
     const {name, value} = evt.target;
-    let changePrice = outlet;
+    let changePrice = currentPrice;
     let changedValue = value;
 
     while (changedValue[0] === '0') {
@@ -69,22 +63,32 @@ function CatalogFilterPrice (props: CatalogFilterPriceProps): JSX.Element {
 
     isChangePrice[name] = true;
 
-    cb(changePrice);
+    dispatch(setCurrentPrice(changePrice));
   };
+
+
+  const handleCorrectPrice = () => {
+    correctPrice(priceName.priceMin);
+    correctPrice(priceName.priceMax);
+  };
+
+  const debouncedCorrectPrice = useDebounce(handleCorrectPrice, CORRECT_PRICE_DELAY);
+
 
   useEffect(()=>{
     debouncedCorrectPrice();
-  }, [state, debouncedCorrectPrice]);
+  }, [currentPrice, debouncedCorrectPrice]);
+
 
   return (
     <div className="form-input">
       <label className="visually-hidden">{labelPrice}</label>
       <input
         type="text"
-        placeholder={filtered[namePrice]}
+        placeholder={filteredPrice[namePrice]}
         id={namePrice}
         name={namePrice}
-        value={isChangePrice[namePrice] ? outlet[namePrice] : ''}
+        value={isChangePrice[namePrice] ? currentPrice[namePrice] : ''}
         onChange={handleChangePrice}
         data-testid={namePrice}
       />
