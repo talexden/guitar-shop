@@ -20,11 +20,10 @@ import {
 import useDebounce from '../../hooks/use-debounce';
 import {redirectToRoute, setCurrentPage, setFilteredGuitars} from '../../store/action';
 import {getGuitars} from '../../store/app-data/selectors';
-import {CheckboxType} from '../../types/const-type';
-import {checkboxStateType} from '../../types/filter-types';
 import Checkbox from '../checkbox/checkbox';
 import {getCurrentPage, getFilteredGuitars} from '../../store/app-process/selectors';
 import CatalogFilterPrice from '../catalog-filter-price/catalog-filter-price';
+import CatalogFilterCheckbox from '../catalog-filter-checkbox/catalog-filter-сheckbox';
 
 // const getCheckboxState = (checkboxType: CheckboxType[]): checkboxStateType => {
 //   const checkboxState: checkboxStateType = {inlet: {}, outlet: {}};
@@ -146,31 +145,10 @@ function  CatalogFilter(): JSX.Element {
         </div>
       </fieldset>
 
-      {/*<fieldset className="catalog-filter__block">*/}
-      {/*  <legend className="catalog-filter__block-title">Тип гитар</legend>*/}
-      {/*  {CHECKBOX_GUITAR_TYPE.map((checkbox) => (*/}
-      {/*    <Checkbox*/}
-      {/*      key={nanoid()}*/}
-      {/*      isChecked={filtersState[checkbox.name]}*/}
-      {/*      isDisabled={false}*/}
-      {/*      checkbox={checkbox}*/}
-      {/*      cb={handleChangeCheckbox}*/}
-      {/*    />*/}
-      {/*  ))}*/}
-      {/*</fieldset>*/}
+      <CatalogFilterCheckbox checkboxType={CHECKBOX_GUITAR_TYPE}/>
 
-      {/*<fieldset className="catalog-filter__block">*/}
-      {/*  <legend className="catalog-filter__block-title">Количество струн</legend>*/}
-      {/*  {CHECKBOX_STRING_TYPE.map((checkbox) => (*/}
-      {/*    <Checkbox*/}
-      {/*      key={nanoid()}*/}
-      {/*      isChecked={filtersState[checkbox.name]}*/}
-      {/*      isDisabled={checkbox.string.some((string) => guitarTypeStringState.length > 0 && !guitarTypeStringState.includes(string))}*/}
-      {/*      checkbox={checkbox}*/}
-      {/*      cb={handleChangeCheckbox}*/}
-      {/*    />*/}
-      {/*  ))}*/}
-      {/*</fieldset>*/}
+      <CatalogFilterCheckbox checkboxType={CHECKBOX_STRING_TYPE}/>
+
     </form>
   );
 }

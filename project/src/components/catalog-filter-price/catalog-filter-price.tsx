@@ -33,18 +33,34 @@ function CatalogFilterPrice ({namePrice, labelPrice}: CatalogFilterPriceProps): 
     dispatch(setFilteredPrice(price));
   }, [filteredGuitars, dispatch]);
 
-  const correctPrice = (key: string) => {
+
+  const handleCorrectPrice = () => {
     let correctedPrice = currentPrice;
-    if (Number(correctedPrice[key]) < Number(filteredPrice.priceMin)) {
-      correctedPrice = ({...correctedPrice, [key]: filteredPrice.priceMin});
+    let isCorrect =  false;
+    const correctPrice = (key: string) => {
+      if (Number(correctedPrice[key]) < Number(filteredPrice.priceMin)) {
+        correctedPrice = ({...correctedPrice, [key]: filteredPrice.priceMin});
+        isCorrect = true;
+      }
+      if (Number(correctedPrice[key]) > Number(filteredPrice.priceMax)) {
+        correctedPrice = ({...correctedPrice, [key]: filteredPrice.priceMax});
+        isCorrect = true
+      }
+      console.log(correctedPrice);
+    };
+    correctPrice(priceName.priceMin);
+    correctPrice(priceName.priceMax);
+    if (isCorrect) {
       dispatch(setCurrentPrice(correctedPrice));
-    }
-    if (Number(correctedPrice[key]) > Number(filteredPrice.priceMax)) {
-      correctedPrice = ({...correctedPrice, [key]: filteredPrice.priceMax});
-      dispatch(setCurrentPrice(correctedPrice));
-    }
+    };
   };
 
+  const debouncedCorrectPrice = useDebounce(handleCorrectPrice, CORRECT_PRICE_DELAY);
+  //
+  //
+  // useEffect(()=>{
+  //   debouncedCorrectPrice();
+  // }, [currentPrice]);
 
   const handleChangePrice = ( evt: ChangeEvent<HTMLInputElement>) => {
     const {name, value} = evt.target;
@@ -64,20 +80,8 @@ function CatalogFilterPrice ({namePrice, labelPrice}: CatalogFilterPriceProps): 
     isChangePrice[name] = true;
 
     dispatch(setCurrentPrice(changePrice));
-  };
-
-
-  const handleCorrectPrice = () => {
-    correctPrice(priceName.priceMin);
-    correctPrice(priceName.priceMax);
-  };
-
-  const debouncedCorrectPrice = useDebounce(handleCorrectPrice, CORRECT_PRICE_DELAY);
-
-
-  useEffect(()=>{
     debouncedCorrectPrice();
-  }, [currentPrice, debouncedCorrectPrice]);
+  };
 
 
   return (
@@ -90,7 +94,7 @@ function CatalogFilterPrice ({namePrice, labelPrice}: CatalogFilterPriceProps): 
         name={namePrice}
         value={isChangePrice[namePrice] ? currentPrice[namePrice] : ''}
         onChange={handleChangePrice}
-        data-testid={namePrice}
+        data-testid={`${namePrice}Test`}
       />
     </div>
   );

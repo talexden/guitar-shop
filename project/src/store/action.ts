@@ -2,15 +2,14 @@ import {createAction} from '@reduxjs/toolkit';
 import {APIRoute, SortDirect, SortKey} from '../common/const';
 import {ActionType} from '../types/action-type';
 import {GuitarType} from '../types/stateType';
-import {PriceType} from '../types/filter-types';
+import {CheckboxStoreType, PriceStoreType} from './app-filter/app-filter';
 
 
 export const redirectToRoute = createAction(
   ActionType.RedirectToRoute,
-  (url: APIRoute | string) => ({
-    payload: url,
-  }),
-);
+  (url: APIRoute | string) => (
+    {payload: url}
+  ));
 
 export const setGuitars = createAction(
   ActionType.SetGuitars,
@@ -89,12 +88,18 @@ export const setIsLoaded = createAction(ActionType.SetIsLoaded);
 
 export const setFilteredPrice = createAction(
   ActionType.SetFilteredPrice,
-  (price: PriceType)=>(
+  (price: PriceStoreType)=>(
     {payload: price}
   ));
 
 export const setCurrentPrice = createAction(
   ActionType.SetCurrentPrice,
-  (price: PriceType)=>(
+  (price: PriceStoreType)=>(
     {payload: price}
+  ));
+
+export const setCheckbox = createAction(
+  ActionType.SetCheckbox,
+  (checkbox: CheckboxStoreType)=>(
+    {payload: {checkbox}}
   ));

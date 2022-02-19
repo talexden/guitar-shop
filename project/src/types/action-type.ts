@@ -21,6 +21,7 @@ export enum ActionType {
   RedirectToRoute = 'route/redirectToRoute',
   SetFilteredPrice = 'filter/setFilteredPrice',
   SetCurrentPrice = 'filter/setCurrentPrice',
+  SetCheckbox = 'filter/setCheckbox',
 }
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, StateType, AxiosInstance, Action>;
