@@ -11,3 +11,4 @@ export type PaginationNavigationType = {
     id: string,
     navigationClass: string,
 };
+s

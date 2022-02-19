@@ -2,7 +2,7 @@ import {NameSpace} from '../root-reducer';
 import {
   StateType
 } from '../../types/stateType';
-import {CheckboxStoreType, PriceStoreType} from './app-filter';
+import {PriceStoreType} from './app-filter';
 
 
 export const getFilteredPrice = (state: StateType): PriceStoreType => state[NameSpace.filter].price.filteredPrice;

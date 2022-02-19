@@ -1,4 +1,5 @@
 import {CheckboxType} from '../types/const-type';
+import {PriceName} from '../store/app-filter/app-filter';
 
 export const VIEW_CATALOG_COUNT = 9;
 
@@ -134,18 +135,19 @@ export enum StarRatingClassName {
   Review = ' review__rating-panel',
 }
 
-export const priceLabel  = {
-  priceMin: 'Минимальная цена',
-  priceMax: 'Максимальная цена',
-};
-
-export const priceName = {
-  priceMin: 'priceMin',
-  priceMax: 'priceMax',
+export const priceInput = {
+  priceMin: {
+    priceName: 'priceMin',
+    priceLabel: 'Минимальная цена',
+  },
+  priceMax: {
+    priceName: 'priceMax',
+    priceLabel: 'Максимальная цена',
+  },
 };
 
 export const CURRENT_PAGE_INIT = 1;
 export const PAGINATION_COUNT = 3;
-export const CORRECT_PRICE_DELAY = 3000;
+export const CORRECT_PRICE_DELAY = 1000;
 
 export const SUCCESSFUL_SENDING_CODE = 200;

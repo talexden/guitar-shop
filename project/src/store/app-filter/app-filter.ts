@@ -11,13 +11,19 @@ export type CheckboxStoreType = {
   }
 };
 
+export enum PriceName {
+  priceMin = 'priceMin',
+  priceMax = 'priceMax',
+}
+
 export type PriceStoreType = {
-  [key: string]: string,
+  [key:string] : string,
 }
 
 export type AppFilterType = {
   price: {
-    [key: string]: PriceStoreType
+    filteredPrice: PriceStoreType
+    currentPrice: PriceStoreType
   },
   checkboxes: {
     [key: string]: CheckboxStoreType,

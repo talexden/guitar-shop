@@ -7,7 +7,7 @@ import {
   CHECKBOX_STRING_TYPE,
   CORRECT_PRICE_DELAY,
   CURRENT_PAGE_INIT,
-  priceLabel, priceName,
+  priceLabel, priceInput,
 } from '../../common/const';
 import {
   getFilterByPrice,
@@ -133,13 +133,11 @@ function  CatalogFilter(): JSX.Element {
         <div className="catalog-filter__price-range">
 
           <CatalogFilterPrice
-            namePrice={priceName.priceMin}
-            labelPrice={priceLabel.priceMin}
+            inputType={priceInput.priceMin}
           />
 
           <CatalogFilterPrice
-            namePrice={priceName.priceMax}
-            labelPrice={priceLabel.priceMax}
+            inputType={priceInput.priceMax}
           />
 
         </div>
