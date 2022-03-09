@@ -2,7 +2,7 @@ import {createAction} from '@reduxjs/toolkit';
 import {APIRoute, SortDirect, SortKey} from '../common/const';
 import {ActionType} from '../types/action-type';
 import {GuitarType} from '../types/stateType';
-import {CheckboxStoreType, PriceStoreType} from './app-filter/app-filter';
+import {CheckboxStoreType, GuitarStringsType, PriceStoreType} from './app-filter/app-filter';
 
 
 export const redirectToRoute = createAction(
@@ -20,43 +20,43 @@ export const setGuitars = createAction(
 export const setFilteredGuitars = createAction(
   ActionType.SetFilteredGuitars,
   (guitars: GuitarType[])=>(
-    {payload: {guitars}}
+    {payload: guitars}
   ));
 
 export const setSortedGuitars = createAction(
   ActionType.SetSortedGuitars,
   (guitars: GuitarType[])=>(
-    {payload: {guitars}}
+    {payload: guitars}
   ));
 
 export const setGuitarsByPages = createAction(
   ActionType.SetGuitarsByPages,
   (guitarsByPages: GuitarType[][])=>(
-    {payload: {guitarsByPages}}
+    {payload: guitarsByPages}
   ));
 
 export const setPaginationPages = createAction(
   ActionType.SetPaginationPages,
   (paginationPages: number[])=>(
-    {payload: {paginationPages}}
+    {payload: paginationPages}
   ));
 
 export const setCurrentPage = createAction(
   ActionType.SetCurrentPage,
   (currentPage: number)=>(
-    {payload: {currentPage}}
+    {payload: currentPage}
   ));
 
 export const setCurrentGuitar = createAction(
   ActionType.SetCurrentGuitar,
   (currentGuitar: GuitarType)=>(
-    {payload: {currentGuitar}}
+    {payload: currentGuitar}
   ));
 
 export const setSearchedGuitars = createAction(
   ActionType.SetSearchedGuitars,
   (guitars: GuitarType[])=>(
-    {payload: {guitars}}
+    {payload: guitars}
   ));
 
 export const setSortKey = createAction(
@@ -86,20 +86,32 @@ export const setSearchKey = createAction(
 export const setIsLoading = createAction(ActionType.SetIsLoading);
 export const setIsLoaded = createAction(ActionType.SetIsLoaded);
 
-export const setFilteredPrice = createAction(
-  ActionType.SetFilteredPrice,
-  (price: PriceStoreType)=>(
-    {payload: price}
-  ));
-
 export const setCurrentPrice = createAction(
   ActionType.SetCurrentPrice,
   (price: PriceStoreType)=>(
     {payload: price}
   ));
 
-export const setCheckbox = createAction(
-  ActionType.SetCheckbox,
-  (checkbox: CheckboxStoreType)=>(
-    {payload: {checkbox}}
+export const setFilteredPrice = createAction(
+  ActionType.SetFilteredPrice,
+  (price: PriceStoreType)=>(
+    {payload: price}
+  ));
+
+export const setCheckboxStore = createAction(
+  ActionType.SetCheckboxStore,
+  (checkboxStore: CheckboxStoreType)=>(
+    {payload: checkboxStore}
+  ));
+
+export const setGuitarStrings = createAction(
+  ActionType.SetGuitarStrings,
+  (guitarStrings: GuitarStringsType)=>(
+    {payload: guitarStrings}
+  ));
+
+export const setGuitarsFilteredByCheckbox = createAction(
+  ActionType.SetGuitarsFilteredByCheckbox,
+  (guitars: GuitarType[])=>(
+    {payload: guitars}
   ));

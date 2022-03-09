@@ -7,7 +7,6 @@ type CatalogFilterCheckboxProps = {
 }
 
 function  CatalogFilterCheckbox ({checkboxType}: CatalogFilterCheckboxProps): JSX.Element {
-
   return(
     <fieldset className="catalog-filter__block">
       <legend className="catalog-filter__block-title">Тип гитар</legend>

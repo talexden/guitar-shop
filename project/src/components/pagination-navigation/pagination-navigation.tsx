@@ -1,6 +1,7 @@
 import {PaginationNavigationType} from '../../types/const-type';
 import {useDispatch} from 'react-redux';
 import {setCurrentPage} from '../../store/action';
+import {MouseEvent} from 'react';
 
 type PaginationNavigationProps = {
   navigation: PaginationNavigationType;
@@ -11,7 +12,8 @@ type PaginationNavigationProps = {
 function PaginationNavigation ({navigation, pageIdx}: PaginationNavigationProps): JSX.Element {
   const {navigationClass, id, label} = navigation;
   const dispatch = useDispatch();
-  const handleOnClick = () => {
+  const handleOnClick = (evt: MouseEvent<HTMLElement>) => {
+    evt.preventDefault();
     dispatch(setCurrentPage(pageIdx));
   };
 

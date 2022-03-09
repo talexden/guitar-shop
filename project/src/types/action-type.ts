@@ -19,9 +19,11 @@ export enum ActionType {
   SetSearchKey = 'app/setSearchKey',
   SetSearchedGuitars = 'app/setSearchedGuitars',
   RedirectToRoute = 'route/redirectToRoute',
-  SetFilteredPrice = 'filter/setFilteredPrice',
   SetCurrentPrice = 'filter/setCurrentPrice',
-  SetCheckbox = 'filter/setCheckbox',
+  SetFilteredPrice = 'filter/setFilteredPrice',
+  SetCheckboxStore = 'filter/setCheckboxStore',
+  SetGuitarStrings = 'filter/setGuitarStrings',
+  SetGuitarsFilteredByCheckbox = 'filter/setGuitarsFilteredByCheckbox',
 }
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, StateType, AxiosInstance, Action>;

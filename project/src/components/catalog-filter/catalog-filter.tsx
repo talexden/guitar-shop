@@ -1,128 +1,179 @@
-import {nanoid} from '@reduxjs/toolkit';
-import {ChangeEvent, useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   AppRoute,
   CHECKBOX_GUITAR_TYPE,
   CHECKBOX_STRING_TYPE,
-  CORRECT_PRICE_DELAY,
-  CURRENT_PAGE_INIT,
-  priceLabel, priceInput,
+  priceInput, URL_DEBOUNCE_DELAY,
 } from '../../common/const';
 import {
   getFilterByPrice,
-  getCheckboxStrings,
-  getMinMaxPrice,
-  getFilteredByString,
-  filterGuitarsByType,
-  getGuitarTypeStrings
+  getFilteredByString
 } from '../../common/filter';
-import useDebounce from '../../hooks/use-debounce';
-import {redirectToRoute, setCurrentPage, setFilteredGuitars} from '../../store/action';
+import {
+  redirectToRoute, setCheckboxStore, setCurrentPrice,
+  setFilteredGuitars,
+  setGuitarsFilteredByCheckbox,
+  setGuitarStrings,
+} from '../../store/action';
 import {getGuitars} from '../../store/app-data/selectors';
-import Checkbox from '../checkbox/checkbox';
-import {getCurrentPage, getFilteredGuitars} from '../../store/app-process/selectors';
 import CatalogFilterPrice from '../catalog-filter-price/catalog-filter-price';
 import CatalogFilterCheckbox from '../catalog-filter-checkbox/catalog-filter-сheckbox';
+import {
+  getCheckboxStore,
+  getCurrentPrice,
+  getGuitarsFilteredByCheckbox,
+  getGuitarStrings,
+  getFilteredPrice
+} from '../../store/app-filter/selectors';
+import {GuitarType} from '../../types/stateType';
+import {StringsType} from '../../types/const-type';
+import {getCurrentPage} from '../../store/app-process/selectors';
+import useDebounce from '../../hooks/use-debounce';
+import {checkboxStoreInit, PriceStoreType} from '../../store/app-filter/app-filter';
 
-// const getCheckboxState = (checkboxType: CheckboxType[]): checkboxStateType => {
-//   const checkboxState: checkboxStateType = {inlet: {}, outlet: {}};
-//   checkboxType.forEach((checkbox) => {
-//     Object.assign(
-//       checkboxState,
-//       {
-//         inlet: {
-//           [checkbox.name]: {
-//             isChecked: false,
-//             isDisabled: false,
-//           },
-//         },
-//         outlet: {
-//           [checkbox.name]: {
-//             isChecked: false,
-//             isDisabled: false,
-//           },
-//         },
-//       },
-//     );
-//   });
-//   return checkboxState;
-// };
+function    CatalogFilter(): JSX.Element {
+  const guitars = useSelector(getGuitars);
+  const checkboxStore = useSelector(getCheckboxStore);
+  const currentPrice = useSelector(getCurrentPrice);
+  const currentPage = useSelector(getCurrentPage);
+  const guitarStrings = useSelector(getGuitarStrings);
+  const filteredPrice = useSelector(getFilteredPrice);
+  const guitarsFilteredByCheckbox = useSelector(getGuitarsFilteredByCheckbox);
+  const dispatch = useDispatch();
+  const [urlState, setUrlState] = useState('');
 
-function  CatalogFilter(): JSX.Element {
-  // const guitars = useSelector(getGuitars);
-  // const currentPage = useSelector(getCurrentPage);
-  // const filteredGuitars = useSelector(getFilteredGuitars);
-  // const dispatch = useDispatch();
-  //
-  // const checkboxStateInit: checkboxStateType =
-  //   Object.assign(
-  //     {},
-  //     getCheckboxState(CHECKBOX_GUITAR_TYPE),
-  //     getCheckboxState(CHECKBOX_STRING_TYPE),
-  //   );
+  const handleRedirectToRoute = () => {
+    if (urlState !== ''){
+      dispatch(redirectToRoute(urlState));
+    }
+  };
 
-  // const [checkboxState, setCheckboxState] = useState(checkboxStateInit);
-
-  // const guitarTypeStringStateInit: number[] = [];
-  // const [guitarTypeStringState, setGuitarTypeStringState] = useState(guitarTypeStringStateInit);
-
-
-  // useEffect(()=> {
-  //   const initPrice = getMinMaxPrice(filteredGuitars);
-  //   setFiltersState({...filtersState, initPrice});
-  // }, []);
-
+  const redirectToUrlDebounce = useDebounce(handleRedirectToRoute, URL_DEBOUNCE_DELAY);
 
   // create search URL
-  // useEffect(() => {
-  //   const priceParams: string[] = [];
-  //   if (filtersState.priceMin > filtersState.filteredPriceMin) {
-  //     priceParams.push(`priceMin=${filtersState.priceMin}`);
-  //   }
-  //   if (filtersState.priceMax < filtersState.filteredPriceMax) {
-  //     priceParams.push(`priceMax=${filtersState.priceMax}`);
-  //   }
+  useEffect(() => {
+    const priceParams: string[] = [];
+    if (currentPrice.priceMin !== filteredPrice.priceMin && currentPrice.priceMin !== '') {
+      priceParams.push(`priceMin=${currentPrice.priceMin}`);
+    }
+    if (currentPrice.priceMax !== filteredPrice.priceMax && currentPrice.priceMax !== '') {
+      priceParams.push(`priceMax=${currentPrice.priceMax}`);
+    }
+
+    const checkboxParams: string[] = [];
+    Object.keys(checkboxStore).forEach((key) => {
+      if (checkboxStore[key].isChecked && !checkboxStore[key].isDisabled) {
+        checkboxParams.push(`${key}=${checkboxStore[key].isChecked}`);
+      }
+    });
+
+    const search = `?${[...priceParams, ...checkboxParams].join('&')}`;
+    const url = `${AppRoute.Catalog}${currentPage}${search === '?' ? '' : search}`;
+
+
+    if (urlState !== url){
+      setUrlState(url);
+      redirectToUrlDebounce();
+    }
+  }, [currentPage, currentPrice, filteredPrice, checkboxStore, redirectToUrlDebounce, dispatch]);
+
+
+
+  // parsing Url
+  // useEffect(()=>{
+  //   const urlSearchParams = new URLSearchParams(window.location.search);
+  //   const params = Object.fromEntries(urlSearchParams.entries());
+  //   const currentUrl = window.location.pathname;
+  //   if (currentUrl !== urlState){
+  //     setUrlState(currentUrl);
+  //     const urlPriceMin = params.priceMin ? params.priceMin : '';
+  //     const urlPriceMax = params.priceMax ? params.priceMin : '';
+  //     const price = {
+  //       priceMin: urlPriceMin,
+  //       priceMax: urlPriceMax,
+  //     };
+  //     delete params.priceMin;
+  //     delete params.priceMax;
+  //     dispatch(setCurrentPrice(price));
   //
-  //   const checkboxParams: string[] = [];
-  //   Object.keys(filtersState).forEach((key) => {
-  //     if (filtersState[key]) {
-  //       checkboxParams.push(`${key}=${filtersState[key]}`);
+  //     let checkbox = {...checkboxStore};
+  //     if (params !== {}) {
+  //       Object.keys(params).forEach((param)=>{
+  //         const checkboxIsChecked = {...checkbox[param], isChecked: true};
+  //         checkbox = {...checkbox, [param]: checkboxIsChecked};
+  //       });
+  //     } else {
+  //       checkbox = {...checkboxStoreInit};
   //     }
-  //   });
   //
-  //   const search = `?${[...priceParams, ...checkboxParams].join('&')}`;
-  //   dispatch(redirectToRoute(`${AppRoute.Catalog}${currentPage}${search}`));
-  // }, [currentPage, filtersState, filtersState, initPrice, dispatch]);
-
-
-  //parsing Url
-  // const urlSearchParams = new URLSearchParams(window.location.search);
-  // const params = Object.fromEntries(urlSearchParams.entries());
-  // console.log(params);
-
-
-  // Sorting
-  // useEffect(() => {
-  //   const guitarsByType = filterGuitarsByType(guitars, CHECKBOX_GUITAR_TYPE, filtersState);
-  //   setGuitarTypeStringState(getGuitarTypeStrings(guitarsByType));
-  //   const strings = getCheckboxStrings(CHECKBOX_STRING_TYPE, filtersState);
-  //   const guitarsSortedByString = getFilteredByString(guitarsByType, strings);
-  //   const guitarsByPrice = getFilterByPrice(guitarsSortedByString, Number(filtersState.priceMin), Number(filtersState.priceMax));
+  //     dispatch(setCheckboxStore(checkbox));
   //
-  //
-  //   dispatch(setCurrentPage(CURRENT_PAGE_INIT));
-  //   dispatch(setFilteredGuitars(guitarsByPrice));
-  // }, [dispatch, filtersState, guitars]);
-
-
-  // const handleChangeCheckbox = ( evt: ChangeEvent<HTMLInputElement>) => {
-  //   const {name, checked} = evt.target;
-  //
-  //   if (filtersState[name] !== checked) {
-  //     setFiltersState({...filtersState, [name]: checked});
   //   }
-  // };
+  //
+  // }, [dispatch, urlState]);
+
+
+  // Filtering by checkbox
+  useEffect(() => {
+    let currentGuitars: GuitarType[] = [];
+    let isChecked = false;
+    let checkboxGuitarStrings: StringsType = [];
+
+    CHECKBOX_GUITAR_TYPE.forEach((type) => {
+      if (checkboxStore[type.name].isChecked) {
+        isChecked = true;
+      }
+    });
+    if (isChecked){
+      CHECKBOX_GUITAR_TYPE.forEach((type) => {
+        if (checkboxStore[type.name].isChecked) {
+          const checkedTypeGuitars = guitars.filter((guitar) => checkboxStore[type.name] && guitar.type === type.name);
+          currentGuitars = [...new Set([...currentGuitars, ...checkedTypeGuitars])];
+          checkboxGuitarStrings = [...new Set([...checkboxGuitarStrings,...type.string])];
+        }
+      });
+    }
+
+    if (checkboxGuitarStrings !== guitarStrings) {
+      dispatch(setGuitarStrings(checkboxGuitarStrings));
+    }
+
+    currentGuitars =  isChecked ? currentGuitars : [...guitars];
+
+    isChecked = false;
+
+    CHECKBOX_STRING_TYPE.forEach((type) => {
+      if (checkboxStore[type.name].isChecked) {
+        isChecked = true;
+      }
+    });
+
+    if (isChecked) {
+      let checkboxStrings: StringsType = [];
+      CHECKBOX_STRING_TYPE.forEach((checkbox) => {
+        const strings: StringsType = checkboxStore[checkbox.name].isChecked ? checkbox.string : [];
+        checkboxStrings = [...new Set([...checkboxStrings,...strings])];
+      });
+      currentGuitars = getFilteredByString(currentGuitars, checkboxStrings);
+    }
+
+    dispatch(setGuitarsFilteredByCheckbox(currentGuitars));
+  }, [dispatch, guitars, checkboxStore]);
+
+
+  // Filtering by price
+  useEffect(() => {
+    let currentGuitars: GuitarType[] = [...guitarsFilteredByCheckbox];
+
+    if (currentPrice.priceMin !== '' || currentPrice.priceMax !== '' ){
+      const priceMin = currentPrice.priceMin === '' ? filteredPrice.priceMin : currentPrice.priceMin;
+      const priceMax = currentPrice.priceMax === '' ? filteredPrice.priceMax : currentPrice.priceMax;
+      console.log({priceMin, priceMax});
+      currentGuitars = getFilterByPrice(currentGuitars, Number(priceMin), Number(priceMax));
+    }
+    dispatch(setFilteredGuitars(currentGuitars));
+  }, [dispatch, guitarsFilteredByCheckbox, currentPrice]);
 
   return (
     <form className="catalog-filter">
@@ -132,20 +183,16 @@ function  CatalogFilter(): JSX.Element {
         <legend className="catalog-filter__block-title">Цена, ₽</legend>
         <div className="catalog-filter__price-range">
 
-          <CatalogFilterPrice
-            inputType={priceInput.priceMin}
-          />
+          <CatalogFilterPrice inputType={priceInput.priceMin} />
 
-          <CatalogFilterPrice
-            inputType={priceInput.priceMax}
-          />
+          <CatalogFilterPrice inputType={priceInput.priceMax} />
 
         </div>
       </fieldset>
 
-      <CatalogFilterCheckbox checkboxType={CHECKBOX_GUITAR_TYPE}/>
+      <CatalogFilterCheckbox checkboxType={CHECKBOX_GUITAR_TYPE} />
 
-      <CatalogFilterCheckbox checkboxType={CHECKBOX_STRING_TYPE}/>
+      <CatalogFilterCheckbox checkboxType={CHECKBOX_STRING_TYPE} />
 
     </form>
   );

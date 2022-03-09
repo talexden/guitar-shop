@@ -56,38 +56,31 @@ export const AppProcess = createReducer(initialState, (builder)=>{
   builder
 
     .addCase(setFilteredGuitars, (state, action) => {
-      const {guitars} = action.payload;
-      state.filteredGuitars = guitars;
+      state.filteredGuitars = action.payload;
     })
 
     .addCase(setSortedGuitars, (state, action) => {
-      const {guitars} = action.payload;
-      state.sortedGuitars = guitars;
+      state.sortedGuitars = action.payload;
     })
 
     .addCase(setGuitarsByPages, (state, action) => {
-      const {guitarsByPages} = action.payload;
-      state.guitarsByPages = guitarsByPages;
+      state.guitarsByPages = action.payload;
     })
 
     .addCase(setPaginationPages, (state, action) => {
-      const {paginationPages} = action.payload;
-      state.paginationPages = paginationPages;
+      state.paginationPages = action.payload;
     })
 
     .addCase(setCurrentGuitar, (state, action) => {
-      const {currentGuitar} = action.payload;
-      state.currentGuitar = currentGuitar;
+      state.currentGuitar = action.payload;
     })
 
     .addCase(setCurrentPage, (state, action) => {
-      const {currentPage} = action.payload;
-      state.currentPage = currentPage;
+      state.currentPage = action.payload;
     })
 
     .addCase(setSearchedGuitars, (state, action) => {
-      const {guitars} = action.payload;
-      state.searchedGuitars = guitars;
+      state.searchedGuitars = action.payload;
     })
 
     .addCase(setSortKey, (state, action) => {

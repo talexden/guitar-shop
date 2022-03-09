@@ -1,4 +1,5 @@
 import {useDispatch} from 'react-redux';
+import {MouseEvent} from 'react';
 import {setCurrentPage} from '../../store/action';
 
 type PaginationItemProps = {
@@ -9,7 +10,8 @@ type PaginationItemProps = {
 
 function PaginationItem ({isActive, pageIdx}: PaginationItemProps): JSX.Element {
   const dispatch = useDispatch();
-  const handleOnClick = () => {
+  const handleOnClick = (evt: MouseEvent<HTMLElement>) => {
+    evt.preventDefault();
     dispatch(setCurrentPage(pageIdx));
   };
 
