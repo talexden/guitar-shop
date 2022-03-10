@@ -1,10 +1,10 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   AppRoute,
   CHECKBOX_GUITAR_TYPE,
   CHECKBOX_STRING_TYPE,
-  priceInput, URL_DEBOUNCE_DELAY,
+  priceInput
 } from '../../common/const';
 import {
   getFilterByPrice,
@@ -43,13 +43,6 @@ function    CatalogFilter(): JSX.Element {
   const dispatch = useDispatch();
   const [urlState, setUrlState] = useState('');
 
-  const handleRedirectToRoute = () => {
-    if (urlState !== ''){
-      dispatch(redirectToRoute(urlState));
-    }
-  };
-
-  const redirectToUrlDebounce = useDebounce(handleRedirectToRoute, URL_DEBOUNCE_DELAY);
 
   // create search URL
   useEffect(() => {
@@ -68,16 +61,21 @@ function    CatalogFilter(): JSX.Element {
       }
     });
 
-    const search = `?${[...priceParams, ...checkboxParams].join('&')}`;
-    const url = `${AppRoute.Catalog}${currentPage}${search === '?' ? '' : search}`;
+    const urlSearch = `?${[...priceParams, ...checkboxParams].join('&')}`;
 
-
-    if (urlState !== url){
-      setUrlState(url);
-      redirectToUrlDebounce();
+    if (urlState !== urlSearch){
+      setUrlState(urlSearch);
     }
-  }, [currentPage, currentPrice, filteredPrice, checkboxStore, redirectToUrlDebounce, dispatch]);
+  }, [currentPrice, filteredPrice, checkboxStore]);
 
+  useEffect(()=>{
+    let url = `${AppRoute.Catalog}${currentPage}`;
+    if (urlState !== '' && urlState !== '?'){
+      url = `${url}${urlState}`;
+    }
+    dispatch(redirectToRoute(url));
+    console.log({url});
+  }, [dispatch, urlState, currentPage]);
 
 
   // parsing Url
@@ -169,7 +167,6 @@ function    CatalogFilter(): JSX.Element {
     if (currentPrice.priceMin !== '' || currentPrice.priceMax !== '' ){
       const priceMin = currentPrice.priceMin === '' ? filteredPrice.priceMin : currentPrice.priceMin;
       const priceMax = currentPrice.priceMax === '' ? filteredPrice.priceMax : currentPrice.priceMax;
-      console.log({priceMin, priceMax});
       currentGuitars = getFilterByPrice(currentGuitars, Number(priceMin), Number(priceMax));
     }
     dispatch(setFilteredGuitars(currentGuitars));

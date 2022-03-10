@@ -22,5 +22,6 @@ export const getSortDirect = (state: StateType): SortDirect => state[NameSpace.p
 export const getIsFilter = (state: StateType): boolean => state[NameSpace.process].isFilter;
 export const getCurrentGuitar = (state: StateType): GuitarType | null => state[NameSpace.process].currentGuitar;
 export const getCurrentPage = (state: StateType): number => state[NameSpace.process].currentPage;
+export const getRedirectUrl = (state: StateType): string => state[NameSpace.process].redirectUrl;
 export const getCurrentNavigationLabel = (state: StateType): string => state[NameSpace.process].currentNavigationLabel;
 export const getSearchKey = (state: StateType): string => state[NameSpace.process].searchKey;

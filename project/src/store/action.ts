@@ -47,6 +47,13 @@ export const setCurrentPage = createAction(
     {payload: currentPage}
   ));
 
+
+export const setRedirectUrl = createAction(
+  ActionType.SetRedirectUrl,
+  (redirectUrl: string)=>(
+    {payload: redirectUrl}
+  ));
+
 export const setCurrentGuitar = createAction(
   ActionType.SetCurrentGuitar,
   (currentGuitar: GuitarType)=>(

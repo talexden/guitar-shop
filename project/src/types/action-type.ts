@@ -13,6 +13,7 @@ export enum ActionType {
   SetPaginationPages = 'app/setPaginationPages',
   SetCurrentGuitar = 'app/setCurrentGuitar',
   SetCurrentPage = 'app/setCurrentPage',
+  SetRedirectUrl = 'app/setRedirectUrl',
   SetSortKey = 'app/setSortKey',
   SetSortDirect = 'app/setSortDirect',
   SetCurrentNavigationLabel = 'app/setCurrentNavigationLabel',

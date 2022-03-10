@@ -12,7 +12,7 @@ import {
   setCurrentPage,
   setCurrentGuitar,
   setCurrentNavigationLabel,
-  setSearchKey
+  setSearchKey, setRedirectUrl,
 } from '../action';
 
 
@@ -29,6 +29,7 @@ export type AppProcessType = {
   guitarsByPages: GuitarType[][],
   currentGuitar: GuitarType | null,
   currentPage: number,
+  redirectUrl: string,
   paginationPages: number[],
   currentNavigationLabel: string
   searchKey: string,
@@ -47,6 +48,7 @@ const initialState: AppProcessType = {
   guitarsByPages: [],
   currentGuitar: null,
   currentPage: 1,
+  redirectUrl: '',
   paginationPages: [],
   currentNavigationLabel: '',
   searchKey: '',
@@ -77,6 +79,10 @@ export const AppProcess = createReducer(initialState, (builder)=>{
 
     .addCase(setCurrentPage, (state, action) => {
       state.currentPage = action.payload;
+    })
+
+    .addCase(setRedirectUrl, (state, action) => {
+      state.redirectUrl = action.payload;
     })
 
     .addCase(setSearchedGuitars, (state, action) => {

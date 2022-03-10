@@ -31,6 +31,7 @@ describe('Reducer', () => {
         guitarsByPages: [],
         currentGuitar: null,
         currentPage: 1,
+        redirectUrl: '',
         paginationPages: [],
         currentNavigationLabel: '',
         searchKey: '',

@@ -4,7 +4,7 @@ import {CORRECT_PRICE_DELAY, inputName} from '../../common/const';
 import {useDispatch, useSelector} from 'react-redux';
 import {setCurrentPrice, setFilteredPrice} from '../../store/action';
 import {getMinMaxPrice} from '../../common/filter';
-import {PriceStoreType} from '../../store/app-filter/app-filter';
+
 import {
   getCurrentPrice,
   getFilteredPrice,
@@ -32,7 +32,7 @@ function CatalogFilterPrice ({inputType}: CatalogFilterPriceProps): JSX.Element 
   const dispatch = useDispatch();
   const [priceState, setPriceState] = useState(priceStateInit);
 
-  // set filteredPrice
+  // set filteredPrice by selected checkbox
   useEffect(()=>{
     const price = getMinMaxPrice(guitarsFilteredByCheckbox);
     if (price[inputName.priceMin] !== filteredPrice[inputName.priceMin] || price[inputName.priceMax] !== filteredPrice[inputName.priceMax]){
@@ -40,21 +40,29 @@ function CatalogFilterPrice ({inputType}: CatalogFilterPriceProps): JSX.Element 
     }
   }, [dispatch, guitarsFilteredByCheckbox, filteredPrice]);
 
-
+  // correct price
   const handleCorrectPrice = () => {
     let price = priceState[inputPriceName];
-    if (priceState[inputPriceName] !== '' && Number(priceState[inputPriceName]) < Number(filteredPrice.priceMin)) {
-      price = filteredPrice.priceMin;
-    }
-    if (priceState[inputPriceName] !== '' && Number(priceState[inputPriceName]) > Number(filteredPrice.priceMax)) {
-      price = filteredPrice.priceMax;
+    if (priceState[inputPriceName] === '') {
+      price = filteredPrice[inputPriceName];
+    } else {
+      // if (priceState[inputPriceName] !== '' && Number(priceState[inputPriceName]) < Number(filteredPrice.priceMin)) {
+      if (Number(priceState[inputPriceName]) < Number(filteredPrice.priceMin)) {
+        price = filteredPrice.priceMin;
+      }
+      // if (priceState[inputPriceName] !== '' && Number(priceState[inputPriceName]) > Number(filteredPrice.priceMax)) {
+      if (Number(priceState[inputPriceName]) > Number(filteredPrice.priceMax)) {
+        price = filteredPrice.priceMax;
 
+      }
     }
+
     const correctPrice = {...priceState, [inputPriceName]: price};
     setPriceState(correctPrice);
   };
 
   const debouncedCorrectPrice = useDebounce(handleCorrectPrice, CORRECT_PRICE_DELAY);
+
 
   useEffect(()=>{
     if (currentPrice[inputPriceName] !== priceState[inputPriceName] && priceState[inputPriceName] !== ''){
