@@ -24,7 +24,6 @@ function ProductCardList (): JSX.Element {
     dispatch(setCurrentPage(correctedPage));
   }
 
-  console.log({correctedPage, guitarsByPages});
   return (
     <div className="cards catalog__cards">
       {guitarsByPages.length > 0 && guitarsByPages[correctedPage - 1].map((guitar)=>(
