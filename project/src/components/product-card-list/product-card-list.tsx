@@ -15,10 +15,7 @@ function ProductCardList (): JSX.Element {
 
   useEffect(() => {
     const guitarsSortedByPages = sortGuitarsByPages(sortedGuitars, CARD_COUNT);
-    if (guitarsSortedByPages !== guitarsByPages) {
-      dispatch(setGuitarsByPages(guitarsSortedByPages));
-    } else { console.log('1'); }
-
+    dispatch(setGuitarsByPages(guitarsSortedByPages));
   }, [sortedGuitars, dispatch]);
 
   let correctedPage = currentPage;
