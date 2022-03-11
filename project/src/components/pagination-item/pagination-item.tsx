@@ -1,6 +1,7 @@
 import {useDispatch} from 'react-redux';
 import {MouseEvent} from 'react';
-import {setCurrentPage} from '../../store/action';
+import {redirectToRoute, setCurrentPage} from '../../store/action';
+import {AppRoute} from '../../common/const';
 
 type PaginationItemProps = {
   isActive: boolean,
@@ -12,7 +13,7 @@ function PaginationItem ({isActive, pageIdx}: PaginationItemProps): JSX.Element 
   const dispatch = useDispatch();
   const handleOnClick = (evt: MouseEvent<HTMLElement>) => {
     evt.preventDefault();
-    dispatch(setCurrentPage(pageIdx));
+    dispatch(redirectToRoute(`${AppRoute.Catalog}${pageIdx}`));
   };
 
   return (

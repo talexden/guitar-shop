@@ -153,5 +153,6 @@ export const inputName = {
 export const CURRENT_PAGE_INIT = 1;
 export const PAGINATION_COUNT = 3;
 export const CORRECT_PRICE_DELAY = 1500;
+export const UPDATE_URL_DELAY = 300;
 
 export const SUCCESSFUL_SENDING_CODE = 200;

@@ -1,17 +1,17 @@
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   AppRoute,
   CHECKBOX_GUITAR_TYPE,
   CHECKBOX_STRING_TYPE,
-  priceInput
+  priceInput, UPDATE_URL_DELAY,
 } from '../../common/const';
 import {
   getFilterByPrice,
   getFilteredByString
 } from '../../common/filter';
 import {
-  redirectToRoute, setCheckboxStore, setCurrentPrice,
+  redirectToRoute, setCheckboxStore, setCurrentPage, setCurrentPrice,
   setFilteredGuitars,
   setGuitarsFilteredByCheckbox,
   setGuitarStrings,
@@ -28,21 +28,41 @@ import {
 } from '../../store/app-filter/selectors';
 import {GuitarType} from '../../types/stateType';
 import {StringsType} from '../../types/const-type';
-import {getCurrentPage} from '../../store/app-process/selectors';
+import {getCurrentPage, getGuitarsByPages} from '../../store/app-process/selectors';
+import {checkboxStoreInit} from '../../store/app-filter/app-filter';
+import {useParams} from 'react-router-dom';
 import useDebounce from '../../hooks/use-debounce';
-import {checkboxStoreInit, PriceStoreType} from '../../store/app-filter/app-filter';
 
 function    CatalogFilter(): JSX.Element {
   const guitars = useSelector(getGuitars);
   const checkboxStore = useSelector(getCheckboxStore);
   const currentPrice = useSelector(getCurrentPrice);
-  const currentPage = useSelector(getCurrentPage);
   const guitarStrings = useSelector(getGuitarStrings);
   const filteredPrice = useSelector(getFilteredPrice);
   const guitarsFilteredByCheckbox = useSelector(getGuitarsFilteredByCheckbox);
+  const guitarsByPages = useSelector(getGuitarsByPages);
   const dispatch = useDispatch();
+  const [urlSearchState, setUrlSearchState] = useState('');
   const [urlState, setUrlState] = useState('');
+  const page: {pageIdx: string}  = useParams();
 
+
+  const handleUrl = () => {
+    const pageNumber = Number(page.pageIdx);
+    let url = `${AppRoute.Catalog}${pageNumber}`;
+    if (urlSearchState !== '' && urlSearchState !== '?'){
+      url = `${url}${urlSearchState}`;
+    }
+    if (url !== window.location.href) {
+      setUrlState(url);
+    }
+  };
+
+  const debounceHandleUrl = useDebounce(handleUrl, UPDATE_URL_DELAY);
+
+  useEffect(()=>{
+    debounceHandleUrl();
+  }, [urlSearchState]);
 
   // create search URL
   useEffect(() => {
@@ -63,28 +83,43 @@ function    CatalogFilter(): JSX.Element {
 
     const urlSearch = `?${[...priceParams, ...checkboxParams].join('&')}`;
 
-    if (urlState !== urlSearch){
-      setUrlState(urlSearch);
+    if (urlSearchState !== urlSearch) {
+      setUrlSearchState(urlSearch);
     }
-  }, [currentPrice, filteredPrice, checkboxStore]);
+  }, [currentPrice, filteredPrice, checkboxStore, urlSearchState]);
 
-  useEffect(()=>{
-    let url = `${AppRoute.Catalog}${currentPage}`;
-    if (urlState !== '' && urlState !== '?'){
-      url = `${url}${urlState}`;
+
+  // redirect to url
+  // useEffect(()=>{
+  //   const pageNumber = Number(page.pageIdx);
+  //   let url = `${AppRoute.Catalog}${pageNumber}`;
+  //   if (urlState !== '' && urlState !== '?'){
+  //     url = `${url}${urlState}`;
+  //   }
+  //   if (window.location.href !== url) {
+  //     dispatch(redirectToRoute(url));
+  //   }
+  // }, [dispatch, urlState, currentPage]);
+
+
+  // correct page number
+  useEffect(() => {
+    let correctedPage = Number(page.pageIdx);
+    if (guitarsByPages.length > 0 && guitarsByPages.length < correctedPage) {
+      correctedPage = guitarsByPages.length;
+      dispatch(setCurrentPage(correctedPage));
     }
-    dispatch(redirectToRoute(url));
-    console.log({url});
-  }, [dispatch, urlState, currentPage]);
+    dispatch(setCurrentPage(correctedPage));
+  }, [dispatch, page, guitarsByPages]);
 
 
   // parsing Url
   // useEffect(()=>{
-  //   const urlSearchParams = new URLSearchParams(window.location.search);
+  //   const currentUrlSearch = window.location.search;
+  //   const urlSearchParams = new URLSearchParams(currentUrlSearch);
   //   const params = Object.fromEntries(urlSearchParams.entries());
-  //   const currentUrl = window.location.pathname;
-  //   if (currentUrl !== urlState){
-  //     setUrlState(currentUrl);
+  //   if (currentUrlSearch !== urlSearchState && urlSearchState !== '?'){
+  //     setUrlSearchState(currentUrlSearch);
   //     const urlPriceMin = params.priceMin ? params.priceMin : '';
   //     const urlPriceMax = params.priceMax ? params.priceMin : '';
   //     const price = {
@@ -93,6 +128,7 @@ function    CatalogFilter(): JSX.Element {
   //     };
   //     delete params.priceMin;
   //     delete params.priceMax;
+  //     console.log({price});
   //     dispatch(setCurrentPrice(price));
   //
   //     let checkbox = {...checkboxStore};
@@ -104,12 +140,10 @@ function    CatalogFilter(): JSX.Element {
   //     } else {
   //       checkbox = {...checkboxStoreInit};
   //     }
-  //
+  //     console.log({checkbox});
   //     dispatch(setCheckboxStore(checkbox));
-  //
   //   }
-  //
-  // }, [dispatch, urlState]);
+  // }, [dispatch, urlSearchState]);
 
 
   // Filtering by checkbox
