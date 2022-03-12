@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   AppRoute,
   CHECKBOX_GUITAR_TYPE,
-  CHECKBOX_STRING_TYPE,
+  CHECKBOX_STRING_TYPE, CURRENT_PAGE_INIT,
   priceInput, UPDATE_URL_DELAY,
 } from '../../common/const';
 import {
@@ -33,6 +33,7 @@ import {checkboxStoreInit} from '../../store/app-filter/app-filter';
 import {useParams} from 'react-router-dom';
 import useDebounce from '../../hooks/use-debounce';
 
+
 function    CatalogFilter(): JSX.Element {
   const guitars = useSelector(getGuitars);
   const checkboxStore = useSelector(getCheckboxStore);
@@ -43,22 +44,30 @@ function    CatalogFilter(): JSX.Element {
   const guitarsByPages = useSelector(getGuitarsByPages);
   const dispatch = useDispatch();
   const [urlSearchState, setUrlSearchState] = useState('');
-  const [urlState, setUrlState] = useState('');
+  const [urlState, setUrlState] = useState(`${AppRoute.Catalog}${CURRENT_PAGE_INIT}`);
+  const [realUrlState, setRealUrlState] = useState(`${AppRoute.Catalog}${CURRENT_PAGE_INIT}`);
   const page: {pageIdx: string}  = useParams();
 
-
   const handleUrl = () => {
-    const pageNumber = Number(page.pageIdx);
-    let url = `${AppRoute.Catalog}${pageNumber}`;
-    if (urlSearchState !== '' && urlSearchState !== '?'){
-      url = `${url}${urlSearchState}`;
-    }
-    if (url !== window.location.href) {
-      setUrlState(url);
+    const href = window.location.pathname + window.location.search;
+    if (href === realUrlState) {
+      const pageNumber = Number(page.pageIdx);
+      let url = `${AppRoute.Catalog}${pageNumber}`;
+      if (urlSearchState !== '' && urlSearchState !== '?'){
+        url = `${url}${urlSearchState}`;
+      }
+      if (url !== href) {
+        setUrlState(url);
+      }
     }
   };
 
   const debounceHandleUrl = useDebounce(handleUrl, UPDATE_URL_DELAY);
+
+  useEffect(()=>{
+    const href = window.location.pathname + window.location.search;
+    console.log({urlState, realUrlState, });
+  }, [urlSearchState]);
 
   useEffect(()=>{
     debounceHandleUrl();
@@ -82,7 +91,6 @@ function    CatalogFilter(): JSX.Element {
     });
 
     const urlSearch = `?${[...priceParams, ...checkboxParams].join('&')}`;
-
     if (urlSearchState !== urlSearch) {
       setUrlSearchState(urlSearch);
     }
@@ -90,16 +98,13 @@ function    CatalogFilter(): JSX.Element {
 
 
   // redirect to url
-  // useEffect(()=>{
-  //   const pageNumber = Number(page.pageIdx);
-  //   let url = `${AppRoute.Catalog}${pageNumber}`;
-  //   if (urlState !== '' && urlState !== '?'){
-  //     url = `${url}${urlState}`;
-  //   }
-  //   if (window.location.href !== url) {
-  //     dispatch(redirectToRoute(url));
-  //   }
-  // }, [dispatch, urlState, currentPage]);
+  useEffect(()=>{
+    const href = window.location.pathname + window.location.search;
+    if (href === realUrlState && href !== urlState && urlState !== '') {
+      setRealUrlState(urlState);
+      dispatch(redirectToRoute(urlState));
+    }
+  }, [dispatch, urlState, realUrlState]);
 
 
   // correct page number
@@ -114,36 +119,40 @@ function    CatalogFilter(): JSX.Element {
 
 
   // parsing Url
-  // useEffect(()=>{
-  //   const currentUrlSearch = window.location.search;
-  //   const urlSearchParams = new URLSearchParams(currentUrlSearch);
-  //   const params = Object.fromEntries(urlSearchParams.entries());
-  //   if (currentUrlSearch !== urlSearchState && urlSearchState !== '?'){
-  //     setUrlSearchState(currentUrlSearch);
-  //     const urlPriceMin = params.priceMin ? params.priceMin : '';
-  //     const urlPriceMax = params.priceMax ? params.priceMin : '';
-  //     const price = {
-  //       priceMin: urlPriceMin,
-  //       priceMax: urlPriceMax,
-  //     };
-  //     delete params.priceMin;
-  //     delete params.priceMax;
-  //     console.log({price});
-  //     dispatch(setCurrentPrice(price));
-  //
-  //     let checkbox = {...checkboxStore};
-  //     if (params !== {}) {
-  //       Object.keys(params).forEach((param)=>{
-  //         const checkboxIsChecked = {...checkbox[param], isChecked: true};
-  //         checkbox = {...checkbox, [param]: checkboxIsChecked};
-  //       });
-  //     } else {
-  //       checkbox = {...checkboxStoreInit};
-  //     }
-  //     console.log({checkbox});
-  //     dispatch(setCheckboxStore(checkbox));
-  //   }
-  // }, [dispatch, urlSearchState]);
+  useEffect(()=>{
+    const href = window.location.pathname + window.location.search;
+    if (href !== realUrlState && realUrlState === urlState) {
+      console.log('lll');
+      const currentUrlSearch = window.location.search;
+      const urlSearchParams = new URLSearchParams(currentUrlSearch);
+      const params = Object.fromEntries(urlSearchParams.entries());
+      if (currentUrlSearch !== urlSearchState && urlSearchState !== '?'){
+        setUrlSearchState(currentUrlSearch);
+        const urlPriceMin = params.priceMin ? params.priceMin : '';
+        const urlPriceMax = params.priceMax ? params.priceMin : '';
+        const price = {
+          priceMin: urlPriceMin,
+          priceMax: urlPriceMax,
+        };
+        delete params.priceMin;
+        delete params.priceMax;
+        console.log({price});
+        dispatch(setCurrentPrice(price));
+
+        let checkbox = {...checkboxStore};
+        if (params !== {}) {
+          Object.keys(params).forEach((param)=>{
+            const checkboxIsChecked = {...checkbox[param], isChecked: true};
+            checkbox = {...checkbox, [param]: checkboxIsChecked};
+          });
+        } else {
+          checkbox = {...checkboxStoreInit};
+        }
+        console.log({checkbox});
+        dispatch(setCheckboxStore(checkbox));
+      }
+    }
+  }, [dispatch, urlSearchState, realUrlState, urlState]);
 
 
   // Filtering by checkbox
