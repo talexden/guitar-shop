@@ -3,8 +3,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   AppRoute,
   CHECKBOX_GUITAR_TYPE,
-  CHECKBOX_STRING_TYPE, CURRENT_PAGE_INIT,
-  priceInput, UPDATE_URL_DELAY,
+  CHECKBOX_STRING_TYPE,
+  priceInput,
+  UPDATE_URL_DELAY
 } from '../../common/const';
 import {
   getFilterByPrice,
@@ -14,7 +15,7 @@ import {
   redirectToRoute, setCheckboxStore, setCurrentPage, setCurrentPrice,
   setFilteredGuitars,
   setGuitarsFilteredByCheckbox,
-  setGuitarStrings,
+  setGuitarStrings
 } from '../../store/action';
 import {getGuitars} from '../../store/app-data/selectors';
 import CatalogFilterPrice from '../catalog-filter-price/catalog-filter-price';
@@ -28,7 +29,7 @@ import {
 } from '../../store/app-filter/selectors';
 import {GuitarType} from '../../types/stateType';
 import {StringsType} from '../../types/const-type';
-import {getCurrentPage, getGuitarsByPages} from '../../store/app-process/selectors';
+import {getGuitarsByPages} from '../../store/app-process/selectors';
 import {checkboxStoreInit} from '../../store/app-filter/app-filter';
 import {useParams} from 'react-router-dom';
 import useDebounce from '../../hooks/use-debounce';
@@ -44,34 +45,26 @@ function    CatalogFilter(): JSX.Element {
   const guitarsByPages = useSelector(getGuitarsByPages);
   const dispatch = useDispatch();
   const [urlSearchState, setUrlSearchState] = useState('');
-  const [urlState, setUrlState] = useState(`${AppRoute.Catalog}${CURRENT_PAGE_INIT}`);
-  const [realUrlState, setRealUrlState] = useState(`${AppRoute.Catalog}${CURRENT_PAGE_INIT}`);
+  const [urlState, setUrlState] = useState('');
   const page: {pageIdx: string}  = useParams();
 
   const handleUrl = () => {
     const href = window.location.pathname + window.location.search;
-    if (href === realUrlState) {
-      const pageNumber = Number(page.pageIdx);
-      let url = `${AppRoute.Catalog}${pageNumber}`;
-      if (urlSearchState !== '' && urlSearchState !== '?'){
-        url = `${url}${urlSearchState}`;
-      }
-      if (url !== href) {
-        setUrlState(url);
-      }
+    const pageNumber = Number(page.pageIdx);
+    let url = `${AppRoute.Catalog}${pageNumber}`;
+    if (urlSearchState !== '' && urlSearchState !== '?'){
+      url = `${url}${urlSearchState}`;
+    }
+    if (url !== href) {
+      setUrlState(url);
     }
   };
 
   const debounceHandleUrl = useDebounce(handleUrl, UPDATE_URL_DELAY);
 
   useEffect(()=>{
-    const href = window.location.pathname + window.location.search;
-    console.log({urlState, realUrlState, });
-  }, [urlSearchState]);
-
-  useEffect(()=>{
     debounceHandleUrl();
-  }, [urlSearchState]);
+  }, [debounceHandleUrl, urlSearchState]);
 
   // create search URL
   useEffect(() => {
@@ -97,14 +90,18 @@ function    CatalogFilter(): JSX.Element {
   }, [currentPrice, filteredPrice, checkboxStore, urlSearchState]);
 
 
+  useEffect(()=>{
+    console.log('features');
+  }, []);
+
+
   // redirect to url
   useEffect(()=>{
     const href = window.location.pathname + window.location.search;
-    if (href === realUrlState && href !== urlState && urlState !== '') {
-      setRealUrlState(urlState);
+    if (href !== urlState && urlState !== '') {
       dispatch(redirectToRoute(urlState));
     }
-  }, [dispatch, urlState, realUrlState]);
+  }, [dispatch, urlState]);
 
 
   // correct page number
@@ -120,9 +117,9 @@ function    CatalogFilter(): JSX.Element {
 
   // parsing Url
   useEffect(()=>{
-    const href = window.location.pathname + window.location.search;
-    if (href !== realUrlState && realUrlState === urlState) {
-      console.log('lll');
+    const search = window.location.search;
+    if (urlState === ''  &&search !== '') {
+
       const currentUrlSearch = window.location.search;
       const urlSearchParams = new URLSearchParams(currentUrlSearch);
       const params = Object.fromEntries(urlSearchParams.entries());
@@ -136,7 +133,6 @@ function    CatalogFilter(): JSX.Element {
         };
         delete params.priceMin;
         delete params.priceMax;
-        console.log({price});
         dispatch(setCurrentPrice(price));
 
         let checkbox = {...checkboxStore};
@@ -148,11 +144,10 @@ function    CatalogFilter(): JSX.Element {
         } else {
           checkbox = {...checkboxStoreInit};
         }
-        console.log({checkbox});
         dispatch(setCheckboxStore(checkbox));
       }
     }
-  }, [dispatch, urlSearchState, realUrlState, urlState]);
+  }, [dispatch, checkboxStore, urlSearchState, urlState]);
 
 
   // Filtering by checkbox
