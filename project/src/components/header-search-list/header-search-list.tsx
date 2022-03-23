@@ -1,4 +1,3 @@
-import {nanoid} from '@reduxjs/toolkit';
 import {getSearchedGuitars} from '../../store/app-process/selectors';
 import HeaderSearchItem from '../header-search-item/header-search-item';
 import {useSelector} from 'react-redux';
@@ -16,7 +15,7 @@ function HeaderSearchList (): JSX.Element {
       className={`form-search__select-list${searchedGuitars.length > 0 ? '' : ' hidden'}`}
       style={STYLE}
     >
-      {searchedGuitars.map((guitar) => (<HeaderSearchItem key={nanoid()} guitarId={guitar.id} guitarName={guitar.name} />))}
+      {searchedGuitars.map((guitar) => (<HeaderSearchItem key={`searchedGuitars-${guitar.id}`} guitarId={guitar.id} guitarName={guitar.name} />))}
     </ul>
   );
 }

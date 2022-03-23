@@ -2,33 +2,28 @@ import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   AppRoute,
-  CHECKBOX_GUITAR_TYPE,
-  CHECKBOX_STRING_TYPE,
   priceInput,
   UPDATE_URL_DELAY
 } from '../../common/const';
 import {
-  getFilterByPrice,
-  getFilteredByString
+  getFilterByPrice
 } from '../../common/filter';
 import {
-  redirectToRoute, setCheckboxStore, setCurrentPage, setCurrentPrice,
-  setFilteredGuitars,
-  setGuitarsFilteredByCheckbox,
-  setGuitarStrings
+  redirectToRoute,
+  setCheckboxStore,
+  setCurrentPage,
+  setCurrentPrice,
+  setFilteredGuitars
 } from '../../store/action';
-import {getGuitars} from '../../store/app-data/selectors';
 import CatalogFilterPrice from '../catalog-filter-price/catalog-filter-price';
 import CatalogFilterCheckbox from '../catalog-filter-checkbox/catalog-filter-сheckbox';
 import {
   getCheckboxStore,
   getCurrentPrice,
   getGuitarsFilteredByCheckbox,
-  getGuitarStrings,
   getFilteredPrice
 } from '../../store/app-filter/selectors';
 import {GuitarType} from '../../types/stateType';
-import {StringsType} from '../../types/const-type';
 import {getGuitarsByPages} from '../../store/app-process/selectors';
 import {checkboxStoreInit} from '../../store/app-filter/app-filter';
 import {useParams} from 'react-router-dom';
@@ -36,10 +31,8 @@ import useDebounce from '../../hooks/use-debounce';
 
 
 function    CatalogFilter(): JSX.Element {
-  const guitars = useSelector(getGuitars);
   const checkboxStore = useSelector(getCheckboxStore);
   const currentPrice = useSelector(getCurrentPrice);
-  const guitarStrings = useSelector(getGuitarStrings);
   const filteredPrice = useSelector(getFilteredPrice);
   const guitarsFilteredByCheckbox = useSelector(getGuitarsFilteredByCheckbox);
   const guitarsByPages = useSelector(getGuitarsByPages);
@@ -88,11 +81,6 @@ function    CatalogFilter(): JSX.Element {
       setUrlSearchState(urlSearch);
     }
   }, [currentPrice, filteredPrice, checkboxStore, urlSearchState]);
-
-
-  useEffect(()=>{
-    console.log('features');
-  }, []);
 
 
   // redirect to url
@@ -150,54 +138,6 @@ function    CatalogFilter(): JSX.Element {
   }, [dispatch, checkboxStore, urlSearchState, urlState]);
 
 
-  // Filtering by checkbox
-  useEffect(() => {
-    let currentGuitars: GuitarType[] = [];
-    let isChecked = false;
-    let checkboxGuitarStrings: StringsType = [];
-
-    CHECKBOX_GUITAR_TYPE.forEach((type) => {
-      if (checkboxStore[type.name].isChecked) {
-        isChecked = true;
-      }
-    });
-    if (isChecked){
-      CHECKBOX_GUITAR_TYPE.forEach((type) => {
-        if (checkboxStore[type.name].isChecked) {
-          const checkedTypeGuitars = guitars.filter((guitar) => checkboxStore[type.name] && guitar.type === type.name);
-          currentGuitars = [...new Set([...currentGuitars, ...checkedTypeGuitars])];
-          checkboxGuitarStrings = [...new Set([...checkboxGuitarStrings,...type.string])];
-        }
-      });
-    }
-
-    if (checkboxGuitarStrings !== guitarStrings) {
-      dispatch(setGuitarStrings(checkboxGuitarStrings));
-    }
-
-    currentGuitars =  isChecked ? currentGuitars : [...guitars];
-
-    isChecked = false;
-
-    CHECKBOX_STRING_TYPE.forEach((type) => {
-      if (checkboxStore[type.name].isChecked) {
-        isChecked = true;
-      }
-    });
-
-    if (isChecked) {
-      let checkboxStrings: StringsType = [];
-      CHECKBOX_STRING_TYPE.forEach((checkbox) => {
-        const strings: StringsType = checkboxStore[checkbox.name].isChecked ? checkbox.string : [];
-        checkboxStrings = [...new Set([...checkboxStrings,...strings])];
-      });
-      currentGuitars = getFilteredByString(currentGuitars, checkboxStrings);
-    }
-
-    dispatch(setGuitarsFilteredByCheckbox(currentGuitars));
-  }, [dispatch, guitars, checkboxStore]);
-
-
   // Filtering by price
   useEffect(() => {
     let currentGuitars: GuitarType[] = [...guitarsFilteredByCheckbox];
@@ -225,9 +165,7 @@ function    CatalogFilter(): JSX.Element {
         </div>
       </fieldset>
 
-      <CatalogFilterCheckbox checkboxType={CHECKBOX_GUITAR_TYPE} />
-
-      <CatalogFilterCheckbox checkboxType={CHECKBOX_STRING_TYPE} />
+      <CatalogFilterCheckbox />
 
     </form>
   );

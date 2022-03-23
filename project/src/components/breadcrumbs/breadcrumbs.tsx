@@ -1,6 +1,5 @@
 import {Link} from 'react-router-dom';
 import {AppRoute, NavigationLabel} from '../../common/const';
-import {nanoid} from '@reduxjs/toolkit';
 
 const BreadcrumbsItem = [
   {
@@ -22,7 +21,7 @@ function  Breadcrumbs(): JSX.Element {
   return (
     <ul className="breadcrumbs page-content__breadcrumbs" data-testid={'breadcrumbs'}>
       {BreadcrumbsItem.map((item) => (
-        <li className="breadcrumbs__item" key={nanoid()}>
+        <li className="breadcrumbs__item" key={`BreadcrumbsItem-${item.route}`}>
           <Link className="link" to={item.route}>{item.label}</Link>
         </li>
       ))}

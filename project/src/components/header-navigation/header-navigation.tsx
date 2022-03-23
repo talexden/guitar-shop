@@ -1,6 +1,5 @@
 import {navigationItems} from '../../common/const';
 import HeaderNavigationItem from '../header-navigation-item/header-navigation-item';
-import {nanoid} from '@reduxjs/toolkit';
 
 function HeaderNavigation(): JSX.Element {
   return (
@@ -8,7 +7,7 @@ function HeaderNavigation(): JSX.Element {
       <ul className="main-nav__list">
         {navigationItems.map((item)=>(
           <HeaderNavigationItem
-            key={nanoid()}
+            key={`navigationItems-${item.url}`}
             url={item.url}
             label={item.label}
           />

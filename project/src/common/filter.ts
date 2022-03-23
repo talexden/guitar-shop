@@ -1,6 +1,7 @@
 import {CheckboxType, StringsType} from '../types/const-type';
 import {GuitarType} from '../types/stateType';
 import {CheckboxStoreType, PriceStoreType} from '../store/app-filter/app-filter';
+import {CHECKBOX_GUITAR_TYPE} from './const';
 
 
 export const getMinMaxPrice = (guitars: GuitarType[]): PriceStoreType => {
@@ -73,3 +74,13 @@ export const getCheckboxStrings = (checkboxType: CheckboxType[], checkboxStore: 
   });
   return checkboxStrings;
 };
+
+export const isCheckboxTypeChecked = (checkboxType: CheckboxType[], checkboxStore: CheckboxStoreType): boolean => {
+  let isChecked = false;
+  checkboxType.forEach((type) => {
+    if (checkboxStore[type.name].isChecked) {
+      isChecked = true;
+    }
+  });
+  return isChecked;
+}

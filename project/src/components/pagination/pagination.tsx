@@ -1,4 +1,3 @@
-import {nanoid} from '@reduxjs/toolkit';
 import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {CURRENT_PAGE_INIT, PAGINATION_COUNT, PaginationNav} from '../../common/const';
@@ -48,7 +47,7 @@ function  Pagination(): JSX.Element {
 
         {paginationPages.map((pageIdx) => (
           <PaginationItem
-            key={nanoid()}
+            key={`paginationPages-${pageIdx}`}
             isActive={currentPage === pageIdx}
             pageIdx={pageIdx}
           />

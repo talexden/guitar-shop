@@ -1,4 +1,3 @@
-import {nanoid} from '@reduxjs/toolkit';
 import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {CARD_COUNT} from '../../common/const';
@@ -25,7 +24,7 @@ function ProductCardList (): JSX.Element {
       {
         guitarsByPages.length >= currentPage
         && guitarsByPages[currentPage - 1].map((guitar)=>(
-          <ProductCard key={nanoid()} guitar={guitar}/>))
+          <ProductCard key={`ProductCard-${guitar.id}`} guitar={guitar}/>))
       }
     </div>
   );
