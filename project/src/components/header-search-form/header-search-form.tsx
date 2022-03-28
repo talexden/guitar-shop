@@ -2,7 +2,7 @@ import {ChangeEvent, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {search} from '../../common/search';
 import {setSearchedGuitars, setSearchKey} from '../../store/action';
-import {getGuitars} from '../../store/app-data/selectors';
+import {getGuitars} from '../../store/app-filter/selectors';
 import {getSearchKey} from '../../store/app-process/selectors';
 
 function HeaderSearchForm (): JSX.Element {

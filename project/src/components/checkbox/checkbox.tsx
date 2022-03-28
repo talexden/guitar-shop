@@ -1,16 +1,25 @@
 import {CheckboxType} from '../../types/const-type';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {getCheckboxStore} from '../../store/app-filter/selectors';
+import {setCheckboxStore} from '../../store/action';
 
 type CheckboxProps = {
   checkbox: CheckboxType,
-  cb: () => void;
 }
 
 
-function Checkbox ({checkbox, cb}: CheckboxProps): JSX.Element {
+function Checkbox ({checkbox}: CheckboxProps): JSX.Element {
   const {label, name} = checkbox;
   const checkboxStore = useSelector(getCheckboxStore);
+  const dispatch = useDispatch();
+
+  const handleOnChange = () => {
+    if (!checkboxStore[name].isDisabled) {
+      const currentCheckbox = {...checkboxStore[name], isChecked: !checkboxStore[name].isChecked};
+      const state = {...checkboxStore, [name]: currentCheckbox};
+      dispatch(setCheckboxStore(state));
+    }
+  };
 
   return (
     <div className="form-checkbox catalog-filter__block-item">
@@ -21,7 +30,7 @@ function Checkbox ({checkbox, cb}: CheckboxProps): JSX.Element {
         name={name}
         checked={checkboxStore[name].isChecked}
         disabled={checkboxStore[name].isDisabled}
-        onChange={cb}
+        onChange={handleOnChange}
         data-testid={`checkbox-${name}`}
       />
       <label htmlFor={name}>{label}</label>

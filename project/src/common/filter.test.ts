@@ -1,4 +1,4 @@
-import {getCheckboxStrings, getFilterByPrice, getFilteredByString, getMinMaxPrice} from './filter';
+import {getCheckboxStrings, getFilterByPrice, filterByString, getMinMaxPrice} from './filter';
 import {mockGuitarsLongArray, mockGuitarsFilterByPrice, mockGuitarsFilteredByString} from './mock-guitars';
 
 describe('Business logic: check filter functions', () => {
@@ -19,7 +19,7 @@ describe('Business logic: check filter functions', () => {
   describe('Function: getFilteredByString', () => {
     it('should be filter structure GUITARS by string count array', () => {
       const strings  = [4, 12];
-      expect(getFilteredByString(mockGuitarsLongArray, strings))
+      expect(filterByString(mockGuitarsLongArray, strings))
         .toEqual(mockGuitarsFilteredByString);
     });
   });

@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  AppRoute,
+  AppRoute, CHECKBOX_GUITAR_TYPE, CHECKBOX_STRING_TYPE,
   priceInput,
   UPDATE_URL_DELAY
 } from '../../common/const';
@@ -16,7 +16,6 @@ import {
   setFilteredGuitars
 } from '../../store/action';
 import CatalogFilterPrice from '../catalog-filter-price/catalog-filter-price';
-import CatalogFilterCheckbox from '../catalog-filter-checkbox/catalog-filter-сheckbox';
 import {
   getCheckboxStore,
   getCurrentPrice,
@@ -28,6 +27,7 @@ import {getGuitarsByPages} from '../../store/app-process/selectors';
 import {checkboxStoreInit} from '../../store/app-filter/app-filter';
 import {useParams} from 'react-router-dom';
 import useDebounce from '../../hooks/use-debounce';
+import CheckboxList from '../checkbox-list/checkbox-list';
 
 
 function    CatalogFilter(): JSX.Element {
@@ -157,15 +157,14 @@ function    CatalogFilter(): JSX.Element {
       <fieldset className="catalog-filter__block">
         <legend className="catalog-filter__block-title">Цена, ₽</legend>
         <div className="catalog-filter__price-range">
-
           <CatalogFilterPrice inputType={priceInput.priceMin} />
-
           <CatalogFilterPrice inputType={priceInput.priceMax} />
-
         </div>
       </fieldset>
 
-      <CatalogFilterCheckbox />
+      <CheckboxList checkboxType={CHECKBOX_GUITAR_TYPE} />
+
+      <CheckboxList checkboxType={CHECKBOX_STRING_TYPE} />
 
     </form>
   );

@@ -1,5 +1,5 @@
 import {useSelector} from 'react-redux';
-import {getIsLoading} from '../../store/app-data/selectors';
+import {getIsLoading} from '../../store/app-filter/selectors';
 import Breadcrumbs from '../breadcrumbs/breadcrumbs';
 import Header from '../header/header';
 import Footer from '../footer/footer';

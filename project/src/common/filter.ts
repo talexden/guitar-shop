@@ -1,7 +1,6 @@
 import {CheckboxType, StringsType} from '../types/const-type';
 import {GuitarType} from '../types/stateType';
 import {CheckboxStoreType, PriceStoreType} from '../store/app-filter/app-filter';
-import {CHECKBOX_GUITAR_TYPE} from './const';
 
 
 export const getMinMaxPrice = (guitars: GuitarType[]): PriceStoreType => {
@@ -33,7 +32,7 @@ export const getFilterByPrice = (guitars: GuitarType[], minPrice: number, maxPri
 };
 
 
-export const getFilteredByString = (guitars: GuitarType[], strings: StringsType) => {
+export const filterByString = (guitars: GuitarType[], strings: StringsType) => {
   let filteredGuitars = [...guitars];
   if (strings.length > 0) {
     filteredGuitars = guitars.filter((guitar) => {
@@ -49,22 +48,6 @@ export const getFilteredByString = (guitars: GuitarType[], strings: StringsType)
   return filteredGuitars;
 };
 
-export const filterGuitarsByType = (guitars: GuitarType[], checkboxType: CheckboxType[], checkboxStore: CheckboxStoreType ): GuitarType[] => {
-  let filteredGuitars: GuitarType[] = [];
-  let noChecked = true;
-  checkboxType.forEach((type) => {
-    if (checkboxStore[type.name].isChecked) {
-      noChecked = false;
-      const checkedTypeGuitars = guitars.filter((guitar) => checkboxStore[type.name] && guitar.type === type.name);
-      filteredGuitars = [...new Set([...filteredGuitars, ...checkedTypeGuitars])];
-    }
-  });
-
-  return noChecked ? [...guitars] : filteredGuitars;
-};
-
-
-// export const getGuitarTypeStrings = (guitars: GuitarType[]): StringsType => [...new Set(guitars.map((guitar)=> guitar.stringCount))];
 
 export const getCheckboxStrings = (checkboxType: CheckboxType[], checkboxStore: CheckboxStoreType): StringsType => {
   let checkboxStrings: StringsType = [];
@@ -75,6 +58,7 @@ export const getCheckboxStrings = (checkboxType: CheckboxType[], checkboxStore: 
   return checkboxStrings;
 };
 
+
 export const isCheckboxTypeChecked = (checkboxType: CheckboxType[], checkboxStore: CheckboxStoreType): boolean => {
   let isChecked = false;
   checkboxType.forEach((type) => {
@@ -83,4 +67,37 @@ export const isCheckboxTypeChecked = (checkboxType: CheckboxType[], checkboxStor
     }
   });
   return isChecked;
-}
+};
+
+
+export const disableCheckbox = (checkboxState: CheckboxStoreType, checkboxType: CheckboxType[], guitarStrings: number[]): CheckboxStoreType => {
+  let state = {...checkboxState};
+  checkboxType.forEach((type) => {
+    const checkboxName = type.name;
+    const checkboxString = type.string[0];
+    const isDisableFlag = guitarStrings.length > 0 ? !guitarStrings.includes(checkboxString): false;
+    const isCheckedFlag = isDisableFlag ? false : state[checkboxName].isChecked;
+
+    const currentCheckbox = {
+      name: checkboxName,
+      isDisabled: isDisableFlag,
+      isChecked: isCheckedFlag,
+    };
+
+    state = {...state, [checkboxName]: currentCheckbox};
+  });
+
+  return state;
+};
+
+
+export const getCheckboxGuitarString = (checkboxState: CheckboxStoreType, checkboxType: CheckboxType[]): StringsType => {
+  let checkboxGuitarStrings: StringsType = [];
+  checkboxType.forEach((type) => {
+    if (checkboxState[type.name].isChecked) {
+      checkboxGuitarStrings = [...new Set([...checkboxGuitarStrings,...type.string])];
+    }
+  });
+
+  return checkboxGuitarStrings;
+};

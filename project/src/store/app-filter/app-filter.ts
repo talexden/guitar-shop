@@ -1,14 +1,23 @@
 import {createReducer} from '@reduxjs/toolkit';
+import {CheckboxType} from '../../types/const-type';
+import {CHECKBOX_GUITAR_TYPE, CHECKBOX_STRING_TYPE} from '../../common/const';
+import {GuitarType} from '../../types/stateType';
+
+import {
+  disableCheckbox,
+  filterByString,
+  getCheckboxGuitarString,
+  isCheckboxTypeChecked
+} from '../../common/filter';
+
 import {
   setCheckboxStore,
   setCurrentPrice,
   setGuitarsFilteredByCheckbox,
   setGuitarStrings,
-  setFilteredPrice
+  setFilteredPrice, setGuitars, setIsLoading, setIsLoaded
 } from '../action';
-import {CheckboxType} from '../../types/const-type';
-import {CHECKBOX_GUITAR_TYPE, CHECKBOX_STRING_TYPE} from '../../common/const';
-import {GuitarType} from '../../types/stateType';
+
 
 export type CheckboxStoreType = {
     [key: string]: {
@@ -30,6 +39,8 @@ export type PriceStoreType = {
 export type GuitarStringsType = number[]
 
 export type AppFilterType = {
+  guitars: GuitarType[],
+  isLoading: boolean,
   price: {
     currentPrice: PriceStoreType,
     filteredPrice:PriceStoreType,
@@ -61,7 +72,10 @@ export const checkboxStoreInit: CheckboxStoreType = {
   ...getCheckboxesInit(CHECKBOX_STRING_TYPE),
 };
 
+
 const initialStore: AppFilterType = {
+  guitars: [],
+  isLoading: false,
   price: {
     currentPrice: {
       priceMin: '',
@@ -82,6 +96,15 @@ const initialStore: AppFilterType = {
 export const AppFilter = createReducer(initialStore, (builder)=>{
   builder
 
+    .addCase(setGuitars, (state, action) => {
+      const {guitars} = action.payload;
+      state.guitars = guitars;
+    })
+
+    .addCase(setIsLoading, (state) => {state.isLoading = true;})
+
+    .addCase(setIsLoaded, (state) => {state.isLoading = false;})
+
     .addCase(setCurrentPrice, (state, action) => {
       state.price.currentPrice = action.payload;
     })
@@ -91,7 +114,28 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
     })
 
     .addCase(setCheckboxStore, (state, action) => {
-      state.checkboxStore = action.payload;
+      const checkboxState = action.payload;
+      const isGuitarTypeChecked = isCheckboxTypeChecked(CHECKBOX_GUITAR_TYPE, checkboxState);
+      const isStringTypeChecked = isCheckboxTypeChecked(CHECKBOX_STRING_TYPE, checkboxState);
+      let currentGuitars: GuitarType[] = isGuitarTypeChecked || isStringTypeChecked ? [] : state.guitars;
+      const checkboxGuitarStrings = getCheckboxGuitarString(checkboxState, CHECKBOX_GUITAR_TYPE);
+      const correctedCheckboxState = disableCheckbox(checkboxState, CHECKBOX_STRING_TYPE, checkboxGuitarStrings);
+
+      if (isGuitarTypeChecked){
+        CHECKBOX_GUITAR_TYPE.forEach((type) => {
+          if (correctedCheckboxState[type.name].isChecked) {
+            const checkedTypeGuitars = state.guitars.filter((guitar) => correctedCheckboxState[type.name] && guitar.type === type.name);
+            currentGuitars = [...new Set([...currentGuitars, ...checkedTypeGuitars])];
+          }
+        });
+      }
+
+      if (isStringTypeChecked){
+        currentGuitars = filterByString(currentGuitars, checkboxGuitarStrings);
+      }
+
+      state.checkboxStore = correctedCheckboxState;
+      state.guitarsFilteredByCheckbox = currentGuitars;
     })
 
     .addCase(setGuitarStrings, (state, action) => {
