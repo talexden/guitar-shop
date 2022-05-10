@@ -93,14 +93,8 @@ export const setSearchKey = createAction(
 export const setIsLoading = createAction(ActionType.SetIsLoading);
 export const setIsLoaded = createAction(ActionType.SetIsLoaded);
 
-export const setCurrentPrice = createAction(
-  ActionType.SetCurrentPrice,
-  (price: PriceStoreType)=>(
-    {payload: price}
-  ));
-
-export const setFilteredPrice = createAction(
-  ActionType.SetFilteredPrice,
+export const setUserPrice = createAction(
+  ActionType.SetUserPrice,
   (price: PriceStoreType)=>(
     {payload: price}
   ));

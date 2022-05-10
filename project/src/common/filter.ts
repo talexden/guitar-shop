@@ -91,7 +91,7 @@ export const disableCheckbox = (checkboxState: CheckboxStoreType, checkboxType: 
 };
 
 
-export const getCheckboxGuitarString = (checkboxState: CheckboxStoreType, checkboxType: CheckboxType[]): StringsType => {
+export const getCheckboxString = (checkboxState: CheckboxStoreType, checkboxType: CheckboxType[]): StringsType => {
   let checkboxGuitarStrings: StringsType = [];
   checkboxType.forEach((type) => {
     if (checkboxState[type.name].isChecked) {

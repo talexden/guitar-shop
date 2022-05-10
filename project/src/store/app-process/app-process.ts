@@ -1,5 +1,5 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {SortDirect, SortKey} from '../../common/const';
+import {CARD_COUNT, SortDirect, SortKey} from '../../common/const';
 import {OrderPostType, CommentPostType, CouponPostType, GuitarType} from '../../types/stateType';
 import {
   setSortedGuitars,
@@ -7,13 +7,14 @@ import {
   setSortDirect,
   setSearchedGuitars,
   setFilteredGuitars,
-  setGuitarsByPages,
   setPaginationPages,
   setCurrentPage,
   setCurrentGuitar,
   setCurrentNavigationLabel,
-  setSearchKey, setRedirectUrl,
+  setSearchKey,
+  setRedirectUrl
 } from '../action';
+import {sortGuitarsByPages} from '../../common/sort';
 
 
 export type AppProcessType = {
@@ -62,11 +63,10 @@ export const AppProcess = createReducer(initialState, (builder)=>{
     })
 
     .addCase(setSortedGuitars, (state, action) => {
-      state.sortedGuitars = action.payload;
-    })
-
-    .addCase(setGuitarsByPages, (state, action) => {
-      state.guitarsByPages = action.payload;
+      const sortedGuitars = action.payload;
+      const guitarsSortedByPages = sortGuitarsByPages(sortedGuitars, CARD_COUNT);
+      state.sortedGuitars = sortedGuitars;
+      state.guitarsByPages = guitarsSortedByPages;
     })
 
     .addCase(setPaginationPages, (state, action) => {

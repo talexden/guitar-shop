@@ -9,7 +9,6 @@ import {
 } from '../../types/stateType';
 
 
-export const getSortedGuitars = (state: StateType): GuitarType[] => state[NameSpace.process].sortedGuitars;
 export const getGuitarsByPages = (state: StateType): GuitarType[][] => state[NameSpace.process].guitarsByPages;
 export const getPaginationPages = (state: StateType): number[] => state[NameSpace.process].paginationPages;
 export const getFilteredGuitars = (state: StateType): GuitarType[] => state[NameSpace.process].filteredGuitars;

@@ -6,16 +6,16 @@ import {GuitarType} from '../../types/stateType';
 import {
   disableCheckbox,
   filterByString,
-  getCheckboxGuitarString,
-  isCheckboxTypeChecked
+  getCheckboxString, getFilterByPrice, getMinMaxPrice,
+  isCheckboxTypeChecked,
 } from '../../common/filter';
 
 import {
   setCheckboxStore,
-  setCurrentPrice,
-  setGuitarsFilteredByCheckbox,
-  setGuitarStrings,
-  setFilteredPrice, setGuitars, setIsLoading, setIsLoaded
+  setUserPrice,
+  setGuitars,
+  setIsLoading,
+  setIsLoaded
 } from '../action';
 
 
@@ -27,11 +27,6 @@ export type CheckboxStoreType = {
   },
 };
 
-export enum PriceName {
-  priceMin = 'priceMin',
-  priceMax = 'priceMax',
-}
-
 export type PriceStoreType = {
   [key:string] : string,
 }
@@ -42,7 +37,7 @@ export type AppFilterType = {
   guitars: GuitarType[],
   isLoading: boolean,
   price: {
-    currentPrice: PriceStoreType,
+    userPrice: PriceStoreType,
     filteredPrice:PriceStoreType,
   },
   guitarsFilteredByCheckbox: GuitarType[],
@@ -72,12 +67,11 @@ export const checkboxStoreInit: CheckboxStoreType = {
   ...getCheckboxesInit(CHECKBOX_STRING_TYPE),
 };
 
-
 const initialStore: AppFilterType = {
   guitars: [],
   isLoading: false,
   price: {
-    currentPrice: {
+    userPrice: {
       priceMin: '',
       priceMax: '',
     },
@@ -98,6 +92,8 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
 
     .addCase(setGuitars, (state, action) => {
       const {guitars} = action.payload;
+      state.price.filteredPrice = getMinMaxPrice(guitars);
+      state.guitarsFilteredByCheckbox = guitars;
       state.guitars = guitars;
     })
 
@@ -105,23 +101,22 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
 
     .addCase(setIsLoaded, (state) => {state.isLoading = false;})
 
-    .addCase(setCurrentPrice, (state, action) => {
-      state.price.currentPrice = action.payload;
-    })
-
-    .addCase(setFilteredPrice, (state, action) => {
-      state.price.filteredPrice = action.payload;
+    .addCase(setUserPrice, (state, action) => {
+      state.filteredG = getFilterByPrice(currentGuitars, Number(priceMin), Number(priceMax));
+      state.price.userPrice = action.payload;
     })
 
     .addCase(setCheckboxStore, (state, action) => {
       const checkboxState = action.payload;
       const isGuitarTypeChecked = isCheckboxTypeChecked(CHECKBOX_GUITAR_TYPE, checkboxState);
       const isStringTypeChecked = isCheckboxTypeChecked(CHECKBOX_STRING_TYPE, checkboxState);
-      let currentGuitars: GuitarType[] = isGuitarTypeChecked || isStringTypeChecked ? [] : state.guitars;
-      const checkboxGuitarStrings = getCheckboxGuitarString(checkboxState, CHECKBOX_GUITAR_TYPE);
-      const correctedCheckboxState = disableCheckbox(checkboxState, CHECKBOX_STRING_TYPE, checkboxGuitarStrings);
+      let currentGuitars: GuitarType[] = state.guitars;
+      const checkboxGuitarTypeStrings = getCheckboxString(checkboxState, CHECKBOX_GUITAR_TYPE);
+      const checkboxGuitarStrings = getCheckboxString(checkboxState, CHECKBOX_STRING_TYPE);
+      const correctedCheckboxState = disableCheckbox(checkboxState, CHECKBOX_STRING_TYPE, checkboxGuitarTypeStrings);
 
       if (isGuitarTypeChecked){
+        currentGuitars = [];
         CHECKBOX_GUITAR_TYPE.forEach((type) => {
           if (correctedCheckboxState[type.name].isChecked) {
             const checkedTypeGuitars = state.guitars.filter((guitar) => correctedCheckboxState[type.name] && guitar.type === type.name);
@@ -135,14 +130,19 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
       }
 
       state.checkboxStore = correctedCheckboxState;
+
+      // if (!isGuitarTypeChecked && !isStringTypeChecked) {
+      //   state.price.userPrice = {
+      //     priceMin: '',
+      //     priceMax: '',
+      //   };
+      // }
+
+      const price = getMinMaxPrice(currentGuitars);
+      const filteredPrice = state.price.filteredPrice;
+      if (price.priceMin !== filteredPrice.priceMin || price.priceMax !== filteredPrice.priceMax) {
+        state.price.filteredPrice = price;
+      }
       state.guitarsFilteredByCheckbox = currentGuitars;
-    })
-
-    .addCase(setGuitarStrings, (state, action) => {
-      state.guitarStrings = action.payload;
-    })
-
-    .addCase(setGuitarsFilteredByCheckbox, (state, action) => {
-      state.guitarsFilteredByCheckbox = action.payload;
     });
 });

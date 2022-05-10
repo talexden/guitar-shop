@@ -1,14 +1,12 @@
-import {ChangeEvent, useEffect, useState} from 'react';
+import {ChangeEvent, useState} from 'react';
 import useDebounce from '../../hooks/use-debounce';
 import {CORRECT_PRICE_DELAY, inputName} from '../../common/const';
 import {useDispatch, useSelector} from 'react-redux';
-import {setCurrentPrice, setFilteredPrice} from '../../store/action';
-import {getMinMaxPrice} from '../../common/filter';
+import {setUserPrice} from '../../store/action';
 
 import {
-  getCurrentPrice,
-  getFilteredPrice,
-  getGuitarsFilteredByCheckbox
+  getUserPrice,
+  getFilteredPrice
 } from '../../store/app-filter/selectors';
 
 type CatalogFilterPriceProps = {
@@ -18,7 +16,6 @@ type CatalogFilterPriceProps = {
   },
 };
 
-
 const priceStateInit = {
   [inputName.priceMin]: '',
   [inputName.priceMax]: '',
@@ -26,19 +23,10 @@ const priceStateInit = {
 
 function CatalogFilterPrice ({inputType}: CatalogFilterPriceProps): JSX.Element {
   const {inputPriceName, priceLabel} = inputType;
-  const currentPrice = useSelector(getCurrentPrice);
+  const userPrice = useSelector(getUserPrice);
   const filteredPrice = useSelector(getFilteredPrice);
-  const guitarsFilteredByCheckbox = useSelector(getGuitarsFilteredByCheckbox);
   const dispatch = useDispatch();
   const [priceState, setPriceState] = useState(priceStateInit);
-
-  // set filteredPrice by selected checkbox
-  useEffect(()=>{
-    const price = getMinMaxPrice(guitarsFilteredByCheckbox);
-    if (price[inputName.priceMin] !== filteredPrice[inputName.priceMin] || price[inputName.priceMax] !== filteredPrice[inputName.priceMax]){
-      dispatch(setFilteredPrice(price));
-    }
-  }, [dispatch, guitarsFilteredByCheckbox, filteredPrice]);
 
   // correct price
   const handleCorrectPrice = () => {
@@ -46,14 +34,11 @@ function CatalogFilterPrice ({inputType}: CatalogFilterPriceProps): JSX.Element 
     if (priceState[inputPriceName] === '') {
       price = filteredPrice[inputPriceName];
     } else {
-      // if (priceState[inputPriceName] !== '' && Number(priceState[inputPriceName]) < Number(filteredPrice.priceMin)) {
       if (Number(priceState[inputPriceName]) < Number(filteredPrice.priceMin)) {
         price = filteredPrice.priceMin;
       }
-      // if (priceState[inputPriceName] !== '' && Number(priceState[inputPriceName]) > Number(filteredPrice.priceMax)) {
       if (Number(priceState[inputPriceName]) > Number(filteredPrice.priceMax)) {
         price = filteredPrice.priceMax;
-
       }
     }
 
@@ -62,29 +47,19 @@ function CatalogFilterPrice ({inputType}: CatalogFilterPriceProps): JSX.Element 
   };
 
   const debouncedCorrectPrice = useDebounce(handleCorrectPrice, CORRECT_PRICE_DELAY);
+  debouncedCorrectPrice();
 
-
-  useEffect(()=>{
-    if (currentPrice[inputPriceName] !== priceState[inputPriceName] && priceState[inputPriceName] !== ''){
-      debouncedCorrectPrice();
-      const price = {...currentPrice, [inputPriceName]: priceState[inputPriceName]};
-      dispatch(setCurrentPrice(price));
-    }
-  }, [dispatch, debouncedCorrectPrice, priceState, inputPriceName, currentPrice]);
-
-
+  // set UserPrice
   const handleChangePrice = ( evt: ChangeEvent<HTMLInputElement>) => {
     let {value} = evt.target;
 
-    value = value.replace(/[^0-9]/g, '');
+    value = value.replace(/\D/g, ''); // '[^0-9]' === '\D'
     while (value[0] === '0') {
       value = value.replace(/^0/, '');
     }
 
-    if (priceState[inputPriceName] !== value) {
-      const price = {...priceState, [inputPriceName]: value};
-      setPriceState(price);
-    }
+    const price = {...priceState, [inputPriceName]: value};
+    dispatch(setUserPrice(price));
   };
 
 
@@ -96,7 +71,7 @@ function CatalogFilterPrice ({inputType}: CatalogFilterPriceProps): JSX.Element 
         placeholder={filteredPrice[inputPriceName]}
         id={inputPriceName}
         name={inputPriceName}
-        value={priceState[inputPriceName] !== filteredPrice[inputPriceName] && priceState[inputPriceName] !== '' ? priceState[inputPriceName] : ''}
+        value={userPrice[inputPriceName]}
         onChange={handleChangePrice}
         data-testid={`${inputPriceName}Test`}
       />

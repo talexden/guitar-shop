@@ -3,7 +3,7 @@ import {mockGuitarsLongArray} from '../common/mock-guitars';
 import {Adapter} from '../components/adapter/adapter';
 import {APIRoute, ErrorTexts} from '../common/const';
 import {ThunkActionResult} from '../types/action-type';
-import {setGuitars, setIsLoading, setIsLoaded} from './action';
+import {setGuitars, setIsLoaded, setIsLoading} from './action';
 
 export const fetchGuitars = (): ThunkActionResult =>
   async (dispatch, _getState, api) => {

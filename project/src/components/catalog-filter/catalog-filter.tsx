@@ -12,13 +12,13 @@ import {
   redirectToRoute,
   setCheckboxStore,
   setCurrentPage,
-  setCurrentPrice,
+  setUserPrice,
   setFilteredGuitars
 } from '../../store/action';
 import CatalogFilterPrice from '../catalog-filter-price/catalog-filter-price';
 import {
   getCheckboxStore,
-  getCurrentPrice,
+  getUserPrice,
   getGuitarsFilteredByCheckbox,
   getFilteredPrice
 } from '../../store/app-filter/selectors';
@@ -32,7 +32,7 @@ import CheckboxList from '../checkbox-list/checkbox-list';
 
 function    CatalogFilter(): JSX.Element {
   const checkboxStore = useSelector(getCheckboxStore);
-  const currentPrice = useSelector(getCurrentPrice);
+  const userPrice = useSelector(getUserPrice);
   const filteredPrice = useSelector(getFilteredPrice);
   const guitarsFilteredByCheckbox = useSelector(getGuitarsFilteredByCheckbox);
   const guitarsByPages = useSelector(getGuitarsByPages);
@@ -62,11 +62,11 @@ function    CatalogFilter(): JSX.Element {
   // create search URL
   useEffect(() => {
     const priceParams: string[] = [];
-    if (currentPrice.priceMin !== filteredPrice.priceMin && currentPrice.priceMin !== '') {
-      priceParams.push(`priceMin=${currentPrice.priceMin}`);
+    if (userPrice.priceMin !== filteredPrice.priceMin && userPrice.priceMin !== '') {
+      priceParams.push(`priceMin=${userPrice.priceMin}`);
     }
-    if (currentPrice.priceMax !== filteredPrice.priceMax && currentPrice.priceMax !== '') {
-      priceParams.push(`priceMax=${currentPrice.priceMax}`);
+    if (userPrice.priceMax !== filteredPrice.priceMax && userPrice.priceMax !== '') {
+      priceParams.push(`priceMax=${userPrice.priceMax}`);
     }
 
     const checkboxParams: string[] = [];
@@ -80,7 +80,7 @@ function    CatalogFilter(): JSX.Element {
     if (urlSearchState !== urlSearch) {
       setUrlSearchState(urlSearch);
     }
-  }, [currentPrice, filteredPrice, checkboxStore, urlSearchState]);
+  }, [userPrice, filteredPrice, checkboxStore, urlSearchState]);
 
 
   // redirect to url
@@ -121,7 +121,7 @@ function    CatalogFilter(): JSX.Element {
         };
         delete params.priceMin;
         delete params.priceMax;
-        dispatch(setCurrentPrice(price));
+        dispatch(setUserPrice(price));
 
         let checkbox = {...checkboxStore};
         if (params !== {}) {
@@ -142,13 +142,13 @@ function    CatalogFilter(): JSX.Element {
   useEffect(() => {
     let currentGuitars: GuitarType[] = [...guitarsFilteredByCheckbox];
 
-    if (currentPrice.priceMin !== '' || currentPrice.priceMax !== '' ){
-      const priceMin = currentPrice.priceMin === '' ? filteredPrice.priceMin : currentPrice.priceMin;
-      const priceMax = currentPrice.priceMax === '' ? filteredPrice.priceMax : currentPrice.priceMax;
+    if (userPrice.priceMin !== '' || userPrice.priceMax !== '' ){
+      const priceMin = userPrice.priceMin === '' ? filteredPrice.priceMin : userPrice.priceMin;
+      const priceMax = userPrice.priceMax === '' ? filteredPrice.priceMax : userPrice.priceMax;
       currentGuitars = getFilterByPrice(currentGuitars, Number(priceMin), Number(priceMax));
     }
     dispatch(setFilteredGuitars(currentGuitars));
-  }, [dispatch, guitarsFilteredByCheckbox, currentPrice]);
+  }, [dispatch, guitarsFilteredByCheckbox, userPrice, filteredPrice]);
 
   return (
     <form className="catalog-filter">
