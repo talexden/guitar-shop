@@ -58,7 +58,7 @@ function CatalogFilterPrice ({inputType}: CatalogFilterPriceProps): JSX.Element 
       value = value.replace(/^0/, '');
     }
 
-    const price = {...priceState, [inputPriceName]: value};
+    const price = {...userPrice, [inputPriceName]: value};
     dispatch(setUserPrice(price));
   };
 
