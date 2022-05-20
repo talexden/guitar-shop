@@ -140,8 +140,8 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
       const isStringTypeChecked = isCheckboxTypeChecked(CHECKBOX_STRING_TYPE, checkboxState);
       let currentGuitars: GuitarType[] = state.guitars;
       const checkboxGuitarTypeStrings = getCheckboxString(checkboxState, CHECKBOX_GUITAR_TYPE);
-      const checkboxGuitarStrings = getCheckboxString(checkboxState, CHECKBOX_STRING_TYPE);
       const correctedCheckboxState = disableCheckbox(checkboxState, CHECKBOX_STRING_TYPE, checkboxGuitarTypeStrings);
+      const checkboxGuitarStrings = getCheckboxString(correctedCheckboxState, CHECKBOX_STRING_TYPE);
 
       if (isGuitarTypeChecked){
         currentGuitars = [];
