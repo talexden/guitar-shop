@@ -44,7 +44,7 @@ export type AppFilterType = {
   checkboxStore: CheckboxStoreType,
   isStringChecked: boolean,
   isTypeChecked: boolean,
-  guitarStrings: GuitarStringsType;
+  filteredGuitars: GuitarType[];
 }
 
 const getCheckboxesInit = (checkboxTypes: CheckboxType[]) => {
@@ -84,7 +84,7 @@ const initialStore: AppFilterType = {
   checkboxStore: checkboxStoreInit,
   isStringChecked: false,
   isTypeChecked: false,
-  guitarStrings: [],
+  filteredGuitars: [],
 };
 
 export const AppFilter = createReducer(initialStore, (builder)=>{
@@ -102,8 +102,44 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
     .addCase(setIsLoaded, (state) => {state.isLoading = false;})
 
     .addCase(setUserPrice, (state, action) => {
-      state.filteredG = getFilterByPrice(currentGuitars, Number(priceMin), Number(priceMax));
-      state.price.userPrice = action.payload;
+      const price = action.payload;
+      const filteredPrice = state.price.filteredPrice;
+      const guitars = state.guitarsFilteredByCheckbox;
+      const userPrice = {
+        priceMin: '',
+        priceMax: '',
+      };
+
+      if (price.priceMin > price.priceMax) {
+        [price.priceMin, price.priceMax] = [price.priceMax, price.priceMin];
+      }
+
+      if (price.priceMin <= filteredPrice.priceMin) {
+        price.priceMin = filteredPrice.priceMin;
+      }
+      if (price.priceMin >= filteredPrice.priceMax) {
+        price.priceMin = filteredPrice.priceMax;
+      }
+      if (price.priceMax <= filteredPrice.priceMin) {
+        price.priceMax = filteredPrice.priceMin;
+      }
+      if (price.priceMax >= filteredPrice.priceMax) {
+        price.priceMax = filteredPrice.priceMax;
+      }
+
+      if (price.priceMax === filteredPrice.priceMax) {
+        userPrice.priceMax = '';
+      } else {
+        userPrice.priceMax = price.priceMax;
+      }
+      if (price.priceMin === filteredPrice.priceMin) {
+        userPrice.priceMin = '';
+      } else {
+        userPrice.priceMin = price.priceMin;
+      }
+
+      state.filteredGuitars = getFilterByPrice(guitars, Number(price.priceMin), Number(price.priceMax));
+      state.price.userPrice = userPrice;
     })
 
     .addCase(setCheckboxStore, (state, action) => {
