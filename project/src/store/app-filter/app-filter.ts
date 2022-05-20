@@ -131,7 +131,7 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
       }
 
       state.filteredGuitars = getFilterByPrice(guitars, Number(price.priceMin), Number(price.priceMax));
-      state.price.userPrice = price;
+      state.price.userPrice = price
     })
 
     .addCase(setCheckboxStore, (state, action) => {
