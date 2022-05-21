@@ -3,7 +3,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {SortDirect, SortKey} from '../../common/const';
 import {sort} from '../../common/sort';
 import {setSortDirect, setSortedGuitars, setSortKey} from '../../store/action';
-import {getFilteredGuitars, getIsFilter, getSortDirect, getSortKey} from '../../store/app-process/selectors';
+import { getIsFilter, getSortDirect, getSortKey} from '../../store/app-process/selectors';
+import {getFilteredGuitars} from '../../store/app-filter/selectors';
 
 const SORT_TYPE_BUTTON_ACTIVE = ' catalog-sort__type-button--active';
 const SORT_ORDER_BUTTON_ACTIVE = ' catalog-sort__order-button--active';

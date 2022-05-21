@@ -131,6 +131,14 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
       }
 
       state.filteredGuitars = getFilterByPrice(guitars, Number(price.priceMin), Number(price.priceMax));
+
+      if (price.priceMin === filteredPrice.priceMin) {
+        price.priceMin = '';
+      }
+      if (price.priceMax === filteredPrice.priceMax) {
+        price.priceMax = '';
+      }
+
       state.price.userPrice = price
     })
 

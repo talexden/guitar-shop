@@ -1,10 +1,9 @@
 import {ChangeEvent, KeyboardEvent, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {setUserPrice} from '../../store/action';
-
 import {
   getUserPrice,
-  getFilteredPrice
+  getFilteredPrice, getGuitarsFilteredByCheckbox,
 } from '../../store/app-filter/selectors';
 
 type CatalogFilterPriceProps = {
@@ -18,13 +17,18 @@ function CatalogFilterPrice ({inputType}: CatalogFilterPriceProps): JSX.Element 
   const {inputPriceName, priceLabel} = inputType;
   const userPrice = useSelector(getUserPrice);
   const filteredPrice = useSelector(getFilteredPrice);
+  const guitarsFilteredByCheckbox = useSelector(getGuitarsFilteredByCheckbox);
   const dispatch = useDispatch();
   const [priceState, setPriceState] = useState('');
 
   useEffect(()=>{
-    const price = userPrice[inputPriceName] === filteredPrice[inputPriceName] ? '' : userPrice[inputPriceName];
-    setPriceState(price);
+    setPriceState(userPrice[inputPriceName]);
   }, [userPrice]);
+
+  useEffect(()=>{
+    handleSetUserPrice();
+  }, [guitarsFilteredByCheckbox]);
+
 
   const handleChangePrice = ( evt: ChangeEvent<HTMLInputElement>) => {
     let {value} = evt.target;
@@ -34,6 +38,7 @@ function CatalogFilterPrice ({inputType}: CatalogFilterPriceProps): JSX.Element 
     }
     setPriceState(value);
   };
+
 
   const handleSetUserPrice = () =>{
     const price = {...userPrice, [inputPriceName]: priceState};

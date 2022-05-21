@@ -11,3 +11,4 @@ export const getCheckboxStore = (state: StateType): CheckboxStoreType => state[N
 export const getGuitarsFilteredByCheckbox = (state: StateType): GuitarType[] => state[NameSpace.filter].guitarsFilteredByCheckbox;
 export const getGuitars = (state: StateType): GuitarType[] => state[NameSpace.filter].guitars;
 export const getIsLoading = (state: StateType): boolean => state[NameSpace.filter].isLoading;
+export const getFilteredGuitars = (state: StateType): GuitarType[] => state[NameSpace.filter].filteredGuitars;

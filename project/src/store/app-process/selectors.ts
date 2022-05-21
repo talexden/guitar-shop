@@ -11,7 +11,6 @@ import {
 
 export const getGuitarsByPages = (state: StateType): GuitarType[][] => state[NameSpace.process].guitarsByPages;
 export const getPaginationPages = (state: StateType): number[] => state[NameSpace.process].paginationPages;
-export const getFilteredGuitars = (state: StateType): GuitarType[] => state[NameSpace.process].filteredGuitars;
 export const getSearchedGuitars = (state: StateType): GuitarType[] => state[NameSpace.process].searchedGuitars;
 export const getCommentPost = (state: StateType): CommentPostType | null => state[NameSpace.process].commentPost;
 export const getCouponPost = (state: StateType): CouponPostType => state[NameSpace.process].couponPost;

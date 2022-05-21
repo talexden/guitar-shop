@@ -5,24 +5,20 @@ import {
   priceInput,
   UPDATE_URL_DELAY
 } from '../../common/const';
-import {
-  getFilterByPrice
-} from '../../common/filter';
+
 import {
   redirectToRoute,
   setCheckboxStore,
   setCurrentPage,
-  setUserPrice,
-  setFilteredGuitars
+  setUserPrice
 } from '../../store/action';
+
 import CatalogFilterPrice from '../catalog-filter-price/catalog-filter-price';
 import {
   getCheckboxStore,
   getUserPrice,
-  getGuitarsFilteredByCheckbox,
   getFilteredPrice
 } from '../../store/app-filter/selectors';
-import {GuitarType} from '../../types/stateType';
 import {getGuitarsByPages} from '../../store/app-process/selectors';
 import {checkboxStoreInit} from '../../store/app-filter/app-filter';
 import {useParams} from 'react-router-dom';
@@ -34,7 +30,6 @@ function    CatalogFilter(): JSX.Element {
   const checkboxStore = useSelector(getCheckboxStore);
   const userPrice = useSelector(getUserPrice);
   const filteredPrice = useSelector(getFilteredPrice);
-  const guitarsFilteredByCheckbox = useSelector(getGuitarsFilteredByCheckbox);
   const guitarsByPages = useSelector(getGuitarsByPages);
   const dispatch = useDispatch();
   const [urlSearchState, setUrlSearchState] = useState('');
@@ -77,10 +72,8 @@ function    CatalogFilter(): JSX.Element {
     });
 
     const urlSearch = `?${[...priceParams, ...checkboxParams].join('&')}`;
-    if (urlSearchState !== urlSearch) {
-      setUrlSearchState(urlSearch);
-    }
-  }, [userPrice, filteredPrice, checkboxStore, urlSearchState]);
+    setUrlSearchState(urlSearch);
+  }, [userPrice, filteredPrice, checkboxStore]);
 
 
   // redirect to url
@@ -111,18 +104,9 @@ function    CatalogFilter(): JSX.Element {
       const currentUrlSearch = window.location.search;
       const urlSearchParams = new URLSearchParams(currentUrlSearch);
       const params = Object.fromEntries(urlSearchParams.entries());
+
       if (currentUrlSearch !== urlSearchState && urlSearchState !== '?'){
         setUrlSearchState(currentUrlSearch);
-        const urlPriceMin = params.priceMin ? params.priceMin : '';
-        const urlPriceMax = params.priceMax ? params.priceMin : '';
-        const price = {
-          priceMin: urlPriceMin,
-          priceMax: urlPriceMax,
-        };
-        delete params.priceMin;
-        delete params.priceMax;
-        dispatch(setUserPrice(price));
-
         let checkbox = {...checkboxStore};
         if (params !== {}) {
           Object.keys(params).forEach((param)=>{
@@ -133,22 +117,21 @@ function    CatalogFilter(): JSX.Element {
           checkbox = {...checkboxStoreInit};
         }
         dispatch(setCheckboxStore(checkbox));
+
+        const urlPriceMin = params.priceMin ? params.priceMin : '';
+        const urlPriceMax = params.priceMax ? params.priceMin : '';
+        const price = {
+          priceMin: urlPriceMin,
+          priceMax: urlPriceMax,
+        };
+        delete params.priceMin;
+        delete params.priceMax;
+        dispatch(setUserPrice(price));
+
+
       }
     }
   }, [dispatch, checkboxStore, urlSearchState, urlState]);
-
-
-  // Filtering by price
-  useEffect(() => {
-    let currentGuitars: GuitarType[] = [...guitarsFilteredByCheckbox];
-
-    if (userPrice.priceMin !== '' || userPrice.priceMax !== '' ){
-      const priceMin = userPrice.priceMin === '' ? filteredPrice.priceMin : userPrice.priceMin;
-      const priceMax = userPrice.priceMax === '' ? filteredPrice.priceMax : userPrice.priceMax;
-      currentGuitars = getFilterByPrice(currentGuitars, Number(priceMin), Number(priceMax));
-    }
-    dispatch(setFilteredGuitars(currentGuitars));
-  }, [dispatch, guitarsFilteredByCheckbox, userPrice, filteredPrice]);
 
   return (
     <form className="catalog-filter">
