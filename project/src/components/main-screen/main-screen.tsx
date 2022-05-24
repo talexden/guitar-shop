@@ -11,12 +11,12 @@ import ProductCardList from '../product-card-list/product-card-list';
 import {useEffect} from 'react';
 import {setSearchUrl} from '../../store/action';
 
-
 function  MainScreen(): JSX.Element {
   const isLoading = useSelector(getIsLoading);
-
   const dispatch = useDispatch();
 
+
+  //parse URL
   useEffect(()=>{
     const currentUrlSearch = window.location.search;
     if (currentUrlSearch.length > 1) {

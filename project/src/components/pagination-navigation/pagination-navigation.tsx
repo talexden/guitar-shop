@@ -1,6 +1,6 @@
 import {PaginationNavigationType} from '../../types/const-type';
 import {useDispatch} from 'react-redux';
-import {redirectToRoute, setCurrentPage} from '../../store/action';
+import {redirectToRoute} from '../../store/action';
 import {MouseEvent} from 'react';
 import {AppRoute} from '../../common/const';
 

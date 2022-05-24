@@ -27,7 +27,8 @@ import {
   setSortDirect,
   setCurrentNavigationLabel,
   setSearchKey,
-  setSearchUrl
+  setSearchUrl,
+  setCheckboxPrice
 } from '../action';
 import {sortGuitarsByPages} from '../../common/sort';
 
@@ -51,7 +52,7 @@ export type AppFilterType = {
   isLoading: boolean,
   price: {
     userPrice: PriceStoreType,
-    filteredPrice:PriceStoreType,
+    checkboxPrice:PriceStoreType,
   },
   guitarsFilteredByCheckbox: GuitarType[],
   checkboxStore: CheckboxStoreType,
@@ -103,7 +104,7 @@ const initialStore: AppFilterType = {
       priceMin: '',
       priceMax: '',
     },
-    filteredPrice: {
+    checkboxPrice: {
       priceMin: '',
       priceMax: '',
     },
@@ -135,8 +136,6 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
 
     .addCase(setGuitars, (state, action) => {
       const {guitars} = action.payload;
-      state.price.filteredPrice = getMinMaxPrice(guitars);
-      state.guitarsFilteredByCheckbox = guitars;
       state.guitars = guitars;
     })
 
@@ -146,39 +145,39 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
 
     .addCase(setUserPrice, (state, action) => {
       const price = action.payload;
-      const filteredPrice = state.price.filteredPrice;
+      const checkboxPrice = state.price.checkboxPrice;
       const guitars = state.guitarsFilteredByCheckbox;
 
       if (price.priceMin === '') {
-        price.priceMin = filteredPrice.priceMin;
+        price.priceMin = checkboxPrice.priceMin;
       }
       if (price.priceMax === '') {
-        price.priceMax = filteredPrice.priceMax;
+        price.priceMax = checkboxPrice.priceMax;
       }
 
       if (Number(price.priceMin) > Number(price.priceMax)) {
         [price.priceMin, price.priceMax] = [price.priceMax, price.priceMin];
       }
 
-      if (Number(price.priceMin) < Number(filteredPrice.priceMin)) {
-        price.priceMin = filteredPrice.priceMin;
+      if (Number(price.priceMin) < Number(checkboxPrice.priceMin)) {
+        price.priceMin = checkboxPrice.priceMin;
       }
-      if (Number(price.priceMin) > Number(filteredPrice.priceMax)) {
-        price.priceMin = filteredPrice.priceMax;
+      if (Number(price.priceMin) > Number(checkboxPrice.priceMax)) {
+        price.priceMin = checkboxPrice.priceMax;
       }
-      if (Number(price.priceMax) < Number(filteredPrice.priceMin)) {
-        price.priceMax = filteredPrice.priceMin;
+      if (Number(price.priceMax) < Number(checkboxPrice.priceMin)) {
+        price.priceMax = checkboxPrice.priceMin;
       }
-      if (Number(price.priceMax) > Number(filteredPrice.priceMax)) {
-        price.priceMax = filteredPrice.priceMax;
+      if (Number(price.priceMax) > Number(checkboxPrice.priceMax)) {
+        price.priceMax = checkboxPrice.priceMax;
       }
 
       state.filteredGuitars = getFilterByPrice(guitars, Number(price.priceMin), Number(price.priceMax));
 
-      if (price.priceMin === filteredPrice.priceMin) {
+      if (price.priceMin === checkboxPrice.priceMin) {
         price.priceMin = '';
       }
-      if (price.priceMax === filteredPrice.priceMax) {
+      if (price.priceMax === checkboxPrice.priceMax) {
         price.priceMax = '';
       }
 
@@ -187,12 +186,24 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
 
     .addCase(setCheckboxStore, (state, action) => {
       const checkboxState = action.payload;
-      const isGuitarTypeChecked = isCheckboxTypeChecked(CHECKBOX_GUITAR_TYPE, checkboxState);
-      const isStringTypeChecked = isCheckboxTypeChecked(CHECKBOX_STRING_TYPE, checkboxState);
-      let currentGuitars: GuitarType[] = state.guitars;
       const checkboxGuitarTypeStrings = getCheckboxString(checkboxState, CHECKBOX_GUITAR_TYPE);
-      const correctedCheckboxState = disableCheckbox(checkboxState, CHECKBOX_STRING_TYPE, checkboxGuitarTypeStrings);
+      state.checkboxStore = disableCheckbox(checkboxState, CHECKBOX_STRING_TYPE, checkboxGuitarTypeStrings);
+    })
+
+    .addCase(setCheckboxPrice, (state, action) => {
+      const correctedCheckboxState = action.payload;
+      const isGuitarTypeChecked = isCheckboxTypeChecked(CHECKBOX_GUITAR_TYPE, correctedCheckboxState);
+      const isStringTypeChecked = isCheckboxTypeChecked(CHECKBOX_STRING_TYPE, correctedCheckboxState);
+      let currentGuitars: GuitarType[] = state.guitars;
       const checkboxGuitarStrings = getCheckboxString(correctedCheckboxState, CHECKBOX_STRING_TYPE);
+
+      //reset price to default
+      // if (!isGuitarTypeChecked && !isStringTypeChecked) {
+      //   state.price.userPrice = {
+      //     priceMin: '',
+      //     priceMax: '',
+      //   };
+      // }
 
       if (isGuitarTypeChecked){
         currentGuitars = [];
@@ -208,20 +219,7 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
         currentGuitars = filterByString(currentGuitars, checkboxGuitarStrings);
       }
 
-      state.checkboxStore = correctedCheckboxState;
-
-      // if (!isGuitarTypeChecked && !isStringTypeChecked) {
-      //   state.price.userPrice = {
-      //     priceMin: '',
-      //     priceMax: '',
-      //   };
-      // }
-
-      const price = getMinMaxPrice(currentGuitars);
-      const filteredPrice = state.price.filteredPrice;
-      if (price.priceMin !== filteredPrice.priceMin || price.priceMax !== filteredPrice.priceMax) {
-        state.price.filteredPrice = price;
-      }
+      state.price.checkboxPrice = getMinMaxPrice(currentGuitars);
       state.guitarsFilteredByCheckbox = currentGuitars;
     })
 

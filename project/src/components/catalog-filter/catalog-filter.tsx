@@ -8,6 +8,7 @@ import {
 
 import {
   redirectToRoute,
+  setCheckboxPrice,
   setCurrentPage
 } from '../../store/action';
 
@@ -15,7 +16,8 @@ import CatalogFilterPrice from '../catalog-filter-price/catalog-filter-price';
 import {
   getCheckboxStore,
   getUserPrice,
-  getFilteredPrice
+  getCheckboxPrice,
+  getGuitars
 } from '../../store/app-filter/selectors';
 import {getGuitarsByPages} from '../../store/app-filter/selectors';
 import {useParams} from 'react-router-dom';
@@ -23,12 +25,24 @@ import CheckboxList from '../checkbox-list/checkbox-list';
 
 
 function    CatalogFilter(): JSX.Element {
+  const guitars = useSelector(getGuitars);
   const checkboxStore = useSelector(getCheckboxStore);
   const userPrice = useSelector(getUserPrice);
-  const filteredPrice = useSelector(getFilteredPrice);
+  const filteredPrice = useSelector(getCheckboxPrice);
   const guitarsByPages = useSelector(getGuitarsByPages);
   const dispatch = useDispatch();
   const page: {pageIdx: string}  = useParams();
+
+  //filter trigger
+  useEffect(()=>{
+    dispatch(setCheckboxPrice(checkboxStore));
+  },[dispatch, checkboxStore, guitars]);
+
+  // //filter trigger
+  // useEffect(()=>{
+  //   dispatch(setCheckboxStore(checkboxStore));
+  //   dispatch(setUserPrice(userPrice));
+  // },[dispatch, checkboxStore, userPrice]);
 
   // create search URL
   useEffect(() => {

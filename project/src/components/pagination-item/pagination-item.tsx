@@ -1,6 +1,6 @@
 import {useDispatch} from 'react-redux';
 import {MouseEvent} from 'react';
-import {redirectToRoute, setCurrentPage} from '../../store/action';
+import {redirectToRoute} from '../../store/action';
 import {AppRoute} from '../../common/const';
 
 type PaginationItemProps = {

@@ -28,8 +28,8 @@ function  Pagination(): JSX.Element {
         endPage = currentPage + (PAGINATION_COUNT - paginationCenter);
       }
     }
-
-    dispatch(setPaginationPages(getIntegersArrayFromTo(startPage, endPage)));
+    const pages = getIntegersArrayFromTo(startPage, endPage);
+    dispatch(setPaginationPages(pages));
   }, [currentPage, guitarsByPages, dispatch, paginationCenter]);
 
   return (

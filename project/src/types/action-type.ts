@@ -22,6 +22,7 @@ export enum ActionType {
   RedirectToRoute = '/redirectToRoute',
   SetUserPrice = '/setUserPrice',
   SetCheckboxStore = '/setCheckboxStore',
+  SetCheckboxPrice = '/setCheckboxPrice',
   SetGuitarStrings = '/setGuitarStrings',
   SetSearchUrl = '/setSearchUrl',
 }

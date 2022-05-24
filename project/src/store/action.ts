@@ -105,6 +105,12 @@ export const setCheckboxStore = createAction(
     {payload: checkboxStore}
   ));
 
+export const setCheckboxPrice = createAction(
+  ActionType.SetCheckboxPrice,
+  (correctedCheckboxState: CheckboxStoreType)=>(
+    {payload: correctedCheckboxState}
+  ));
+
 export const setGuitarStrings = createAction(
   ActionType.SetGuitarStrings,
   (guitarStrings: GuitarStringsType)=>(

@@ -3,7 +3,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {setUserPrice} from '../../store/action';
 import {
   getUserPrice,
-  getFilteredPrice, getGuitarsFilteredByCheckbox,
+  getCheckboxPrice,
+  getGuitarsFilteredByCheckbox
 } from '../../store/app-filter/selectors';
 
 type CatalogFilterPriceProps = {
@@ -16,14 +17,14 @@ type CatalogFilterPriceProps = {
 function CatalogFilterPrice ({inputType}: CatalogFilterPriceProps): JSX.Element {
   const {inputPriceName, priceLabel} = inputType;
   const userPrice = useSelector(getUserPrice);
-  const filteredPrice = useSelector(getFilteredPrice);
+  const filteredPrice = useSelector(getCheckboxPrice);
   const guitarsFilteredByCheckbox = useSelector(getGuitarsFilteredByCheckbox);
   const dispatch = useDispatch();
   const [priceState, setPriceState] = useState('');
 
   useEffect(()=>{
     setPriceState(userPrice[inputPriceName]);
-  }, [userPrice]);
+  }, [userPrice, inputPriceName]);
 
   useEffect(()=>{
     handleSetUserPrice();
@@ -49,11 +50,11 @@ function CatalogFilterPrice ({inputType}: CatalogFilterPriceProps): JSX.Element 
     if ( evt.key === 'Enter') {
       handleSetUserPrice();
     }
-  }
+  };
 
   const handleOnBlur = () => {
     handleSetUserPrice();
-  }
+  };
 
   return (
     <div className="form-input">
