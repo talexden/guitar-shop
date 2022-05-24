@@ -4,7 +4,7 @@ import {setCurrentGuitar, setSearchKey} from '../../store/action';
 import {getGuitars} from '../../store/app-filter/selectors';
 import {useOnClick} from '../../hooks/use-on-click';
 import {useRef} from 'react';
-import {getSearchKey} from '../../store/app-process/selectors';
+import {getSearchKey} from '../../store/app-filter/selectors';
 
 
 type HeaderSearchItemProps = {

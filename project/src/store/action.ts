@@ -111,8 +111,8 @@ export const setGuitarStrings = createAction(
     {payload: guitarStrings}
   ));
 
-export const setGuitarsFilteredByCheckbox = createAction(
-  ActionType.SetGuitarsFilteredByCheckbox,
-  (guitars: GuitarType[])=>(
-    {payload: guitars}
+export const setSearchUrl = createAction(
+  ActionType.SetSearchUrl,
+  (searchUrl: string)=>(
+    {payload: searchUrl}
   ));

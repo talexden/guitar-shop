@@ -1,16 +1,14 @@
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  AppRoute, CHECKBOX_GUITAR_TYPE, CHECKBOX_STRING_TYPE,
-  priceInput,
-  UPDATE_URL_DELAY
+  CHECKBOX_GUITAR_TYPE,
+  CHECKBOX_STRING_TYPE,
+  priceInput
 } from '../../common/const';
 
 import {
   redirectToRoute,
-  setCheckboxStore,
-  setCurrentPage,
-  setUserPrice
+  setCurrentPage
 } from '../../store/action';
 
 import CatalogFilterPrice from '../catalog-filter-price/catalog-filter-price';
@@ -19,10 +17,8 @@ import {
   getUserPrice,
   getFilteredPrice
 } from '../../store/app-filter/selectors';
-import {getGuitarsByPages} from '../../store/app-process/selectors';
-import {checkboxStoreInit} from '../../store/app-filter/app-filter';
+import {getGuitarsByPages} from '../../store/app-filter/selectors';
 import {useParams} from 'react-router-dom';
-import useDebounce from '../../hooks/use-debounce';
 import CheckboxList from '../checkbox-list/checkbox-list';
 
 
@@ -32,27 +28,7 @@ function    CatalogFilter(): JSX.Element {
   const filteredPrice = useSelector(getFilteredPrice);
   const guitarsByPages = useSelector(getGuitarsByPages);
   const dispatch = useDispatch();
-  const [urlSearchState, setUrlSearchState] = useState('');
-  const [urlState, setUrlState] = useState('');
   const page: {pageIdx: string}  = useParams();
-
-  const handleUrl = () => {
-    const href = window.location.pathname + window.location.search;
-    const pageNumber = Number(page.pageIdx);
-    let url = `${AppRoute.Catalog}${pageNumber}`;
-    if (urlSearchState !== '' && urlSearchState !== '?'){
-      url = `${url}${urlSearchState}`;
-    }
-    if (url !== href) {
-      setUrlState(url);
-    }
-  };
-
-  const debounceHandleUrl = useDebounce(handleUrl, UPDATE_URL_DELAY);
-
-  useEffect(()=>{
-    debounceHandleUrl();
-  }, [debounceHandleUrl, urlSearchState]);
 
   // create search URL
   useEffect(() => {
@@ -72,17 +48,8 @@ function    CatalogFilter(): JSX.Element {
     });
 
     const urlSearch = `?${[...priceParams, ...checkboxParams].join('&')}`;
-    setUrlSearchState(urlSearch);
-  }, [userPrice, filteredPrice, checkboxStore]);
-
-
-  // redirect to url
-  useEffect(()=>{
-    const href = window.location.pathname + window.location.search;
-    if (href !== urlState && urlState !== '') {
-      dispatch(redirectToRoute(urlState));
-    }
-  }, [dispatch, urlState]);
+    dispatch(redirectToRoute(urlSearch));
+  }, [dispatch, userPrice, filteredPrice, checkboxStore]);
 
 
   // correct page number
@@ -94,44 +61,6 @@ function    CatalogFilter(): JSX.Element {
     }
     dispatch(setCurrentPage(correctedPage));
   }, [dispatch, page, guitarsByPages]);
-
-
-  // parsing Url
-  useEffect(()=>{
-    const search = window.location.search;
-    if (urlState === ''  &&search !== '') {
-
-      const currentUrlSearch = window.location.search;
-      const urlSearchParams = new URLSearchParams(currentUrlSearch);
-      const params = Object.fromEntries(urlSearchParams.entries());
-
-      if (currentUrlSearch !== urlSearchState && urlSearchState !== '?'){
-        setUrlSearchState(currentUrlSearch);
-        let checkbox = {...checkboxStore};
-        if (params !== {}) {
-          Object.keys(params).forEach((param)=>{
-            const checkboxIsChecked = {...checkbox[param], isChecked: true};
-            checkbox = {...checkbox, [param]: checkboxIsChecked};
-          });
-        } else {
-          checkbox = {...checkboxStoreInit};
-        }
-        dispatch(setCheckboxStore(checkbox));
-
-        const urlPriceMin = params.priceMin ? params.priceMin : '';
-        const urlPriceMax = params.priceMax ? params.priceMin : '';
-        const price = {
-          priceMin: urlPriceMin,
-          priceMax: urlPriceMax,
-        };
-        delete params.priceMin;
-        delete params.priceMax;
-        dispatch(setUserPrice(price));
-
-
-      }
-    }
-  }, [dispatch, checkboxStore, urlSearchState, urlState]);
 
   return (
     <form className="catalog-filter">

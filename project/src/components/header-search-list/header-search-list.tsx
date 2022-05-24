@@ -1,4 +1,4 @@
-import {getSearchedGuitars} from '../../store/app-process/selectors';
+import {getSearchedGuitars} from '../../store/app-filter/selectors';
 import HeaderSearchItem from '../header-search-item/header-search-item';
 import {useSelector} from 'react-redux';
 

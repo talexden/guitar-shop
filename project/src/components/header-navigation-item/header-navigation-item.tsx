@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
-import {getCurrentNavigationLabel} from '../../store/app-process/selectors';
+import {getCurrentNavigationLabel} from '../../store/app-filter/selectors';
 import {setCurrentNavigationLabel} from '../../store/action';
 
 type HeaderNavigationItemProps = {

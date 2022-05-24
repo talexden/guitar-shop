@@ -1,6 +1,6 @@
 import {useSelector} from 'react-redux';
 import {getTripleNumberString} from '../../common/utils';
-import {getCurrentGuitar} from '../../store/app-process/selectors';
+import {getCurrentGuitar} from '../../store/app-filter/selectors';
 import LoadingScreen from '../loading-screen/loading-screen';
 import {StarRating} from '../star-rating/star-rating';
 import {StarRatingClassName} from '../../common/const';

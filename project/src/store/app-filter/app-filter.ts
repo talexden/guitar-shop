@@ -1,7 +1,7 @@
 import {createReducer} from '@reduxjs/toolkit';
 import {CheckboxType} from '../../types/const-type';
-import {CHECKBOX_GUITAR_TYPE, CHECKBOX_STRING_TYPE} from '../../common/const';
-import {GuitarType} from '../../types/stateType';
+import {CARD_COUNT, CHECKBOX_GUITAR_TYPE, CHECKBOX_STRING_TYPE, SortDirect, SortKey} from '../../common/const';
+import {CommentPostType, CouponPostType, GuitarType, OrderPostType} from '../../types/stateType';
 
 import {
   disableCheckbox,
@@ -15,8 +15,21 @@ import {
   setUserPrice,
   setGuitars,
   setIsLoading,
-  setIsLoaded
+  setIsLoaded,
+  setFilteredGuitars,
+  setSortedGuitars,
+  setPaginationPages,
+  setCurrentGuitar,
+  setCurrentPage,
+  setRedirectUrl,
+  setSearchedGuitars,
+  setSortKey,
+  setSortDirect,
+  setCurrentNavigationLabel,
+  setSearchKey,
+  setSearchUrl
 } from '../action';
+import {sortGuitarsByPages} from '../../common/sort';
 
 
 export type CheckboxStoreType = {
@@ -45,6 +58,21 @@ export type AppFilterType = {
   isStringChecked: boolean,
   isTypeChecked: boolean,
   filteredGuitars: GuitarType[];
+  sortedGuitars: GuitarType[],
+  searchedGuitars: GuitarType[],
+  commentPost: CommentPostType | null,
+  couponPost: CouponPostType,
+  orderPost: OrderPostType | null,
+  sortKey: SortKey,
+  sortDirect: SortDirect,
+  isFilter: boolean,
+  guitarsByPages: GuitarType[][],
+  currentGuitar: GuitarType | null,
+  currentPage: number,
+  redirectUrl: string,
+  paginationPages: number[],
+  currentNavigationLabel: string
+  searchKey: string,
 }
 
 const getCheckboxesInit = (checkboxTypes: CheckboxType[]) => {
@@ -85,6 +113,21 @@ const initialStore: AppFilterType = {
   isStringChecked: false,
   isTypeChecked: false,
   filteredGuitars: [],
+  sortedGuitars: [],
+  searchedGuitars: [],
+  commentPost: null,
+  couponPost: '',
+  orderPost: null,
+  sortKey: SortKey.Price,
+  sortDirect: SortDirect.LowToHigh,
+  isFilter: false,
+  guitarsByPages: [],
+  currentGuitar: null,
+  currentPage: 1,
+  redirectUrl: '',
+  paginationPages: [],
+  currentNavigationLabel: '',
+  searchKey: '',
 };
 
 export const AppFilter = createReducer(initialStore, (builder)=>{
@@ -139,7 +182,7 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
         price.priceMax = '';
       }
 
-      state.price.userPrice = price
+      state.price.userPrice = price;
     })
 
     .addCase(setCheckboxStore, (state, action) => {
@@ -180,5 +223,82 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
         state.price.filteredPrice = price;
       }
       state.guitarsFilteredByCheckbox = currentGuitars;
+    })
+
+    .addCase(setFilteredGuitars, (state, action) => {
+      state.filteredGuitars = action.payload;
+    })
+
+    .addCase(setSortedGuitars, (state, action) => {
+      const sortedGuitars = action.payload;
+      const guitarsSortedByPages = sortGuitarsByPages(sortedGuitars, CARD_COUNT);
+      state.sortedGuitars = sortedGuitars;
+      state.guitarsByPages = guitarsSortedByPages;
+    })
+
+    .addCase(setPaginationPages, (state, action) => {
+      state.paginationPages = action.payload;
+    })
+
+    .addCase(setCurrentGuitar, (state, action) => {
+      state.currentGuitar = action.payload;
+    })
+
+    .addCase(setCurrentPage, (state, action) => {
+      state.currentPage = action.payload;
+    })
+
+    .addCase(setRedirectUrl, (state, action) => {
+      state.redirectUrl = action.payload;
+    })
+
+    .addCase(setSearchedGuitars, (state, action) => {
+      state.searchedGuitars = action.payload;
+    })
+
+    .addCase(setSortKey, (state, action) => {
+      state.sortKey = action.payload;
+      state.isFilter = true;
+    })
+
+    .addCase(setSortDirect, (state, action) => {
+      state.sortDirect = action.payload;
+      state.isFilter = true;
+    })
+
+    .addCase(setCurrentNavigationLabel, (state, action) => {
+      state.currentNavigationLabel = action.payload;
+    })
+
+    .addCase(setSearchKey, (state, action) => {
+      state.searchKey = action.payload;
+    })
+
+    .addCase(setSearchUrl, (state, action) => {
+      const searchUrl = action.payload;
+
+      const urlSearchParams = new URLSearchParams(searchUrl);
+      const params = Object.fromEntries(urlSearchParams.entries());
+      let checkbox = state.checkboxStore;
+      if (params !== {}) {
+        Object.keys(params).forEach((param)=>{
+          const checkboxIsChecked = {...checkbox[param], isChecked: true};
+          checkbox = {...checkbox, [param]: checkboxIsChecked};
+        });
+      } else {
+        checkbox = {...checkboxStoreInit};
+      }
+
+      const urlPriceMin = params.priceMin ? params.priceMin : '';
+      const urlPriceMax = params.priceMax ? params.priceMin : '';
+      const price = {
+        priceMin: urlPriceMin,
+        priceMax: urlPriceMax,
+      };
+      delete params.priceMin;
+      delete params.priceMax;
+
+      state.checkboxStore = checkbox;
+      state.price.userPrice = price;
     });
 });

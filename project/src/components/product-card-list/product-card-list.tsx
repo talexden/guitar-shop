@@ -1,5 +1,5 @@
 import {useSelector} from 'react-redux';
-import {getCurrentPage, getGuitarsByPages} from '../../store/app-process/selectors';
+import {getCurrentPage, getGuitarsByPages} from '../../store/app-filter/selectors';
 import ProductCard from '../product-card/product-card';
 
 function ProductCardList (): JSX.Element {

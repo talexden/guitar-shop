@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {CURRENT_PAGE_INIT, PAGINATION_COUNT, PaginationNav} from '../../common/const';
 import {getIntegersArrayFromTo} from '../../common/utils';
 import {setPaginationPages} from '../../store/action';
-import {getCurrentPage, getGuitarsByPages, getPaginationPages} from '../../store/app-process/selectors';
+import {getCurrentPage, getGuitarsByPages, getPaginationPages} from '../../store/app-filter/selectors';
 import PaginationItem from '../pagination-item/pagination-item';
 import PaginationNavigation from '../pagination-navigation/pagination-navigation';
 
