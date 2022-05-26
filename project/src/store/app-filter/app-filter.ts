@@ -1,6 +1,13 @@
 import {createReducer} from '@reduxjs/toolkit';
 import {CheckboxType} from '../../types/const-type';
-import {CARD_COUNT, CHECKBOX_GUITAR_TYPE, CHECKBOX_STRING_TYPE, SortDirect, SortKey} from '../../common/const';
+import {
+  CARD_COUNT,
+  CHECKBOX_GUITAR_TYPE,
+  CHECKBOX_STRING_TYPE,
+  CURRENT_PAGE_INIT, PAGINATION_COUNT,
+  SortDirect,
+  SortKey,
+} from '../../common/const';
 import {CommentPostType, CouponPostType, GuitarType, OrderPostType} from '../../types/stateType';
 
 import {
@@ -31,13 +38,14 @@ import {
   setCheckboxPrice
 } from '../action';
 import {sortGuitarsByPages} from '../../common/sort';
+import {getIntegersArrayFromTo} from '../../common/utils';
 
 
 export type CheckboxStoreType = {
-    [key: string]: {
-      name: string,
-      isChecked: boolean,
-      isDisabled: boolean,
+  [key: string]: {
+    name: string,
+    isChecked: boolean,
+    isDisabled: boolean,
   },
 };
 
@@ -243,7 +251,29 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
     })
 
     .addCase(setCurrentPage, (state, action) => {
-      state.currentPage = action.payload;
+      let page = action.payload;
+      const guitarsByPages = state.guitarsByPages;
+      if (guitarsByPages.length > 0 && guitarsByPages.length < page) {
+        page = guitarsByPages.length;
+      }
+
+      state.currentPage = page;
+
+      const paginationCenter = Math.round(PAGINATION_COUNT / 2);
+      const guitarsByPagesSize = guitarsByPages.length;
+      let startPage = CURRENT_PAGE_INIT;
+      let endPage = guitarsByPagesSize;
+      if (guitarsByPagesSize > PAGINATION_COUNT) {
+        if (page === guitarsByPagesSize) {
+          startPage = page - paginationCenter;
+          endPage = page;
+        } else {
+          startPage = page - (PAGINATION_COUNT - paginationCenter);
+          endPage = page + (PAGINATION_COUNT - paginationCenter);
+        }
+      }
+
+      state.paginationPages = getIntegersArrayFromTo(startPage, endPage);
     })
 
     .addCase(setRedirectUrl, (state, action) => {
