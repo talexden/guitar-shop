@@ -1,58 +1,97 @@
-import {useSelector} from 'react-redux';
 import {getTripleNumberString} from '../../common/utils';
-import {getCurrentGuitar} from '../../store/app-filter/selectors';
-import LoadingScreen from '../loading-screen/loading-screen';
 import {StarRating} from '../star-rating/star-rating';
 import {StarRatingClassName} from '../../common/const';
+import {GuitarType} from '../../types/stateType';
+import {useState, MouseEvent} from 'react';
 
+const STYLE = {
+    height: 'inherit',
+    width: 'auto',
+    margin: 'auto',
+};
 
-function  ProductContainer(): JSX.Element {
-  const guitar = useSelector(getCurrentGuitar);
+type ProductContainerType = {
+  currentGuitar: GuitarType,
+}
 
-  if (guitar === null) {
-    return(<LoadingScreen />);
-  } else {
-    const {previewImg, name, rating, vendorCode, type, stringCount, description, price, comments} = guitar;
-    return (
-      <div className="product-container">
-        <img className="product-container__img" src={previewImg} width="90" height="235" alt={name} />
-        <div className="product-container__info-wrapper">
-          <h2 className="product-container__title title title--big title--uppercase">{name}</h2>
+function  ProductContainer({currentGuitar}: ProductContainerType): JSX.Element {
+  const {previewImg, name, rating, vendorCode, type, stringCount, description, price, comments} = currentGuitar;
+  const [tabState, setTabState] = useState({isCharacteristics: true, isDescription: false});
 
-          <StarRating rating={rating} commentsCount={String(comments.length)} className={StarRatingClassName.ProductContainer}/>
+  const handleOnClickCharacteristics = (evt: MouseEvent<HTMLElement>) => {
+    evt.preventDefault();
+    setTabState({
+      isCharacteristics: true,
+      isDescription: false,
+    })
+  };
 
-          <div className="tabs">
-            <a className="button button--medium tabs__button" href="#characteristics">Характеристики</a>
-            <a className="button button--black-border button--medium tabs__button" href="#description">Описание</a>
-            <div className="tabs__content" id="characteristics">
-              <table className="tabs__table">
-                <tbody>
-                  <tr className="tabs__table-row">
-                    <td className="tabs__title">Артикул:</td>
-                    <td className="tabs__value">{vendorCode}</td>
-                  </tr>
-                  <tr className="tabs__table-row">
-                    <td className="tabs__title">Тип:</td>
-                    <td className="tabs__value">{type}</td>
-                  </tr>
-                  <tr className="tabs__table-row">
-                    <td className="tabs__title">Количество струн:</td>
-                    <td className="tabs__value">{stringCount} струнная</td>
-                  </tr>
-                </tbody>
-              </table>
-              <p className="tabs__product-description hidden">{description}</p>
-            </div>
+  const handleOnClickDescription = (evt: MouseEvent<HTMLElement>) => {
+    evt.preventDefault();
+    setTabState({
+      isCharacteristics: false,
+      isDescription: true,
+    })
+  };
+
+  const handleOnClickCart = (evt: MouseEvent<HTMLElement>) => {
+    evt.preventDefault();
+    console.log('handleOnClickCart');
+  };
+
+  return (
+    <div className="product-container">
+      <div className="product-container__img">
+        <img  style={STYLE} src={previewImg} width="90" height="235" alt={name} />
+      </div>
+      <div className="product-container__info-wrapper">
+        <h2 className="product-container__title title title--big title--uppercase">{name}</h2>
+
+        <StarRating rating={rating} commentsCount={String(comments.length)} className={StarRatingClassName.ProductContainer}/>
+
+        <div className="tabs">
+          <a
+            className={`${tabState.isCharacteristics ? '' : 'button--black-border '} button button--medium tabs__button`}
+            onClick={handleOnClickCharacteristics}
+            href="#characteristics"
+          >Характеристики</a>
+          <a
+            className={`${tabState.isDescription ? '' : 'button--black-border '} button button--medium tabs__button`}
+            onClick={handleOnClickDescription}
+            href="#description"
+          >Описание</a>
+          <div className="tabs__content" id="characteristics">
+            <table className={`${tabState.isCharacteristics ? '' : 'hidden '}tabs__table`}>
+              <tbody>
+                <tr className="tabs__table-row">
+                  <td className="tabs__title">Артикул:</td>
+                  <td className="tabs__value">{vendorCode}</td>
+                </tr>
+                <tr className="tabs__table-row">
+                  <td className="tabs__title">Тип:</td>
+                  <td className="tabs__value">{type}</td>
+                </tr>
+                <tr className="tabs__table-row">
+                  <td className="tabs__title">Количество струн:</td>
+                  <td className="tabs__value">{stringCount} струнная</td>
+                </tr>
+              </tbody>
+            </table>
+            <p className={`${tabState.isDescription ? '' : 'hidden '}tabs__product-description`}>{description}</p>
           </div>
         </div>
-        <div className="product-container__price-wrapper">
-          <p className="product-container__price-info product-container__price-info--title">Цена:</p>
-          <p className="product-container__price-info product-container__price-info--value">{getTripleNumberString(price)} ₽</p>
-          <a className="button button--red button--big product-container__button" href="#top">Добавить в корзину</a>
-        </div>
       </div>
-    );
-  }
+      <div className="product-container__price-wrapper">
+        <p className="product-container__price-info product-container__price-info--title">Цена:</p>
+        <p className="product-container__price-info product-container__price-info--value">{getTripleNumberString(price)} ₽</p>
+        <a
+          className="button button--red button--big product-container__button"
+          onClick={handleOnClickCart}
+          href="#top"
+        >Добавить в корзину</a>
+      </div>
+    </div>
+  );
 }
 
 export default  ProductContainer;

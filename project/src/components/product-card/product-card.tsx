@@ -1,14 +1,15 @@
 import {GuitarType} from '../../types/stateType';
 import {capitalizedString, getTripleNumberString} from '../../common/utils';
 import {StarRating} from '../star-rating/star-rating';
-import {StarRatingClassName} from '../../common/const';
+import {AppRoute, StarRatingClassName} from '../../common/const';
+import {Link} from 'react-router-dom';
 
 type ProductCardProps = {
   guitar: GuitarType,
 }
 
 function  ProductCard({guitar}: ProductCardProps): JSX.Element {
-  const {name, type, price, rating, previewImg, comments} = guitar;
+  const {name, type, price, rating, previewImg, comments, id} = guitar;
 
   return (
     <div className="product-card">
@@ -22,7 +23,7 @@ function  ProductCard({guitar}: ProductCardProps): JSX.Element {
         </p>
       </div>
       <div className="product-card__buttons">
-        <a className="button button--mini" href="#top">Подробнее</a>
+        <Link to={`${AppRoute.ProductInfo}/${id}`} className="button button--mini">Подробнее</Link>
         <a className="button button--red button--mini button--add-to-cart" href="#top">Купить</a>
       </div>
     </div>

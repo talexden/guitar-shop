@@ -1,5 +1,9 @@
 import Review from '../review/review';
 
+const STYLE = {
+  zIndex: 1,
+}
+
 function  ReviewsList(): JSX.Element {
   return (
     <section className="reviews">
@@ -9,7 +13,7 @@ function  ReviewsList(): JSX.Element {
         <Review />
       </div>
       <button className="button button--medium reviews__more-button">Показать еще отзывы</button>
-      <a className="button button--up button--red-border button--big reviews__up-button" href="#header">Наверх</a>
+      <a style={STYLE} className="button button--up button--red-border button--big reviews__up-button" href="#header">Наверх</a>
     </section>
   );
 }

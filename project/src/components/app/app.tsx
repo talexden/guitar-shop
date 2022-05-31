@@ -18,7 +18,7 @@ function App(): JSX.Element {
         <Route exact path={AppRoute.Main}>
           <Redirect to={AppRoute.Catalog} />
         </Route>
-        <Route exact path={`${AppRoute.ProductInfo}:guitarId`}>
+        <Route exact path={`${AppRoute.ProductInfo}/:guitarId`}>
           <ProductScreen />
         </Route>
         <Route>

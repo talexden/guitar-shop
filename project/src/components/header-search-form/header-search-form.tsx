@@ -2,20 +2,25 @@ import {ChangeEvent, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {search} from '../../common/search';
 import {setSearchedGuitars, setSearchKey} from '../../store/action';
-import {getGuitars} from '../../store/app-filter/selectors';
+import {getGuitars, getSearchedGuitars} from '../../store/app-filter/selectors';
 import {getSearchKey} from '../../store/app-filter/selectors';
 
 function HeaderSearchForm (): JSX.Element {
   const dispatch = useDispatch();
   const guitars = useSelector(getGuitars);
   const searchKey = useSelector(getSearchKey);
+  const searchedGuitars = useSelector(getSearchedGuitars);
+
 
   useEffect(() => {
-    if (searchKey) {
+    if (searchKey !== '') {
       const searchedGuitars = search(guitars, searchKey);
       dispatch(setSearchedGuitars(searchedGuitars));
     } else {
-      dispatch(setSearchedGuitars([]));
+      if (searchedGuitars.length) {
+        dispatch(setSearchedGuitars([]));
+      }
+
     }
   },[searchKey, guitars, dispatch]);
 

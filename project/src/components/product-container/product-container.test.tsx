@@ -3,23 +3,17 @@ import {render, screen} from '@testing-library/react';
 import {Router} from 'react-router-dom';
 import ProductContainer from './product-container';
 import {configureMockStore} from '@jedmao/redux-mock-store';
-import {Provider} from 'react-redux';
 import {mockGuitar} from '../../common/mock-guitars';
 
 const history = createMemoryHistory();
-const mockStore = configureMockStore();
 
 describe('Component: ProductContainer', () => {
   it('should render correctly', () => {
-    const store = mockStore({
-      PROCESS: {currentGuitar: mockGuitar},
-    });
     render(
-      <Provider store={store}>
-        <Router history={history}>
-          <ProductContainer />
-        </Router>
-      </Provider>);
+      <Router history={history}>
+        <ProductContainer currentGuitar={mockGuitar}/>
+      </Router>
+    )
 
     expect(screen.getByText(/CURT Z300/i)).toBeInTheDocument();
     expect(screen.getByText('1')).toBeInTheDocument();
@@ -40,15 +34,11 @@ describe('Component: ProductContainer', () => {
   });
 
   it('should render correctly with loading', () => {
-    const store = mockStore({
-      PROCESS: {currentGuitar: null},
-    });
     render(
-      <Provider store={store}>
-        <Router history={history}>
-          <ProductContainer />
-        </Router>
-      </Provider>);
+      <Router history={history}>
+        <ProductContainer currentGuitar={mockGuitar}/>
+      </Router>
+    )
 
     expect(screen.getByText(/Loading .../i)).toBeInTheDocument();
   });

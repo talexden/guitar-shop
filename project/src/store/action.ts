@@ -56,7 +56,7 @@ export const setRedirectUrl = createAction(
 
 export const setCurrentGuitar = createAction(
   ActionType.SetCurrentGuitar,
-  (currentGuitar: GuitarType)=>(
+  (currentGuitar: GuitarType | null)=>(
     {payload: currentGuitar}
   ));
 

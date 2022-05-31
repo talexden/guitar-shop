@@ -48,8 +48,8 @@ export enum StyleClassName {
 }
 
 export enum StarIconUrl {
-  iconFullStar = 'img/sprite_auto.svg#icon-full-star',
-  iconStar = 'img/sprite_auto.svg#icon-star',
+  iconFullStar = '/img/sprite_auto.svg#icon-full-star',
+  iconStar = '/img/sprite_auto.svg#icon-star',
 }
 
 export enum ErrorTexts {
