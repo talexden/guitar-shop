@@ -6,7 +6,7 @@ import {
   CHECKBOX_STRING_TYPE,
   CURRENT_PAGE_INIT, PAGINATION_COUNT,
   SortDirect,
-  SortKey,
+  SortKey
 } from '../../common/const';
 import {CommentPostType, CouponPostType, GuitarType, OrderPostType} from '../../types/stateType';
 
@@ -35,9 +35,10 @@ import {
   setCurrentNavigationLabel,
   setSearchKey,
   setSearchUrl,
-  setCheckboxPrice
+  setCheckboxPrice,
+  setCommentCount
 } from '../action';
-import {sortGuitarsByPages} from '../../common/sort';
+import {sortCommentsByDate, sortGuitarsByPages} from '../../common/sort';
 import {getIntegersArrayFromTo} from '../../common/utils';
 
 
@@ -77,6 +78,7 @@ export type AppFilterType = {
   isFilter: boolean,
   guitarsByPages: GuitarType[][],
   currentGuitar: GuitarType | null,
+  commentCount: number;
   currentPage: number,
   redirectUrl: string,
   paginationPages: number[],
@@ -132,6 +134,7 @@ const initialStore: AppFilterType = {
   isFilter: false,
   guitarsByPages: [],
   currentGuitar: null,
+  commentCount: 0,
   currentPage: 1,
   redirectUrl: '',
   paginationPages: [],
@@ -247,7 +250,16 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
     })
 
     .addCase(setCurrentGuitar, (state, action) => {
-      state.currentGuitar = action.payload;
+      let currentGuitar = action.payload;
+      if (currentGuitar) {
+        const comments = sortCommentsByDate(currentGuitar.comments);
+        currentGuitar = {...currentGuitar, comments};
+      }
+      state.currentGuitar = currentGuitar;
+    })
+
+    .addCase(setCommentCount, (state, action) => {
+      state.commentCount = action.payload;
     })
 
     .addCase(setCurrentPage, (state, action) => {

@@ -65,7 +65,7 @@ function CatalogFilterPrice ({inputType}: CatalogFilterPriceProps): JSX.Element 
         id={inputPriceName}
         name={inputPriceName}
         value={priceState}
-        onKeyPress={handlePressEnter}
+        onKeyDown={handlePressEnter}
         onChange={handleChangePrice}
         onBlur={handleOnBlur}
         data-testid={`${inputPriceName}Test`}

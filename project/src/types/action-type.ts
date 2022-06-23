@@ -12,6 +12,7 @@ export enum ActionType {
   SetGuitarsByPages = '/setGuitarsByPages',
   SetPaginationPages = '/setPaginationPages',
   SetCurrentGuitar = '/setCurrentGuitar',
+  SetCommentCount = '/setCommentCount',
   SetCurrentPage = '/setCurrentPage',
   SetRedirectUrl = '/setRedirectUrl',
   SetSortKey = '/setSortKey',

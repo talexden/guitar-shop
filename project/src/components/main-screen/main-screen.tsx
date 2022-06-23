@@ -12,6 +12,9 @@ import {useEffect} from 'react';
 import {setCurrentPage, setSearchUrl} from '../../store/action';
 import {useParams} from 'react-router-dom';
 
+
+const GOOD = 'Товар';
+
 function  MainScreen(): JSX.Element {
   const isLoading = useSelector(getIsLoading);
   const guitarsByPages = useSelector(getGuitarsByPages);
@@ -40,7 +43,7 @@ function  MainScreen(): JSX.Element {
         <main className="page-content">
           <div className="container">
             <h1 className="page-content__title title title--bigger">Каталог гитар</h1>
-            <Breadcrumbs />
+            <Breadcrumbs breadcrumbs={GOOD}/>
             <div className="catalog">
               <CatalogFilter />
               <CatalogSort />

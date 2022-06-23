@@ -15,25 +15,24 @@ function  ProductScreen(): JSX.Element {
   const dispatch = useDispatch();
   const params: {guitarId: string} = useParams();
   const isLoading = useSelector(getIsLoading);
-  let currentGuitar = useSelector(getCurrentGuitar);
+  const currentGuitar = useSelector(getCurrentGuitar);
 
   useEffect (() => {
     dispatch(fetchCurrentGuitar(params.guitarId));
-  }, [dispatch, params])
+  }, [dispatch, params]);
 
   if (!currentGuitar || isLoading) {
     return (<LoadingScreen/>);
   } else {
-    console.log('render');
     return (
       <>
         <Header/>
         <main className="page-content">
           <div className="container">
             <h1 className="page-content__title title title--bigger">Товар</h1>
-            <Breadcrumbs/>
+            <Breadcrumbs breadcrumbs={currentGuitar.name}/>
             <ProductContainer currentGuitar={currentGuitar}/>
-            <ReviewsList/>
+            <ReviewsList reviewComments={currentGuitar.comments}/>
           </div>
         </main>
         <Footer/>

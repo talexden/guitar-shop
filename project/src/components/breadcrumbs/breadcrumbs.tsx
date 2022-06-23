@@ -10,14 +10,13 @@ const BreadcrumbsItem = [
     route: AppRoute.Catalog,
     label: NavigationLabel.Catalog,
   },
-  {
-    route: AppRoute.About,
-    label: NavigationLabel.About,
-  },
 ];
 
+type breadcrumbsProps = {
+  breadcrumbs: string;
+}
 
-function  Breadcrumbs(): JSX.Element {
+function  Breadcrumbs({breadcrumbs}: breadcrumbsProps): JSX.Element {
   return (
     <ul className="breadcrumbs page-content__breadcrumbs" data-testid={'breadcrumbs'}>
       {BreadcrumbsItem.map((item) => (
@@ -25,6 +24,9 @@ function  Breadcrumbs(): JSX.Element {
           <Link className="link" to={item.route}>{item.label}</Link>
         </li>
       ))}
+      <li className="breadcrumbs__item">
+        <Link className="link" to=''>{breadcrumbs}</Link>
+      </li>
     </ul>
   );
 }

@@ -7,7 +7,7 @@ import {createAPI} from './services/api';
 import {fetchGuitars} from './store/api-action';
 import {redirect} from './store/middlewares/redirect';
 import {rootReducer} from './store/root-reducer';
-import { configureStore } from '@reduxjs/toolkit';
+import {configureStore} from '@reduxjs/toolkit';
 import {Provider} from 'react-redux';
 
 

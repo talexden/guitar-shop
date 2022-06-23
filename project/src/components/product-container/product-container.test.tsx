@@ -2,7 +2,6 @@ import {createMemoryHistory} from 'history';
 import {render, screen} from '@testing-library/react';
 import {Router} from 'react-router-dom';
 import ProductContainer from './product-container';
-import {configureMockStore} from '@jedmao/redux-mock-store';
 import {mockGuitar} from '../../common/mock-guitars';
 
 const history = createMemoryHistory();
@@ -12,8 +11,7 @@ describe('Component: ProductContainer', () => {
     render(
       <Router history={history}>
         <ProductContainer currentGuitar={mockGuitar}/>
-      </Router>
-    )
+      </Router>);
 
     expect(screen.getByText(/CURT Z300/i)).toBeInTheDocument();
     expect(screen.getByText('1')).toBeInTheDocument();
@@ -37,8 +35,7 @@ describe('Component: ProductContainer', () => {
     render(
       <Router history={history}>
         <ProductContainer currentGuitar={mockGuitar}/>
-      </Router>
-    )
+      </Router>);
 
     expect(screen.getByText(/Loading .../i)).toBeInTheDocument();
   });

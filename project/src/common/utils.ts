@@ -27,3 +27,13 @@ export const getIntegersArrayFromTo = (from: number, to: number): number[] => {
 
   return result;
 };
+
+
+export const formatDateDDMMMMYYYY = (date: string): string => (
+  new Date(date).toLocaleString('ru', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+);
+

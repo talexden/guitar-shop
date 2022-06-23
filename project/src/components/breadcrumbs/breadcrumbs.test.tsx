@@ -8,10 +8,11 @@ import {AppRoute, NavigationLabel} from '../../common/const';
 const history = createMemoryHistory();
 describe('Component: Breadcrumbs', () => {
   it('should render correctly', () => {
+    const GOOD = 'Товар';
 
     render(
       <Router history={history}>
-        <Breadcrumbs />
+        <Breadcrumbs breadcrumbs={GOOD}/>
       </Router>);
 
 
@@ -21,7 +22,7 @@ describe('Component: Breadcrumbs', () => {
   });
 
   it('should redirect to root url when user clicked to link', () => {
-
+    const GOOD = 'Товар';
     render(
       <Router history={history}>
         <Switch>
@@ -35,7 +36,7 @@ describe('Component: Breadcrumbs', () => {
             <h1>This is about page</h1>
           </Route>
           <Route>
-            <Breadcrumbs />
+            <Breadcrumbs breadcrumbs={GOOD}/>
           </Route>
         </Switch>
       </Router>);

@@ -2,6 +2,8 @@ import {createMemoryHistory} from 'history';
 import {render, screen} from '@testing-library/react';
 import {Router} from 'react-router-dom';
 import Review from './review';
+import {mockGuitar} from '../../common/mock-guitars';
+
 
 const history = createMemoryHistory();
 describe('Component: ReviewsList', () => {
@@ -9,7 +11,7 @@ describe('Component: ReviewsList', () => {
 
     render(
       <Router history={history}>
-        <Review />
+        <Review reviewComment={mockGuitar.comments[1]}/>
       </Router>);
 
     expect(screen.getByText(/Рейтинг:/i)).toBeInTheDocument();

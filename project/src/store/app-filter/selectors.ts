@@ -24,6 +24,7 @@ export const getSortKey = (state: StateType): SortKey => state[NameSpace.filter]
 export const getSortDirect = (state: StateType): SortDirect => state[NameSpace.filter].sortDirect;
 export const getIsFilter = (state: StateType): boolean => state[NameSpace.filter].isFilter;
 export const getCurrentGuitar = (state: StateType): GuitarType | null => state[NameSpace.filter].currentGuitar;
+export const getCommentCount = (state: StateType): number => state[NameSpace.filter].commentCount;
 export const getCurrentPage = (state: StateType): number => state[NameSpace.filter].currentPage;
 export const getRedirectUrl = (state: StateType): string => state[NameSpace.filter].redirectUrl;
 export const getCurrentNavigationLabel = (state: StateType): string => state[NameSpace.filter].currentNavigationLabel;

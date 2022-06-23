@@ -60,6 +60,12 @@ export const setCurrentGuitar = createAction(
     {payload: currentGuitar}
   ));
 
+export const setCommentCount = createAction(
+  ActionType.SetCommentCount,
+  (commentCount: number)=>(
+    {payload: commentCount}
+  ));
+
 export const setSearchedGuitars = createAction(
   ActionType.SetSearchedGuitars,
   (guitars: GuitarType[])=>(
