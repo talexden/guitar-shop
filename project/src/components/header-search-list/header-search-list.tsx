@@ -15,7 +15,13 @@ function HeaderSearchList (): JSX.Element {
       className={`form-search__select-list${searchedGuitars.length > 0 ? '' : ' hidden'}`}
       style={STYLE}
     >
-      {searchedGuitars.map((guitar) => (<HeaderSearchItem key={`searchedGuitars-${guitar.id}`} guitarId={guitar.id} guitarName={guitar.name} />))}
+      {searchedGuitars.map((guitar) => (
+        <HeaderSearchItem
+          key={`searchedGuitars-${guitar.id}`}
+          guitarId={guitar.id}
+          guitarName={guitar.name}
+        />
+      ))}
     </ul>
   );
 }

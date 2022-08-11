@@ -1,8 +1,8 @@
 import {createAction} from '@reduxjs/toolkit';
-import {APIRoute, SortDirect, SortKey} from '../common/const';
+import {APIRoute, Modal, SortDirect, SortKey} from '../common/const';
 import {ActionType} from '../types/action-type';
 import {GuitarType} from '../types/stateType';
-import {CheckboxStoreType, GuitarStringsType, PriceStoreType} from './app-filter/app-filter';
+import {CheckboxStoreType, PriceStoreType} from './app-filter/app-filter';
 
 
 export const redirectToRoute = createAction(
@@ -27,12 +27,6 @@ export const setSortedGuitars = createAction(
   ActionType.SetSortedGuitars,
   (guitars: GuitarType[])=>(
     {payload: guitars}
-  ));
-
-export const setGuitarsByPages = createAction(
-  ActionType.SetGuitarsByPages,
-  (guitarsByPages: GuitarType[][])=>(
-    {payload: guitarsByPages}
   ));
 
 export const setPaginationPages = createAction(
@@ -117,14 +111,14 @@ export const setCheckboxPrice = createAction(
     {payload: correctedCheckboxState}
   ));
 
-export const setGuitarStrings = createAction(
-  ActionType.SetGuitarStrings,
-  (guitarStrings: GuitarStringsType)=>(
-    {payload: guitarStrings}
-  ));
-
 export const setSearchUrl = createAction(
   ActionType.SetSearchUrl,
   (searchUrl: string)=>(
     {payload: searchUrl}
   ));
+
+export const closeModal = createAction(ActionType.CloseModal);
+export const openModal = createAction(
+  ActionType.OpenModal,
+  (modal: Modal) => ({payload: modal}));
+

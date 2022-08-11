@@ -26,6 +26,8 @@ export enum ActionType {
   SetCheckboxPrice = '/setCheckboxPrice',
   SetGuitarStrings = '/setGuitarStrings',
   SetSearchUrl = '/setSearchUrl',
+  OpenModal = '/openModalReview',
+  CloseModal = '/closeModalReview',
 }
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, StateType, AxiosInstance, Action>;

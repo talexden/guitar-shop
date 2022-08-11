@@ -9,12 +9,15 @@ import {fetchCurrentGuitar} from '../../store/api-action';
 import {getCurrentGuitar, getIsLoading} from '../../store/app-filter/selectors';
 import LoadingScreen from '../loading-screen/loading-screen';
 import {useEffect} from 'react';
+import ModalWindow from '../modal-window/modal-window';
+import {getModal} from '../../store/app-process/selector';
 
 
 function  ProductScreen(): JSX.Element {
   const dispatch = useDispatch();
   const params: {guitarId: string} = useParams();
   const isLoading = useSelector(getIsLoading);
+  const modal = useSelector(getModal);
   const currentGuitar = useSelector(getCurrentGuitar);
 
   useEffect (() => {
@@ -32,10 +35,11 @@ function  ProductScreen(): JSX.Element {
             <h1 className="page-content__title title title--bigger">Товар</h1>
             <Breadcrumbs breadcrumbs={currentGuitar.name}/>
             <ProductContainer currentGuitar={currentGuitar}/>
-            <ReviewsList reviewComments={currentGuitar.comments}/>
+            <ReviewsList />
           </div>
         </main>
         <Footer/>
+        {modal && <ModalWindow />}
       </>
     );
   }

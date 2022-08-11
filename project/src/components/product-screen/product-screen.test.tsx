@@ -12,7 +12,7 @@ const history = createMemoryHistory();
 describe('Component: ProductScreen', () => {
   it('should render correctly', () => {
     const store = mockStore({
-      PROCESS: {
+      FILTER: {
         currentGuitar: mockGuitar,
         searchedGuitars: [],
         guitarsByPages: [],
@@ -20,10 +20,12 @@ describe('Component: ProductScreen', () => {
         paginationPages: [],
         filteredGuitars: [],
         sortedGuitars: [],
-      },
-      DATA: {
         guitars: mockGuitars,
         isLoading: false,
+
+      },
+      PROCESS: {
+        modal: '',
       },
     });
 

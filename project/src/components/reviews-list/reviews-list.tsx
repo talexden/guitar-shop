@@ -3,13 +3,20 @@ import {CommentType} from '../../types/stateType';
 import {useEffect, useState, MouseEvent} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {getCommentCount, getCurrentGuitar} from '../../store/app-filter/selectors';
-import {setCommentCount} from '../../store/action';
+import {openModal, setCommentCount} from '../../store/action';
+import {Modal} from '../../common/const';
 
 const STYLE = {
-  zIndex: 1,
-};
+  zIndex: {
+    zIndex: 1,
+  },
+  hidden: {
+    display: 'none',
+  },
+} as const;
 
-const COUNT = 3;
+
+const SHOW_MORE_COUNT = 3;
 
 const COMMENTS_INIT: CommentType[] = [];
 
@@ -19,24 +26,34 @@ function  ReviewsList(): JSX.Element {
   const commentCount = useSelector(getCommentCount);
   const [currentComments, setCurrentComments] = useState(COMMENTS_INIT);
 
-  const handleOnClick = () => {
-    dispatch(setCommentCount(commentCount + COUNT));
-  };
+  let showMoreStyle = {};
+  if (currentGuitar && currentGuitar.comments.length < commentCount) {
+    showMoreStyle = STYLE.hidden;
+  }
 
   useEffect(() => {
-    dispatch(setCommentCount(COUNT));
-  }, [currentGuitar]);
+    dispatch(setCommentCount(SHOW_MORE_COUNT));
+  }, [currentGuitar, dispatch]);
 
   useEffect(() => {
     if (currentGuitar) {
       setCurrentComments(currentGuitar.comments.slice(0, commentCount));
     }
-  }, [commentCount]);
+  }, [commentCount, dispatch, currentGuitar]);
+
+  const handleOpenModalReview = (evt: MouseEvent<HTMLElement>) => {
+    evt.preventDefault();
+    dispatch(openModal(Modal.Review));
+  };
+
+  const handleShowMore = () => {
+    dispatch(setCommentCount(commentCount + SHOW_MORE_COUNT));
+  };
 
   // When the user scrolls down - click button
   window.onscroll = function() {
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-      handleOnClick();
+      handleShowMore();
     }
   };
 
@@ -51,21 +68,28 @@ function  ReviewsList(): JSX.Element {
   return (
     <section className="reviews">
       <h3 className="reviews__title title title--bigger">Отзывы</h3>
-      <a className="button button--red-border button--big reviews__sumbit-button" href="#top">Оставить отзыв</a>
+      <a
+        className="button button--red-border button--big reviews__sumbit-button"
+        onClick={handleOpenModalReview}
+        href="#top"
+      >
+        Оставить отзыв
+      </a>
       <div>
         {currentComments.map((reviewComment) => (
           <Review reviewComment={reviewComment} key={`reviewComment-${reviewComment.id}`}/>
         ))}
       </div>
       <button
-        onClick={handleOnClick}
-        className="button button--medium reviews__more-button"
+        onClick={handleShowMore}
+        className='button button--medium reviews__more-button'
+        style={showMoreStyle}
       >Показать еще отзывы
       </button>
       <a
         className="button button--up button--red-border button--big reviews__up-button"
         onClick={handlerTopFunction}
-        style={STYLE}
+        style={STYLE.zIndex}
         href="#header"
       >Наверх
       </a>

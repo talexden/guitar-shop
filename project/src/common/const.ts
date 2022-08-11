@@ -42,9 +42,18 @@ export const navigationItems = [
   },
 ];
 
+export enum Modal {
+  Review = 'modal--review',
+  SuccessReview = 'modal--success modal-success--review',
+  SuccessAdd = 'modal--success modal-success--add',
+}
+
+
 export enum StyleClassName {
   HeaderLogo = 'header__logo',
   FooterLogo = 'footer__logo',
+  VisuallyHidden = 'visually-hidden',
+  Hidden = 'hidden',
 }
 
 export enum StarIconUrl {

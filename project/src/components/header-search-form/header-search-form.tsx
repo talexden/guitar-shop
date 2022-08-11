@@ -14,8 +14,8 @@ function HeaderSearchForm (): JSX.Element {
 
   useEffect(() => {
     if (searchKey !== '') {
-      const searchedGuitars = search(guitars, searchKey);
-      dispatch(setSearchedGuitars(searchedGuitars));
+      const findGuitars = search(guitars, searchKey);
+      dispatch(setSearchedGuitars(findGuitars));
     } else {
       if (searchedGuitars.length) {
         dispatch(setSearchedGuitars([]));
