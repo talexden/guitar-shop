@@ -1,8 +1,6 @@
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {AppRoute, FORM_SEARCH_ITEM_TAB_INDEX} from '../../common/const';
 import {redirectToRoute, setSearchKey} from '../../store/action';
-import {useRef} from 'react';
-import {getSearchKey} from '../../store/app-filter/selectors';
 
 
 type HeaderSearchItemProps = {
@@ -10,22 +8,17 @@ type HeaderSearchItemProps = {
   guitarId: number;
 }
 
-function HeaderSearchItem ({guitarName, guitarId}: HeaderSearchItemProps): JSX.Element {
-  const searchKey = useSelector(getSearchKey);
+function  HeaderSearchItem ({guitarName, guitarId}: HeaderSearchItemProps): JSX.Element {
   const dispatch = useDispatch();
-  const node = useRef<HTMLLIElement>(null);
 
   const handleClick = () => {
-    if (searchKey !== '') {
-      dispatch(setSearchKey(''));
-    }
+    dispatch(setSearchKey(''));
     dispatch(redirectToRoute(`${AppRoute.ProductInfo}/${guitarId}`));
   };
 
   return (
     <li
-      ref={node}
-      className="form-search__select-item"
+      className='form-search__select-item'
       tabIndex={FORM_SEARCH_ITEM_TAB_INDEX}
       onClick={handleClick}
     >

@@ -3,8 +3,8 @@ import HeaderNavigationItem from '../header-navigation-item/header-navigation-it
 
 function HeaderNavigation(): JSX.Element {
   return (
-    <nav className="main-nav">
-      <ul className="main-nav__list">
+    <nav className='main-nav'>
+      <ul className='main-nav__list'>
         {navigationItems.map((item)=>(
           <HeaderNavigationItem
             key={`navigationItems-${item.url}`}

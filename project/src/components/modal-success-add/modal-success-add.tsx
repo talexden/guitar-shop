@@ -20,7 +20,7 @@ function ModalSuccessAdd ():JSX.Element {
   return (
     <div className='modal__content'>
       <svg className='modal__icon' width='26' height='20' aria-hidden='true'>
-        <use xlinkHref='#icon-success'></use>
+        <use xlinkHref={'#icon-success'}></use>
       </svg>
       <p className='modal__message'>Товар успешно добавлен в корзину</p>
       <div className='modal__button-container modal__button-container--add'>

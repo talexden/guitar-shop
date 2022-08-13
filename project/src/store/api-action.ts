@@ -3,7 +3,8 @@ import {mockGuitarsLongArray} from '../common/mock-guitars';
 import {Adapter} from '../components/adapter/adapter';
 import {APIRoute, ErrorTexts} from '../common/const';
 import {ThunkActionResult} from '../types/action-type';
-import {setCurrentGuitar, setGuitars, setIsLoaded, setIsLoading} from './action';
+import {setCheckboxStore, setCurrentGuitar, setGuitars, setIsLoaded, setIsLoading} from './action';
+import {checkboxStoreInit} from './app-filter/app-filter';
 
 export const fetchGuitars = (): ThunkActionResult =>
   async (dispatch, _getState, api) => {
@@ -12,6 +13,7 @@ export const fetchGuitars = (): ThunkActionResult =>
       const {data} = await api.get(`${APIRoute.Guitars}?_embed=comments`);
       const guitars = data.map(Adapter.adaptToClient);
       dispatch(setGuitars(guitars));
+      dispatch(setCheckboxStore(checkboxStoreInit));
       dispatch(setIsLoaded());
     } catch (error) {
       dispatch(setGuitars(mockGuitarsLongArray)); // моки, удалить
@@ -29,7 +31,7 @@ export const fetchCurrentGuitar = (guitarId: string): ThunkActionResult =>
       dispatch(setCurrentGuitar(currentGuitar));
       dispatch(setIsLoaded());
     } catch (error) {
-      const mockCurrentGuitar = mockGuitarsLongArray.find(guitar => guitar.id === Number(guitarId))
+      const mockCurrentGuitar = mockGuitarsLongArray.find((guitar) => guitar.id === Number(guitarId));
       dispatch(setCurrentGuitar(mockCurrentGuitar !== undefined ? mockCurrentGuitar : mockGuitarsLongArray[1])); // моки, удалить
       dispatch(setIsLoaded()); // моки, удалить
       toast.info(ErrorTexts.LoadGuitarsFailMessage);

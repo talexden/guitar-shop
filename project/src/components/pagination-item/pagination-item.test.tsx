@@ -9,23 +9,71 @@ const mockStore = configureMockStore();
 const history = createMemoryHistory();
 
 describe('Component: PaginationItem', () => {
-  it('should render pagination-item numbers correctly', () => {
-    const store = mockStore({
-      PROCESS: {
-        currentPage: 1,
-      },
+  const PaginationNav = Object.freeze({
+    PageNumber: {
+      navigationClass: '',
+      label: 'pageNumber',
+      id: 'pageNumber',
+    },
+    Next: {
+      label: 'Далее',
+      id: 'pageNext',
+      navigationClass: ' pagination__page--next',
+    },
+    Previous: {
+      label: 'Назад',
+      id: 'pagePrev',
+      navigationClass: ' pagination__page--prev',
+    },
+  });
+  const store = mockStore({
+    PROCESS: {
+      currentPage: 1,
+    },
+  });
+  const isActive = false;
+  describe('Component: PaginationItem as PageNumber', () => {
+    it('should render pagination-item textContent correctly', () => {
+      const pageIdx = 23;
+
+      render(
+        <Provider store={store}>
+          <Router history={history}>
+            <PaginationItem isActive={isActive} pageIdx={pageIdx} paginationNav={PaginationNav.PageNumber}/>
+          </Router>
+        </Provider>);
+
+      expect(screen.getByText(/23/i)).toBeInTheDocument();
     });
+  });
 
-    const isActive = false;
-    const pageIdx = 23;
+  describe('Component: PaginationItem as Next', () => {
+    it('should render pagination-item textContent correctly', () => {
+      const pageIdx = 23;
 
-    render(
-      <Provider store={store}>
-        <Router history={history}>
-          <PaginationItem isActive={isActive} pageIdx={pageIdx}/>
-        </Router>
-      </Provider>);
+      render(
+        <Provider store={store}>
+          <Router history={history}>
+            <PaginationItem isActive={isActive} pageIdx={pageIdx} paginationNav={PaginationNav.Next}/>
+          </Router>
+        </Provider>);
 
-    expect(screen.getByText(/23/i)).toBeInTheDocument();
+      expect(screen.getByText(/Далее/i)).toBeInTheDocument();
+    });
+  });
+
+  describe('Component: PaginationItem as Previous', () => {
+    it('should render pagination-item textContent correctly', () => {
+      const pageIdx = 23;
+
+      render(
+        <Provider store={store}>
+          <Router history={history}>
+            <PaginationItem isActive={isActive} pageIdx={pageIdx} paginationNav={PaginationNav.Previous}/>
+          </Router>
+        </Provider>);
+
+      expect(screen.getByText(/Назад/i)).toBeInTheDocument();
+    });
   });
 });

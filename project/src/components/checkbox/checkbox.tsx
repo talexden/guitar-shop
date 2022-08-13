@@ -22,10 +22,10 @@ function Checkbox ({checkbox}: CheckboxProps): JSX.Element {
   };
 
   return (
-    <div className="form-checkbox catalog-filter__block-item">
+    <div className='form-checkbox catalog-filter__block-item'>
       <input
-        className="visually-hidden"
-        type="checkbox"
+        className='visually-hidden'
+        type='checkbox'
         id={name}
         name={name}
         checked={checkboxStore[name].isChecked}

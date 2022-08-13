@@ -8,7 +8,7 @@ type LogoProps = {
 function  Logo({className}: LogoProps): JSX.Element {
   return (
     <Link className={`${className} logo`} to={AppRoute.Main}>
-      <img className="logo__img" width="70" height="70" src="/img/svg/logo.svg" alt="Логотип" />
+      <img className='logo__img' width='70' height='70' src='/img/svg/logo.svg' alt='Логотип' />
     </Link>
   );
 }

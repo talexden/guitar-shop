@@ -2,10 +2,6 @@ import {getSearchedGuitars} from '../../store/app-filter/selectors';
 import HeaderSearchItem from '../header-search-item/header-search-item';
 import {useSelector} from 'react-redux';
 
-const STYLE = {
-  zIndex: 10,
-};
-
 
 function HeaderSearchList (): JSX.Element {
   const searchedGuitars = useSelector(getSearchedGuitars);
@@ -13,7 +9,6 @@ function HeaderSearchList (): JSX.Element {
   return (
     <ul
       className={`form-search__select-list${searchedGuitars.length > 0 ? '' : ' hidden'}`}
-      style={STYLE}
     >
       {searchedGuitars.map((guitar) => (
         <HeaderSearchItem

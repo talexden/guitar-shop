@@ -1,77 +1,50 @@
-import {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import {
   CHECKBOX_GUITAR_TYPE,
-  CHECKBOX_STRING_TYPE,
+  CHECKBOX_STRING_TYPE, FilterBlockTitle,
   priceInput
 } from '../../common/const';
 
-import {
-  redirectToRoute,
-  setCheckboxPrice
-} from '../../store/action';
-
 import CatalogFilterPrice from '../catalog-filter-price/catalog-filter-price';
-import {
-  getCheckboxStore,
-  getUserPrice,
-  getCheckboxPrice,
-  getGuitars
-} from '../../store/app-filter/selectors';
 import CheckboxList from '../checkbox-list/checkbox-list';
+import CatalogFilterBlock from '../catalog-filter-block/catalog-filter-block';
+import { useDispatch } from 'react-redux';
+import {resetFilters, setCheckboxStore} from '../../store/action';
+import {checkboxStoreInit} from '../../store/app-filter/app-filter';
 
 
 function    CatalogFilter(): JSX.Element {
-  const guitars = useSelector(getGuitars);
-  const checkboxStore = useSelector(getCheckboxStore);
-  const userPrice = useSelector(getUserPrice);
-  const filteredPrice = useSelector(getCheckboxPrice);
   const dispatch = useDispatch();
-
-
-  //filter trigger
-  useEffect(()=>{
-    dispatch(setCheckboxPrice(checkboxStore));
-  },[dispatch, checkboxStore, guitars]);
-
-  // create search URL
-  useEffect(() => {
-    const priceParams: string[] = [];
-    if (userPrice.priceMin !== filteredPrice.priceMin && userPrice.priceMin !== '') {
-      priceParams.push(`priceMin=${userPrice.priceMin}`);
-    }
-    if (userPrice.priceMax !== filteredPrice.priceMax && userPrice.priceMax !== '') {
-      priceParams.push(`priceMax=${userPrice.priceMax}`);
-    }
-
-    const checkboxParams: string[] = [];
-    Object.keys(checkboxStore).forEach((key) => {
-      if (checkboxStore[key].isChecked && !checkboxStore[key].isDisabled) {
-        checkboxParams.push(`${key}=${checkboxStore[key].isChecked}`);
-      }
-    });
-
-    const urlSearch = `?${[...priceParams, ...checkboxParams].join('&')}`;
-    dispatch(redirectToRoute(urlSearch));
-  }, [dispatch, userPrice, filteredPrice, checkboxStore]);
-
+  const handleResetFilters = () => {
+    dispatch(resetFilters());
+    dispatch(setCheckboxStore(checkboxStoreInit));
+  };
 
   return (
-    <form className="catalog-filter">
-      <h2 className="title title--bigger catalog-filter__title">Фильтр</h2>
+    <form className='catalog-filter'>
+      <h2 className='title title--bigger catalog-filter__title'>Фильтр</h2>
 
-      <fieldset className="catalog-filter__block">
-        <legend className="catalog-filter__block-title">Цена, ₽</legend>
-        <div className="catalog-filter__price-range">
+      <CatalogFilterBlock blockTitle={FilterBlockTitle.Price}>
+        <div className='catalog-filter__price-range'>
           <CatalogFilterPrice inputType={priceInput.priceMin} />
           <CatalogFilterPrice inputType={priceInput.priceMax} />
         </div>
-      </fieldset>
+      </CatalogFilterBlock>
 
-      <CheckboxList checkboxType={CHECKBOX_GUITAR_TYPE} />
+      <CatalogFilterBlock blockTitle={FilterBlockTitle.Type} >
+        <CheckboxList checkboxType={CHECKBOX_GUITAR_TYPE} />
+      </CatalogFilterBlock>
 
-      <CheckboxList checkboxType={CHECKBOX_STRING_TYPE} />
+      <CatalogFilterBlock blockTitle={FilterBlockTitle.Strings} >
+        <CheckboxList checkboxType={CHECKBOX_STRING_TYPE} />
+      </CatalogFilterBlock>
 
+      <button
+        className="catalog-filter__reset-btn button button--black-border button--medium"
+        onClick={handleResetFilters}
+        type="button"
+      >
+        Очистить
+      </button>
     </form>
   );
 }

@@ -24,7 +24,7 @@ describe('Component: ErrorScreen', () => {
     render(
       <Router history={history}>
         <Switch>
-          <Route path="/" exact>
+          <Route path='/' exact>
             <h1>This is main page</h1>
           </Route>
           <Route>

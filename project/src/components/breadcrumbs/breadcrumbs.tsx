@@ -18,14 +18,14 @@ type breadcrumbsProps = {
 
 function  Breadcrumbs({breadcrumbs}: breadcrumbsProps): JSX.Element {
   return (
-    <ul className="breadcrumbs page-content__breadcrumbs" data-testid={'breadcrumbs'}>
+    <ul className='breadcrumbs page-content__breadcrumbs' data-testid={'breadcrumbs'}>
       {BreadcrumbsItem.map((item) => (
-        <li className="breadcrumbs__item" key={`BreadcrumbsItem-${item.route}`}>
-          <Link className="link" to={item.route}>{item.label}</Link>
+        <li className='breadcrumbs__item' key={`BreadcrumbsItem-${item.route}`}>
+          <Link className='link' to={item.route}>{item.label}</Link>
         </li>
       ))}
-      <li className="breadcrumbs__item">
-        <Link className="link" to=''>{breadcrumbs}</Link>
+      <li className='breadcrumbs__item'>
+        <Link className='link' to=''>{breadcrumbs}</Link>
       </li>
     </ul>
   );

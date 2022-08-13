@@ -2,10 +2,12 @@ import {mockGuitarsLongArray} from './mock-guitars';
 import {sort} from './sort';
 import {SortDirect, SortKey} from './const';
 
+const isFilter = true;
+
 describe('Business logic: check sort functions', () => {
   describe('Function: sort', () => {
     it('should be return GUITARS structure, sorted by Rating from Low to High', () => {
-      expect(sort(mockGuitarsLongArray, SortKey.Rating, SortDirect.LowToHigh))
+      expect(sort(mockGuitarsLongArray, SortKey.Rating, SortDirect.LowToHigh, isFilter))
         .toEqual(
           [
             {
@@ -1922,7 +1924,7 @@ describe('Business logic: check sort functions', () => {
         );
     });
     it('should be return GUITARS structure, sorted by Rating from High to Low', () => {
-      expect(sort(mockGuitarsLongArray, SortKey.Rating, SortDirect.HighToLow))
+      expect(sort(mockGuitarsLongArray, SortKey.Rating, SortDirect.HighToLow, isFilter))
         .toEqual(
           [
             {
@@ -3839,7 +3841,7 @@ describe('Business logic: check sort functions', () => {
         );
     });
     it('should be return GUITARS structure, sorted by Price from Low to High', () => {
-      expect(sort(mockGuitarsLongArray, SortKey.Price, SortDirect.LowToHigh))
+      expect(sort(mockGuitarsLongArray, SortKey.Price, SortDirect.LowToHigh, isFilter))
         .toEqual(
           [
             {
@@ -5756,7 +5758,7 @@ describe('Business logic: check sort functions', () => {
         );
     });
     it('should be return GUITARS structure, sorted by Price from High to Low', () => {
-      expect(sort(mockGuitarsLongArray, SortKey.Price, SortDirect.HighToLow))
+      expect(sort(mockGuitarsLongArray, SortKey.Price, SortDirect.HighToLow, isFilter))
         .toEqual(
           [
             {

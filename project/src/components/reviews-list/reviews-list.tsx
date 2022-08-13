@@ -11,7 +11,7 @@ const STYLE = {
     zIndex: 1,
   },
   hidden: {
-    display: 'none',
+    visibility: 'hidden',
   },
 } as const;
 
@@ -66,12 +66,12 @@ function  ReviewsList(): JSX.Element {
   };
 
   return (
-    <section className="reviews">
-      <h3 className="reviews__title title title--bigger">Отзывы</h3>
+    <section className='reviews'>
+      <h3 className='reviews__title title title--bigger'>Отзывы</h3>
       <a
-        className="button button--red-border button--big reviews__sumbit-button"
+        className='button button--red-border button--big reviews__sumbit-button'
         onClick={handleOpenModalReview}
-        href="#top"
+        href={'#top'}
       >
         Оставить отзыв
       </a>
@@ -87,10 +87,10 @@ function  ReviewsList(): JSX.Element {
       >Показать еще отзывы
       </button>
       <a
-        className="button button--up button--red-border button--big reviews__up-button"
+        className='button button--up button--red-border button--big reviews__up-button'
         onClick={handlerTopFunction}
         style={STYLE.zIndex}
-        href="#header"
+        href={'#header'}
       >Наверх
       </a>
     </section>

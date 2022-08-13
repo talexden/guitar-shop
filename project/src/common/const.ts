@@ -42,6 +42,12 @@ export const navigationItems = [
   },
 ];
 
+export enum FilterBlockTitle {
+  Price = 'Цена, ₽',
+  Type = 'Тип гитар',
+  Strings = 'Количество струн',
+}
+
 export enum Modal {
   Review = 'modal--review',
   SuccessReview = 'modal--success modal-success--review',
@@ -124,15 +130,20 @@ export const CHECKBOX_STRING_TYPE: CheckboxType[] = [
 export const CARD_COUNT = 9;
 
 export const PaginationNav = Object.freeze({
+  PageNumber: {
+    navigationClass: '',
+    label: 'pageNumber',
+    id: 'pageNumber',
+  },
   Next: {
     label: 'Далее',
-    id: 'next',
-    navigationClass: 'pagination__page--next',
+    id: 'pageNext',
+    navigationClass: ' pagination__page--next',
   },
   Previous: {
     label: 'Назад',
-    id: 'prev',
-    navigationClass: 'pagination__page--prev',
+    id: 'pagePrev',
+    navigationClass: ' pagination__page--prev',
   },
 });
 

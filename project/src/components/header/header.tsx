@@ -6,8 +6,8 @@ import HeaderNavigation from '../header-navigation/header-navigation';
 
 function Header (): JSX.Element {
   return (
-    <header className="header" id="header">
-      <div className="container header__wrapper">
+    <header className='header' id='header'>
+      <div className='container header__wrapper'>
 
         <Logo className={StyleClassName.HeaderLogo}/>
 

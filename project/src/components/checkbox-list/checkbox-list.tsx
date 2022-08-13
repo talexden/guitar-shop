@@ -7,12 +7,9 @@ type CheckboxListProps = {
 
 function CheckboxList ({checkboxType}: CheckboxListProps):JSX.Element {
   return (
-    <fieldset className="catalog-filter__block">
-      <legend className="catalog-filter__block-title">Тип гитар</legend>
-      {checkboxType.map((checkbox) => (
-        <Checkbox key={checkbox.name} checkbox={checkbox} />
-      ))}
-    </fieldset>
+    <>
+      {checkboxType.map((checkbox) => <Checkbox key={checkbox.name} checkbox={checkbox} /> )}
+    </>
   );
 }
 

@@ -65,12 +65,6 @@ describe('Component: CatalogSort', () => {
 
     expect(useDispatch).toBeCalledTimes(1);
     expect(dispatch).toHaveBeenCalledTimes(2);
-    expect(dispatch).nthCalledWith(1,
-      {
-        type: ActionType.SetSortedGuitars,
-        payload: {guitars: mockSortedGuitars},
-      },
-    );
     expect(dispatch).nthCalledWith(2,
       {
         type: ActionType.SetSortKey,

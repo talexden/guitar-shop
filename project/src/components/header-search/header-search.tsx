@@ -4,7 +4,7 @@ import HeaderSearchList from '../header-search-list/header-search-list';
 function HeaderSearch (): JSX.Element {
 
   return (
-    <div className="form-search">
+    <div className='form-search'>
       <HeaderSearchForm />
       <HeaderSearchList />
     </div>

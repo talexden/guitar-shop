@@ -1,21 +1,12 @@
 import {createReducer} from '@reduxjs/toolkit';
 import {CheckboxType} from '../../types/const-type';
 import {
-  CARD_COUNT,
   CHECKBOX_GUITAR_TYPE,
   CHECKBOX_STRING_TYPE,
-  CURRENT_PAGE_INIT, PAGINATION_COUNT,
   SortDirect,
   SortKey
 } from '../../common/const';
 import {CommentPostType, CouponPostType, GuitarType, OrderPostType} from '../../types/stateType';
-
-import {
-  disableCheckbox,
-  filterByString,
-  getCheckboxString, getFilterByPrice, getMinMaxPrice,
-  isCheckboxTypeChecked
-} from '../../common/filter';
 
 import {
   setCheckboxStore,
@@ -23,23 +14,20 @@ import {
   setGuitars,
   setIsLoading,
   setIsLoaded,
-  setFilteredGuitars,
-  setSortedGuitars,
   setPaginationPages,
   setCurrentGuitar,
   setCurrentPage,
-  setRedirectUrl,
   setSearchedGuitars,
   setSortKey,
   setSortDirect,
   setCurrentNavigationLabel,
   setSearchKey,
   setSearchUrl,
-  setCheckboxPrice,
-  setCommentCount
+  setCommentCount, resetFilters
 } from '../action';
-import {sortCommentsByDate, sortGuitarsByPages} from '../../common/sort';
-import {getIntegersArrayFromTo} from '../../common/utils';
+import {sortCommentsByDate} from '../../common/sort';
+import {StoreLogic} from '../store-logic/store-logic';
+import {search} from '../../common/search';
 
 
 export type CheckboxStoreType = {
@@ -50,24 +38,24 @@ export type CheckboxStoreType = {
   },
 };
 
-export type PriceStoreType = {
+export type PriceType = {
   [key:string] : string,
 }
 
-export type GuitarStringsType = number[]
+export type PriceStoreType = {
+  userPrice: PriceType,
+  checkboxPrice:PriceType,
+}
 
 export type AppFilterType = {
   guitars: GuitarType[],
   isLoading: boolean,
-  price: {
-    userPrice: PriceStoreType,
-    checkboxPrice:PriceStoreType,
-  },
-  guitarsFilteredByCheckbox: GuitarType[],
+  price: PriceStoreType
+  filteredByCheckbox: GuitarType[],
   checkboxStore: CheckboxStoreType,
   isStringChecked: boolean,
   isTypeChecked: boolean,
-  filteredGuitars: GuitarType[];
+  filteredByPrice: GuitarType[];
   sortedGuitars: GuitarType[],
   searchedGuitars: GuitarType[],
   commentPost: CommentPostType | null,
@@ -76,7 +64,7 @@ export type AppFilterType = {
   sortKey: SortKey,
   sortDirect: SortDirect,
   isFilter: boolean,
-  guitarsByPages: GuitarType[][],
+  sortedByPages: GuitarType[][],
   currentGuitar: GuitarType | null,
   commentCount: number;
   currentPage: number,
@@ -84,6 +72,7 @@ export type AppFilterType = {
   paginationPages: number[],
   currentNavigationLabel: string
   searchKey: string,
+  urlSearch: string,
 }
 
 const getCheckboxesInit = (checkboxTypes: CheckboxType[]) => {
@@ -106,24 +95,26 @@ export const checkboxStoreInit: CheckboxStoreType = {
   ...getCheckboxesInit(CHECKBOX_STRING_TYPE),
 };
 
+const priceInit = {
+  userPrice: {
+    priceMin: '',
+    priceMax: '',
+  },
+  checkboxPrice: {
+    priceMin: '',
+    priceMax: '',
+  },
+};
+
 const initialStore: AppFilterType = {
   guitars: [],
   isLoading: false,
-  price: {
-    userPrice: {
-      priceMin: '',
-      priceMax: '',
-    },
-    checkboxPrice: {
-      priceMin: '',
-      priceMax: '',
-    },
-  },
-  guitarsFilteredByCheckbox: [],
+  price: priceInit,
+  filteredByCheckbox: [],
   checkboxStore: checkboxStoreInit,
   isStringChecked: false,
   isTypeChecked: false,
-  filteredGuitars: [],
+  filteredByPrice: [],
   sortedGuitars: [],
   searchedGuitars: [],
   commentPost: null,
@@ -132,7 +123,7 @@ const initialStore: AppFilterType = {
   sortKey: SortKey.Price,
   sortDirect: SortDirect.LowToHigh,
   isFilter: false,
-  guitarsByPages: [],
+  sortedByPages: [],
   currentGuitar: null,
   commentCount: 0,
   currentPage: 1,
@@ -140,6 +131,7 @@ const initialStore: AppFilterType = {
   paginationPages: [],
   currentNavigationLabel: '',
   searchKey: '',
+  urlSearch: '',
 };
 
 export const AppFilter = createReducer(initialStore, (builder)=>{
@@ -150,110 +142,68 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
       state.guitars = guitars;
     })
 
-    .addCase(setIsLoading, (state) => {state.isLoading = true;})
-
-    .addCase(setIsLoaded, (state) => {state.isLoading = false;})
-
-    .addCase(setUserPrice, (state, action) => {
-      const price = action.payload;
-      const checkboxPrice = state.price.checkboxPrice;
-      const guitars = state.guitarsFilteredByCheckbox;
-
-      if (price.priceMin === '') {
-        price.priceMin = checkboxPrice.priceMin;
-      }
-      if (price.priceMax === '') {
-        price.priceMax = checkboxPrice.priceMax;
-      }
-
-      if (Number(price.priceMin) > Number(price.priceMax)) {
-        [price.priceMin, price.priceMax] = [price.priceMax, price.priceMin];
-      }
-
-      if (Number(price.priceMin) < Number(checkboxPrice.priceMin)) {
-        price.priceMin = checkboxPrice.priceMin;
-      }
-      if (Number(price.priceMin) > Number(checkboxPrice.priceMax)) {
-        price.priceMin = checkboxPrice.priceMax;
-      }
-      if (Number(price.priceMax) < Number(checkboxPrice.priceMin)) {
-        price.priceMax = checkboxPrice.priceMin;
-      }
-      if (Number(price.priceMax) > Number(checkboxPrice.priceMax)) {
-        price.priceMax = checkboxPrice.priceMax;
-      }
-
-      state.filteredGuitars = getFilterByPrice(guitars, Number(price.priceMin), Number(price.priceMax));
-
-      if (price.priceMin === checkboxPrice.priceMin) {
-        price.priceMin = '';
-      }
-      if (price.priceMax === checkboxPrice.priceMax) {
-        price.priceMax = '';
-      }
-
-      state.price.userPrice = price;
+    .addCase(resetFilters, (state) => {
+      state.isFilter = false;
+      state.price = priceInit;
+      state.currentPage = 1;
     })
 
     .addCase(setCheckboxStore, (state, action) => {
-      const checkboxState = action.payload;
-      const checkboxGuitarTypeStrings = getCheckboxString(checkboxState, CHECKBOX_GUITAR_TYPE);
-      state.checkboxStore = disableCheckbox(checkboxState, CHECKBOX_STRING_TYPE, checkboxGuitarTypeStrings);
+      state.checkboxStore = action.payload;
+      const resultCheckboxChain = StoreLogic.checkboxChain(state);
+      state.filteredByCheckbox = resultCheckboxChain.filteredByCheckbox;
+      state.checkboxStore = resultCheckboxChain.checkboxStore;
+      state.price = resultCheckboxChain.price;
+      state.filteredByPrice = resultCheckboxChain.filteredByPrice;
+      state.sortedGuitars = resultCheckboxChain.sortedGuitars;
+      state.sortedByPages = resultCheckboxChain.sortedByPages;
+      state.currentPage = resultCheckboxChain.page;
+      state.paginationPages = resultCheckboxChain.paginationPages;
     })
 
-    .addCase(setCheckboxPrice, (state, action) => {
-      const correctedCheckboxState = action.payload;
-      const isGuitarTypeChecked = isCheckboxTypeChecked(CHECKBOX_GUITAR_TYPE, correctedCheckboxState);
-      const isStringTypeChecked = isCheckboxTypeChecked(CHECKBOX_STRING_TYPE, correctedCheckboxState);
-      let currentGuitars: GuitarType[] = state.guitars;
-      const checkboxGuitarStrings = getCheckboxString(correctedCheckboxState, CHECKBOX_STRING_TYPE);
-
-      //reset price to default
-      // if (!isGuitarTypeChecked && !isStringTypeChecked) {
-      //   state.price.userPrice = {
-      //     priceMin: '',
-      //     priceMax: '',
-      //   };
-      // }
-
-      if (isGuitarTypeChecked){
-        currentGuitars = [];
-        CHECKBOX_GUITAR_TYPE.forEach((type) => {
-          if (correctedCheckboxState[type.name].isChecked) {
-            const checkedTypeGuitars = state.guitars.filter((guitar) => correctedCheckboxState[type.name] && guitar.type === type.name);
-            currentGuitars = [...new Set([...currentGuitars, ...checkedTypeGuitars])];
-          }
-        });
-      }
-
-      if (isStringTypeChecked){
-        currentGuitars = filterByString(currentGuitars, checkboxGuitarStrings);
-      }
-
-      state.price.checkboxPrice = getMinMaxPrice(currentGuitars);
-      state.guitarsFilteredByCheckbox = currentGuitars;
+    .addCase(setUserPrice, (state, action) => {
+      state.price.userPrice = action.payload;
+      const resultPriceChain = StoreLogic.priceChain(state);
+      state.price = resultPriceChain.price;
+      state.filteredByPrice = resultPriceChain.filteredByPrice;
+      state.sortedGuitars = resultPriceChain.sortedGuitars;
+      state.sortedByPages = resultPriceChain.sortedByPages;
+      state.currentPage = resultPriceChain.page;
+      state.paginationPages = resultPriceChain.paginationPages;
     })
 
-    .addCase(setFilteredGuitars, (state, action) => {
-      state.filteredGuitars = action.payload;
+    .addCase(setSortKey, (state, action) => {
+      state.sortKey = action.payload;
+      state.isFilter = true;
+      const resultSortChain = StoreLogic.sortChain(state);
+      state.sortedGuitars = resultSortChain.sortedGuitars;
+      state.sortedByPages = resultSortChain.sortedByPages;
+      state.currentPage = resultSortChain.page;
+      state.paginationPages = resultSortChain.paginationPages;
     })
 
-    .addCase(setSortedGuitars, (state, action) => {
-      const sortedGuitars = action.payload;
-      const guitarsSortedByPages = sortGuitarsByPages(sortedGuitars, CARD_COUNT);
-      state.sortedGuitars = sortedGuitars;
-      state.guitarsByPages = guitarsSortedByPages;
+    .addCase(setSortDirect, (state, action) => {
+      state.sortDirect = action.payload;
+      state.isFilter = true;
+      const resultRunSort = StoreLogic.sortChain(state);
+      state.sortedGuitars = resultRunSort.sortedGuitars;
+      state.sortedByPages = resultRunSort.sortedByPages;
+      state.currentPage = resultRunSort.page;
+      state.paginationPages = resultRunSort.paginationPages;
     })
+
+    .addCase(setIsLoading, (state) => {state.isLoading = true;})
+
+    .addCase(setIsLoaded, (state) => {state.isLoading = false;})
 
     .addCase(setPaginationPages, (state, action) => {
       state.paginationPages = action.payload;
     })
 
     .addCase(setCurrentGuitar, (state, action) => {
-      let currentGuitar = action.payload;
+      const currentGuitar = action.payload;
       if (currentGuitar) {
-        const comments = sortCommentsByDate(currentGuitar.comments);
-        currentGuitar = {...currentGuitar, comments};
+        currentGuitar.comments = sortCommentsByDate(currentGuitar.comments);
       }
       state.currentGuitar = currentGuitar;
     })
@@ -263,47 +213,15 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
     })
 
     .addCase(setCurrentPage, (state, action) => {
-      let page = action.payload;
-      const guitarsByPages = state.guitarsByPages;
-      if (guitarsByPages.length > 0 && guitarsByPages.length < page) {
-        page = guitarsByPages.length;
-      }
-
-      state.currentPage = page;
-
-      const paginationCenter = Math.round(PAGINATION_COUNT / 2);
-      const guitarsByPagesSize = guitarsByPages.length;
-      let startPage = CURRENT_PAGE_INIT;
-      let endPage = guitarsByPagesSize;
-      if (guitarsByPagesSize > PAGINATION_COUNT) {
-        if (page === guitarsByPagesSize) {
-          startPage = page - paginationCenter;
-          endPage = page;
-        } else {
-          startPage = page - (PAGINATION_COUNT - paginationCenter);
-          endPage = page + (PAGINATION_COUNT - paginationCenter);
-        }
-      }
-
-      state.paginationPages = getIntegersArrayFromTo(startPage, endPage);
+      state.currentPage = action.payload;
+      const resultPagesChain = StoreLogic.pagesChain(state);
+      state.currentPage = resultPagesChain.page;
+      state.paginationPages = resultPagesChain.paginationPages;
     })
 
-    .addCase(setRedirectUrl, (state, action) => {
-      state.redirectUrl = action.payload;
-    })
 
     .addCase(setSearchedGuitars, (state, action) => {
       state.searchedGuitars = action.payload;
-    })
-
-    .addCase(setSortKey, (state, action) => {
-      state.sortKey = action.payload;
-      state.isFilter = true;
-    })
-
-    .addCase(setSortDirect, (state, action) => {
-      state.sortDirect = action.payload;
-      state.isFilter = true;
     })
 
     .addCase(setCurrentNavigationLabel, (state, action) => {
@@ -311,34 +229,12 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
     })
 
     .addCase(setSearchKey, (state, action) => {
-      state.searchKey = action.payload;
+      const searchKey = action.payload;
+      state.searchKey = searchKey;
+      state.searchedGuitars = searchKey ? search(state.guitars, searchKey) : [];
     })
 
-    .addCase(setSearchUrl, (state, action) => {
-      const searchUrl = action.payload;
-
-      const urlSearchParams = new URLSearchParams(searchUrl);
-      const params = Object.fromEntries(urlSearchParams.entries());
-      let checkbox = state.checkboxStore;
-      if (params !== {}) {
-        Object.keys(params).forEach((param)=>{
-          const checkboxIsChecked = {...checkbox[param], isChecked: true};
-          checkbox = {...checkbox, [param]: checkboxIsChecked};
-        });
-      } else {
-        checkbox = {...checkboxStoreInit};
-      }
-
-      const urlPriceMin = params.priceMin ? params.priceMin : '';
-      const urlPriceMax = params.priceMax ? params.priceMin : '';
-      const price = {
-        priceMin: urlPriceMin,
-        priceMax: urlPriceMax,
-      };
-      delete params.priceMin;
-      delete params.priceMax;
-
-      state.checkboxStore = checkbox;
-      state.price.userPrice = price;
+    .addCase(setSearchUrl, (state) => {
+      state.urlSearch = '';
     });
 });

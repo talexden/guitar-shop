@@ -39,9 +39,9 @@ function ModalWindow ():JSX.Element {
   return (
     <div style={STYLE}>
       <div className={`modal is-active ${modal} modal-for-ui-kit`}>
-        <div className="modal__wrapper">
+        <div className='modal__wrapper'>
           <div
-            className="modal__overlay"
+            className='modal__overlay'
             onClick={handleCloseModal}
           >
           </div>

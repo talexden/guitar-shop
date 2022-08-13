@@ -11,7 +11,7 @@ const mockStore = configureMockStore();
 const history = createMemoryHistory();
 
 describe('Application Routing', () => {
-  it('should render "MainScreen" when user navigate to "/"', () => {
+  it('should render MainScreen when user navigate to / during loading', () => {
     const store = mockStore({
       DATA: {isLoading: true},
     });

@@ -4,8 +4,8 @@ import {AppRoute} from '../../common/const';
 function ErrorScreen(): JSX.Element {
   return (
     <h1>
-      <b className="not-found__status">404 Not Found</b>
-      <p className="not-found__status-description">
+      <b className='not-found__status'>404 Not Found</b>
+      <p className='not-found__status-description'>
         <Link to={AppRoute.Main}>Перейти на главную страницу</Link>
       </p>
     </h1>

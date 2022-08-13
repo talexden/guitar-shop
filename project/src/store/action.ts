@@ -2,7 +2,7 @@ import {createAction} from '@reduxjs/toolkit';
 import {APIRoute, Modal, SortDirect, SortKey} from '../common/const';
 import {ActionType} from '../types/action-type';
 import {GuitarType} from '../types/stateType';
-import {CheckboxStoreType, PriceStoreType} from './app-filter/app-filter';
+import {CheckboxStoreType, PriceType} from './app-filter/app-filter';
 
 
 export const redirectToRoute = createAction(
@@ -11,22 +11,12 @@ export const redirectToRoute = createAction(
     {payload: url}
   ));
 
+export const resetFilters = createAction(ActionType.ResetFilters);
+
 export const setGuitars = createAction(
   ActionType.SetGuitars,
   (guitars: GuitarType[])=>(
     {payload: {guitars}}
-  ));
-
-export const setFilteredGuitars = createAction(
-  ActionType.SetFilteredGuitars,
-  (guitars: GuitarType[])=>(
-    {payload: guitars}
-  ));
-
-export const setSortedGuitars = createAction(
-  ActionType.SetSortedGuitars,
-  (guitars: GuitarType[])=>(
-    {payload: guitars}
   ));
 
 export const setPaginationPages = createAction(
@@ -39,13 +29,6 @@ export const setCurrentPage = createAction(
   ActionType.SetCurrentPage,
   (currentPage: number)=>(
     {payload: currentPage}
-  ));
-
-
-export const setRedirectUrl = createAction(
-  ActionType.SetRedirectUrl,
-  (redirectUrl: string)=>(
-    {payload: redirectUrl}
   ));
 
 export const setCurrentGuitar = createAction(
@@ -95,7 +78,7 @@ export const setIsLoaded = createAction(ActionType.SetIsLoaded);
 
 export const setUserPrice = createAction(
   ActionType.SetUserPrice,
-  (price: PriceStoreType)=>(
+  (price: PriceType)=>(
     {payload: price}
   ));
 
@@ -103,12 +86,6 @@ export const setCheckboxStore = createAction(
   ActionType.SetCheckboxStore,
   (checkboxStore: CheckboxStoreType)=>(
     {payload: checkboxStore}
-  ));
-
-export const setCheckboxPrice = createAction(
-  ActionType.SetCheckboxPrice,
-  (correctedCheckboxState: CheckboxStoreType)=>(
-    {payload: correctedCheckboxState}
   ));
 
 export const setSearchUrl = createAction(

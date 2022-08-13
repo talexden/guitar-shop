@@ -1,34 +1,23 @@
-import {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {PaginationNav} from '../../common/const';
-import {setCurrentPage} from '../../store/action';
-import {getCurrentPage, getGuitarsByPages, getPaginationPages} from '../../store/app-filter/selectors';
+import {getCurrentPage, getSortedByPages, getPaginationPages} from '../../store/app-filter/selectors';
 import PaginationItem from '../pagination-item/pagination-item';
-import PaginationNavigation from '../pagination-navigation/pagination-navigation';
-import {useParams} from 'react-router-dom';
 
 
 function  Pagination(): JSX.Element {
   const currentPage = useSelector(getCurrentPage);
-  const guitarsByPages = useSelector(getGuitarsByPages);
+  const guitarsByPages = useSelector(getSortedByPages);
   const paginationPages = useSelector(getPaginationPages);
-  const dispatch = useDispatch();
-  const page: {pageIdx: string}  = useParams();
-
-  // set page
-  useEffect(() => {
-    dispatch(setCurrentPage(Number(page.pageIdx)));
-  }, [dispatch, page, guitarsByPages]);
-
 
   return (
-    <div className="pagination page-content__pagination">
-      <ul className="pagination__list">
+    <div className='pagination page-content__pagination'>
+      <ul className='pagination__list'>
 
         {
           currentPage > 1 &&
-          <PaginationNavigation
-            navigation={PaginationNav.Previous}
+          <PaginationItem
+            paginationNav={PaginationNav.Previous}
+            isActive={false}
             pageIdx={currentPage - 1}
           />
         }
@@ -37,6 +26,7 @@ function  Pagination(): JSX.Element {
         {paginationPages.map((pageIdx) => (
           <PaginationItem
             key={`paginationPages-${pageIdx}`}
+            paginationNav={PaginationNav.PageNumber}
             isActive={currentPage === pageIdx}
             pageIdx={pageIdx}
           />
@@ -44,8 +34,9 @@ function  Pagination(): JSX.Element {
 
         {
           currentPage < guitarsByPages.length &&
-          <PaginationNavigation
-            navigation={PaginationNav.Next}
+          <PaginationItem
+            paginationNav={PaginationNav.Next}
+            isActive={false}
             pageIdx={currentPage + 1}
           />
         }

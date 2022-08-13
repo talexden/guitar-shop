@@ -30,9 +30,9 @@ function  ProductScreen(): JSX.Element {
     return (
       <>
         <Header/>
-        <main className="page-content">
-          <div className="container">
-            <h1 className="page-content__title title title--bigger">Товар</h1>
+        <main className='page-content'>
+          <div className='container'>
+            <h1 className='page-content__title title title--bigger'>Товар</h1>
             <Breadcrumbs breadcrumbs={currentGuitar.name}/>
             <ProductContainer currentGuitar={currentGuitar}/>
             <ReviewsList />
