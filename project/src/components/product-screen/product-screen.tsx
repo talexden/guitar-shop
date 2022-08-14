@@ -9,7 +9,7 @@ import {fetchCurrentGuitar} from '../../store/api-action';
 import {getCurrentGuitar, getIsLoading} from '../../store/app-filter/selectors';
 import LoadingScreen from '../loading-screen/loading-screen';
 import {useEffect} from 'react';
-import ModalWindow from '../modal-window/modal-window';
+import ModalScreen from '../modal-screen/modal-screen';
 import {getModal} from '../../store/app-process/selector';
 
 
@@ -39,7 +39,7 @@ function  ProductScreen(): JSX.Element {
           </div>
         </main>
         <Footer/>
-        {modal && <ModalWindow />}
+        {modal && <ModalScreen />}
       </>
     );
   }

@@ -15,7 +15,7 @@ const STYLE: CSSProperties = {
   marginBottom: '50px',
 };
 
-function ModalWindow ():JSX.Element {
+function ModalScreen ():JSX.Element {
   const modal = useSelector(getModal);
   const dispatch = useDispatch();
 
@@ -54,4 +54,4 @@ function ModalWindow ():JSX.Element {
   );
 }
 
-export default ModalWindow;
+export default ModalScreen;
