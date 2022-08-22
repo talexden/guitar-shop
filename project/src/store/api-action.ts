@@ -17,12 +17,13 @@ export const fetchGuitars = (): ThunkActionResult =>
       dispatch(setIsLoaded());
     } catch (error) {
       dispatch(setGuitars(mockGuitarsLongArray)); // моки, удалить
+      dispatch(setCheckboxStore(checkboxStoreInit));
       dispatch(setIsLoaded()); // моки, удалить
       toast.info(ErrorTexts.LoadGuitarsFailMessage);
     }
   };
 
-export const fetchCurrentGuitar = (guitarId: string): ThunkActionResult =>
+export const fetchCurrentGuitar = (guitarId: number): ThunkActionResult =>
   async (dispatch, _getState, api) => {
     try{
       dispatch(setIsLoading());

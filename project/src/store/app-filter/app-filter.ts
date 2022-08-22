@@ -23,10 +23,10 @@ import {
   setCurrentNavigationLabel,
   setSearchKey,
   setSearchUrl,
-  setCommentCount, resetFilters
+  setCommentCount, resetFilters, redirectToRoute
 } from '../action';
 import {sortCommentsByDate} from '../../common/sort';
-import {StoreLogic} from '../store-logic/store-logic';
+import {CatalogLogic} from '../store-logic/catalog-logic';
 import {search} from '../../common/search';
 
 
@@ -137,9 +137,12 @@ const initialStore: AppFilterType = {
 export const AppFilter = createReducer(initialStore, (builder)=>{
   builder
 
+    .addCase(redirectToRoute, (state) => {
+      state.currentGuitar = null;
+    })
+
     .addCase(setGuitars, (state, action) => {
-      const {guitars} = action.payload;
-      state.guitars = guitars;
+      state.guitars = action.payload;
     })
 
     .addCase(resetFilters, (state) => {
@@ -150,7 +153,7 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
 
     .addCase(setCheckboxStore, (state, action) => {
       state.checkboxStore = action.payload;
-      const resultCheckboxChain = StoreLogic.checkboxChain(state);
+      const resultCheckboxChain = CatalogLogic.checkboxChain(state);
       state.filteredByCheckbox = resultCheckboxChain.filteredByCheckbox;
       state.checkboxStore = resultCheckboxChain.checkboxStore;
       state.price = resultCheckboxChain.price;
@@ -163,7 +166,7 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
 
     .addCase(setUserPrice, (state, action) => {
       state.price.userPrice = action.payload;
-      const resultPriceChain = StoreLogic.priceChain(state);
+      const resultPriceChain = CatalogLogic.priceChain(state);
       state.price = resultPriceChain.price;
       state.filteredByPrice = resultPriceChain.filteredByPrice;
       state.sortedGuitars = resultPriceChain.sortedGuitars;
@@ -175,7 +178,7 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
     .addCase(setSortKey, (state, action) => {
       state.sortKey = action.payload;
       state.isFilter = true;
-      const resultSortChain = StoreLogic.sortChain(state);
+      const resultSortChain = CatalogLogic.sortChain(state);
       state.sortedGuitars = resultSortChain.sortedGuitars;
       state.sortedByPages = resultSortChain.sortedByPages;
       state.currentPage = resultSortChain.page;
@@ -185,7 +188,7 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
     .addCase(setSortDirect, (state, action) => {
       state.sortDirect = action.payload;
       state.isFilter = true;
-      const resultRunSort = StoreLogic.sortChain(state);
+      const resultRunSort = CatalogLogic.sortChain(state);
       state.sortedGuitars = resultRunSort.sortedGuitars;
       state.sortedByPages = resultRunSort.sortedByPages;
       state.currentPage = resultRunSort.page;
@@ -202,10 +205,8 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
 
     .addCase(setCurrentGuitar, (state, action) => {
       const currentGuitar = action.payload;
-      if (currentGuitar) {
-        currentGuitar.comments = sortCommentsByDate(currentGuitar.comments);
-      }
-      state.currentGuitar = currentGuitar;
+      const comments = sortCommentsByDate(currentGuitar.comments);
+      state.currentGuitar = {...currentGuitar, comments};
     })
 
     .addCase(setCommentCount, (state, action) => {
@@ -214,7 +215,7 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
 
     .addCase(setCurrentPage, (state, action) => {
       state.currentPage = action.payload;
-      const resultPagesChain = StoreLogic.pagesChain(state);
+      const resultPagesChain = CatalogLogic.pagesChain(state);
       state.currentPage = resultPagesChain.page;
       state.paginationPages = resultPagesChain.paginationPages;
     })

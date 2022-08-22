@@ -6,7 +6,7 @@ import {runPrice} from './logic/runPrice';
 import {runSort} from './logic/runSort';
 import {runPages} from './logic/runPages';
 
-export class StoreLogic {
+export class CatalogLogic {
   static checkboxChain = (state: AppFilterType) => {
     const resultRunCheckbox = runCheckbox(state.checkboxStore, state.guitars);
     const resultRunPrice = runPrice(resultRunCheckbox.filteredByCheckbox, state.price);

@@ -1,4 +1,5 @@
 import {CheckboxType} from '../types/const-type';
+import {GuitarType} from '../types/stateType';
 
 export const VIEW_CATALOG_COUNT = 9;
 
@@ -52,8 +53,8 @@ export enum Modal {
   Review = 'modal--review',
   SuccessReview = 'modal--success modal-success--review',
   SuccessAdd = 'modal--success modal-success--add',
+  CartAdd = 'modal-cart--add',
 }
-
 
 export enum StyleClassName {
   HeaderLogo = 'header__logo',
@@ -75,6 +76,8 @@ export enum ErrorTexts {
 export const RATING_STAR_COUNT = 5;
 
 export const FORM_SEARCH_ITEM_TAB_INDEX = 0;
+
+export const DEFAULT_CART_COUNT = 1;
 
 export enum SortKey {
   Price = 'price',
@@ -164,13 +167,21 @@ export const priceInput = {
   },
 };
 
-export const inputName = {
-  priceMin: 'priceMin',
-  priceMax: 'priceMax',
-};
-
 export const CURRENT_PAGE_INIT = 1;
 export const PAGINATION_COUNT = 3;
 export const CORRECT_PRICE_DELAY = 1500;
 export const UPDATE_URL_DELAY = 300;
 export const SUCCESSFUL_SENDING_CODE = 200;
+
+export const GUITAR_NULL: GuitarType = {
+  id: 0,
+  name: '',
+  vendorCode: '',
+  type: '',
+  description:  '',
+  previewImg: '',
+  stringCount: 0,
+  rating: 0,
+  price: 0,
+  comments: [],
+};

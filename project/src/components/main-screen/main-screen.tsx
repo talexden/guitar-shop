@@ -8,13 +8,15 @@ import CatalogSort from '../catalog-sort/catalog-sort';
 import LoadingScreen from '../loading-screen/loading-screen';
 import Pagination from '../pagination/pagination';
 import ProductCardList from '../product-card-list/product-card-list';
+import ModalScreen from '../modal-screen/modal-screen';
+import {getModal} from '../../store/app-process/selector';
 
 
 const GOOD = 'Товар';
 
 function  MainScreen(): JSX.Element {
   const isLoading = useSelector(getIsLoading);
-
+  const modal = useSelector(getModal);
   if (isLoading) {
     return (<LoadingScreen />);
   } else {
@@ -34,6 +36,7 @@ function  MainScreen(): JSX.Element {
           </div>
         </main>
         <Footer />
+        {modal && <ModalScreen />}
       </>
     );
   }

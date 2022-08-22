@@ -21,8 +21,10 @@ function  ProductScreen(): JSX.Element {
   const currentGuitar = useSelector(getCurrentGuitar);
 
   useEffect (() => {
-    dispatch(fetchCurrentGuitar(params.guitarId));
-  }, [dispatch, params]);
+    if (!currentGuitar) {
+      dispatch(fetchCurrentGuitar(Number(params.guitarId)));
+    }
+  }, [dispatch, currentGuitar, params]);
 
   if (!currentGuitar || isLoading) {
     return (<LoadingScreen/>);

@@ -7,6 +7,7 @@ import ModalSuccessAdd from '../modal-success-add/modal-success-add';
 import {noScrollAdd, noScrollRemove} from '../../common/no-scroll';
 import ModalSuccessReview from '../modal-success-review/modal-success-review';
 import {closeModal} from '../../store/action';
+import ModalCartAdd from '../modal-cart-add/modal-cart-add';
 
 const STYLE: CSSProperties = {
   position: 'relative',
@@ -48,6 +49,7 @@ function ModalScreen ():JSX.Element {
           {modal === Modal.Review && <ModalReview />}
           {modal === Modal.SuccessReview && <ModalSuccessReview />}
           {modal === Modal.SuccessAdd && <ModalSuccessAdd />}
+          {modal === Modal.CartAdd && <ModalCartAdd />}
         </div>
       </div>
     </div>

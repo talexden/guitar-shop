@@ -13,10 +13,18 @@ export const redirectToRoute = createAction(
 
 export const resetFilters = createAction(ActionType.ResetFilters);
 
+export const setCartItem = createAction(ActionType.SetCartItem);
+
+export const setSelectedGuitar = createAction(
+  ActionType.SetSelectGuitar,
+  (guitar: GuitarType)=>(
+    {payload: guitar}
+  ));
+
 export const setGuitars = createAction(
   ActionType.SetGuitars,
   (guitars: GuitarType[])=>(
-    {payload: {guitars}}
+    {payload: guitars}
   ));
 
 export const setPaginationPages = createAction(
@@ -33,7 +41,7 @@ export const setCurrentPage = createAction(
 
 export const setCurrentGuitar = createAction(
   ActionType.SetCurrentGuitar,
-  (currentGuitar: GuitarType | null)=>(
+  (currentGuitar: GuitarType)=>(
     {payload: currentGuitar}
   ));
 

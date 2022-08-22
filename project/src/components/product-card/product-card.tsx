@@ -1,8 +1,11 @@
 import {GuitarType} from '../../types/stateType';
 import {capitalizedString, getTripleNumberString} from '../../common/utils';
 import {StarRating} from '../star-rating/star-rating';
-import {AppRoute, StarRatingClassName} from '../../common/const';
-import {Link} from 'react-router-dom';
+import {AppRoute, Modal, StarRatingClassName} from '../../common/const';
+import {openModal, redirectToRoute, setCurrentGuitar, setSelectedGuitar} from '../../store/action';
+import {useDispatch} from 'react-redux';
+import {MouseEvent} from 'react';
+import {fetchCurrentGuitar} from '../../store/api-action';
 
 type ProductCardProps = {
   guitar: GuitarType,
@@ -10,6 +13,20 @@ type ProductCardProps = {
 
 function  ProductCard({guitar}: ProductCardProps): JSX.Element {
   const {name, type, price, rating, previewImg, comments, id} = guitar;
+  const dispatch = useDispatch();
+
+  const handleAddToCart = (evt: MouseEvent<HTMLAnchorElement>) => {
+    evt.preventDefault();
+    dispatch(setSelectedGuitar(guitar));
+    dispatch(openModal(Modal.CartAdd));
+  };
+
+  const handleOpenProductScreen = (evt: MouseEvent<HTMLAnchorElement>) => {
+    evt.preventDefault();
+    dispatch(setCurrentGuitar(guitar));
+    dispatch(fetchCurrentGuitar(id));
+    dispatch(redirectToRoute(`${AppRoute.ProductInfo}/${id}`));
+  };
 
   return (
     <div className='product-card'>
@@ -23,8 +40,20 @@ function  ProductCard({guitar}: ProductCardProps): JSX.Element {
         </p>
       </div>
       <div className='product-card__buttons'>
-        <Link to={`${AppRoute.ProductInfo}/${id}`} className='button button--mini'>Подробнее</Link>
-        <a className='button button--red button--mini button--add-to-cart' href={'#top'}>Купить</a>
+        <a
+          className='button button--mini'
+          onClick={handleOpenProductScreen}
+          href={'#top'}
+        >
+          Подробнее
+        </a>
+        <a
+          className='button button--red button--mini button--add-to-cart'
+          onClick={handleAddToCart}
+          href={'#top'}
+        >
+          Купить
+        </a>
       </div>
     </div>
   );

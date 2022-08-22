@@ -18,5 +18,5 @@ export const sortByPages = (guitars: GuitarType[], cardCount: number): GuitarTyp
 };
 
 export const sortCommentsByDate = (comments: CommentType[]) => (
-  [...comments].sort((a, b) => (a.createAt > b.createAt ? 1 : -1))
+  [...comments].sort((a, b) => (a.createAt < b.createAt ? 1 : -1))
 );

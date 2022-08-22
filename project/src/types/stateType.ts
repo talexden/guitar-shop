@@ -11,7 +11,6 @@ export type CommentType = {
   guitarId: number
 };
 
-
 export type GuitarType = {
   id: number,
   name: string,
@@ -24,6 +23,7 @@ export type GuitarType = {
   price: number,
   comments: CommentType[],
 };
+
 export type CommentPostType = {
   guitarId: number,
   userName: string,

@@ -8,6 +8,8 @@ export enum ActionType {
   ResetFilters = '/resetFilters',
   SetIsLoading = '/setIsLoading',
   SetIsLoaded = '/setIsLoaded',
+  SetCartItem = '/setCartItem',
+  SetSelectGuitar = '/setSelectGuitar',
   SetGuitars = '/setGuitars',
   SetPaginationPages = '/setPaginationPages',
   SetCurrentGuitar = '/setCurrentGuitar',

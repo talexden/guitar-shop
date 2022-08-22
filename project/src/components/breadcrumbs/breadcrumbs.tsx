@@ -1,5 +1,8 @@
 import {Link} from 'react-router-dom';
 import {AppRoute, NavigationLabel} from '../../common/const';
+import {useDispatch} from 'react-redux';
+import {MouseEvent} from 'react';
+import {redirectToRoute} from '../../store/action';
 
 const BreadcrumbsItem = [
   {
@@ -17,6 +20,13 @@ type breadcrumbsProps = {
 }
 
 function  Breadcrumbs({breadcrumbs}: breadcrumbsProps): JSX.Element {
+  const dispatch = useDispatch();
+
+  const handleRedirectToCatalog = (evt: MouseEvent<HTMLAnchorElement>) => {
+    evt.preventDefault();
+    dispatch(redirectToRoute(AppRoute.Catalog));
+  };
+
   return (
     <ul className='breadcrumbs page-content__breadcrumbs' data-testid={'breadcrumbs'}>
       {BreadcrumbsItem.map((item) => (
@@ -25,7 +35,13 @@ function  Breadcrumbs({breadcrumbs}: breadcrumbsProps): JSX.Element {
         </li>
       ))}
       <li className='breadcrumbs__item'>
-        <Link className='link' to=''>{breadcrumbs}</Link>
+        <a
+          className='link'
+          onClick={handleRedirectToCatalog}
+          href={'#top'}
+        >
+          {breadcrumbs}
+        </a>
       </li>
     </ul>
   );
