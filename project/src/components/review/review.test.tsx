@@ -2,7 +2,7 @@ import {createMemoryHistory} from 'history';
 import {render, screen} from '@testing-library/react';
 import {Router} from 'react-router-dom';
 import Review from './review';
-import {mockGuitar} from '../../common/mock-guitars';
+import {mockGuitar} from '../../common/mock/mock-guitars';
 
 
 const history = createMemoryHistory();

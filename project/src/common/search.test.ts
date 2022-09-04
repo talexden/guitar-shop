@@ -1,4 +1,4 @@
-import {mockGuitarsLongArray} from './mock-guitars';
+import {mockGuitarsLongArray} from './mock/mock-guitars';
 import {search} from './search';
 
 describe('Business logic: check search functions', () => {

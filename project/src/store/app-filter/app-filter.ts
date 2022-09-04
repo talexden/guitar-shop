@@ -2,7 +2,9 @@ import {createReducer} from '@reduxjs/toolkit';
 import {CheckboxType} from '../../types/const-type';
 import {
   CHECKBOX_GUITAR_TYPE,
-  CHECKBOX_STRING_TYPE, COMMENT_COUNT_INIT, CURRENT_PAGE_INIT,
+  CHECKBOX_STRING_TYPE,
+  COMMENT_COUNT_INIT,
+  CURRENT_PAGE_INIT,
   SortDirect,
   SortKey
 } from '../../common/const';
@@ -15,12 +17,11 @@ import {
   setCurrentGuitar,
   setSearchedGuitars,
   setCurrentNavigationLabel,
-  setUrlSearch,
   setCommentCount, redirectToRoute, setFilter
 } from '../action';
 import {sortCommentsByDate} from '../../common/sort';
 import {Filter} from '../store-logic/filter';
-import {createUrlSearch} from '../store-logic/logic/create-url-search';
+import {createUrlSearch} from '../../common/create-url-search';
 import browserHistory from '../../browser-history';
 
 
@@ -67,6 +68,7 @@ export type AppFilterType = {
   currentNavigationLabel: string
   searchKey: string,
   urlSearch: string,
+  locationSearch: string,
 }
 
 const getCheckboxesInit = (checkboxTypes: CheckboxType[]) => {
@@ -125,6 +127,7 @@ const initialStore: AppFilterType = {
   currentNavigationLabel: '',
   searchKey: '',
   urlSearch: '',
+  locationSearch: '',
 };
 
 export const AppFilter = createReducer(initialStore, (builder)=>{
@@ -142,9 +145,23 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
 
     .addCase(setFilter, (state, action) => {
       const filter = action.payload;
-      const {checkboxStore, userPrice, isFilter, sortKey, sortDirect, currentPage, reset} = filter;
+      const {checkboxStore, userPrice, isFilter, sortKey, sortDirect, currentPage, locationSearch, reset} = filter;
+      let resetFilter = reset;
 
-      if (reset) {
+      if (locationSearch) {
+        state.locationSearch = locationSearch;
+        // state.checkboxStore = checkboxStoreInit;
+        // state.price = PRICE_STORE_INIT;
+        // state.isFilter = isFilter;
+        // state.sortKey = sortKey;
+        // state.sortDirect = sortDirect;
+        // state.currentPage = CURRENT_PAGE_INIT;
+      } else {
+        state.locationSearch = '';
+        resetFilter = true;
+      }
+
+      if (resetFilter) {
         state.checkboxStore = checkboxStoreInit;
         state.price = PRICE_STORE_INIT;
         state.isFilter = false;
@@ -173,7 +190,18 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
       state.currentPage = resultPagination.page;
       state.paginationPages = resultPagination.paginationPages;
       state.urlSearch = createUrlSearch(state);
-      browserHistory.push(state.urlSearch);
+      if ( locationSearch && state.locationSearch !== state.urlSearch) {
+        // eslint-disable-next-line no-console
+        console.log('wrong parsing');
+        // eslint-disable-next-line no-console
+        console.log(state.locationSearch);
+        // eslint-disable-next-line no-console
+        console.log(state.urlSearch);
+      } else {
+        if (state.urlSearch && !locationSearch) {
+          browserHistory.push(state.urlSearch);
+        }
+      }
     })
 
     .addCase(setIsLoading, (state) => {state.isLoading = true;})
@@ -195,9 +223,5 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
 
     .addCase(setCurrentNavigationLabel, (state, action) => {
       state.currentNavigationLabel = action.payload;
-    })
-
-    .addCase(setUrlSearch, (state, action) => {
-      state.urlSearch = action.payload;
     });
 });

@@ -3,7 +3,7 @@ import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 import {render, screen} from '@testing-library/react';
-import {mockGuitarsSortedByPages} from '../../common/mock-guitars';
+import {mockGuitarsSortedByPages} from '../../common/mock/mock-guitars';
 import Pagination from './pagination';
 
 const mockStore = configureMockStore();

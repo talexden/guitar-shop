@@ -1,4 +1,4 @@
-import {mockGuitarsLongArray} from './mock-guitars';
+import {mockGuitarsLongArray} from './mock/mock-guitars';
 import {sort} from './sort';
 import {SortDirect, SortKey} from './const';
 

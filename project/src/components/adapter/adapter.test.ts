@@ -1,5 +1,5 @@
 import {Adapter} from './adapter';
-import {mockGuitar} from '../../common/mock-guitars';
+import {mockGuitar} from '../../common/mock/mock-guitars';
 
 describe('Adapter to client', () => {
   const guitar = mockGuitar;

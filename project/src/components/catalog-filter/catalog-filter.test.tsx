@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import CatalogFilter from './catalog-filter';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import {Provider} from 'react-redux';
-import {mockGuitarsLongArray} from '../../common/mock-guitars';
+import {mockGuitarsLongArray} from '../../common/mock/mock-guitars';
 
 const history = createMemoryHistory();
 const mockStore = configureMockStore();

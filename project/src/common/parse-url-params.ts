@@ -1,6 +1,6 @@
-import {checkboxStoreInit, CheckboxStoreType} from '../../app-filter/app-filter';
-import {FilterType} from '../../action';
-import {SortDirect, SortKey} from '../../../common/const';
+import {checkboxStoreInit, CheckboxStoreType} from '../store/app-filter/app-filter';
+import {FilterType} from '../store/action';
+import {SortDirect, SortKey} from './const';
 
 
 export const parseUrlParams = (searchUrl: string, checkboxStore: CheckboxStoreType): FilterType => {

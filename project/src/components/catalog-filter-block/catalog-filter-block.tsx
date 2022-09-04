@@ -1,6 +1,8 @@
+import {ReactNode} from 'react';
+
 type CatalogFilterBlockType = {
   blockTitle: string,
-  children: React.ReactNode
+  children: ReactNode,
 }
 
 export function CatalogFilterBlock (props: CatalogFilterBlockType):JSX.Element {

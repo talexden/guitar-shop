@@ -1,5 +1,5 @@
 import {filterByString} from './filter-by-string';
-import {mockGuitarsFilteredByString, mockGuitarsLongArray} from './mock-guitars';
+import {mockGuitarsFilteredByString, mockGuitarsLongArray} from './mock/mock-guitars';
 
 describe('Function: filterByString', () => {
   it('should be filter structure GUITARS by string count array', () => {

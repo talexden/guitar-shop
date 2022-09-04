@@ -1,8 +1,6 @@
 import {CheckboxType} from '../types/const-type';
 import {GuitarType} from '../types/stateType';
 
-export const VIEW_CATALOG_COUNT = 9;
-
 export enum AppRoute {
   Main = '/',
   Catalog = '/page',
@@ -170,8 +168,6 @@ export const priceInput = {
 export const CURRENT_PAGE_INIT = 1;
 export const COMMENT_COUNT_INIT = 0;
 export const PAGINATION_COUNT = 3;
-export const CORRECT_PRICE_DELAY = 1500;
-export const UPDATE_URL_DELAY = 300;
 export const SUCCESSFUL_SENDING_CODE = 200;
 export const RESET_FILTER = {
   reset: true,

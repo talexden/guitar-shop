@@ -5,7 +5,7 @@ import { Router } from 'react-router-dom';
 import App from './app';
 import {AppRoute} from '../../common/const';
 import {render, screen} from '@testing-library/react';
-import {mockGuitars} from '../../common/mock-guitars';
+import {mockGuitars} from '../../common/mock/mock-guitars';
 
 const mockStore = configureMockStore();
 const history = createMemoryHistory();

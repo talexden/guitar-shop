@@ -3,7 +3,7 @@ import {render, screen} from '@testing-library/react';
 import {Router} from 'react-router-dom';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import { Provider } from 'react-redux';
-import {mockGuitars} from '../../common/mock-guitars';
+import {mockGuitars} from '../../common/mock/mock-guitars';
 import HeaderSearchItem from './header-search-item';
 
 const history = createMemoryHistory();

@@ -72,6 +72,7 @@ export type FilterType = {
   sortKey?: SortKey,
   sortDirect?: SortDirect,
   currentPage?: number,
+  locationSearch?: string,
   reset?: boolean,
 }
 
@@ -79,12 +80,6 @@ export const setFilter = createAction(
   ActionType.SetFilter,
   (filter: FilterType)=>(
     {payload: filter}
-  ));
-
-export const setUrlSearch = createAction(
-  ActionType.SetUrlSearch,
-  (searchUrl: string)=>(
-    {payload: searchUrl}
   ));
 
 export const closeModal = createAction(ActionType.CloseModal);

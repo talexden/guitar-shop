@@ -1,4 +1,4 @@
-import {GuitarType} from '../types/stateType';
+import {GuitarType} from '../../types/stateType';
 
 export const mockGuitarsLongArray: GuitarType[] = [
   {

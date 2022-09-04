@@ -1,7 +1,7 @@
 import {createMemoryHistory} from 'history';
 import {render, screen} from '@testing-library/react';
 import {Router} from 'react-router-dom';
-import {mockGuitars, mockGuitarsSortedByPages} from '../../common/mock-guitars';
+import {mockGuitars, mockGuitarsSortedByPages} from '../../common/mock/mock-guitars';
 import ProductCardList from './product-card-list';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import {Provider} from 'react-redux';

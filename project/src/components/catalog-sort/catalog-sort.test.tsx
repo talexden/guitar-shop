@@ -5,7 +5,7 @@ import * as Redux from 'react-redux';
 import userEvent from '@testing-library/user-event';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import {Provider} from 'react-redux';
-import {mockGuitar, mockGuitarsLongArray} from '../../common/mock-guitars';
+import {mockGuitar, mockGuitarsLongArray} from '../../common/mock/mock-guitars';
 import CatalogSort from './catalog-sort';
 import {SortDirect, SortKey} from '../../common/const';
 import {ActionType} from '../../types/action-type';

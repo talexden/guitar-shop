@@ -1,4 +1,4 @@
-import {AppFilterType} from '../../app-filter/app-filter';
+import {AppFilterType} from '../store/app-filter/app-filter';
 
 export const createUrlSearch = ({checkboxStore, price, isFilter, sortKey, sortDirect}: AppFilterType): string => {
   const params: string[] = [];
@@ -22,5 +22,7 @@ export const createUrlSearch = ({checkboxStore, price, isFilter, sortKey, sortDi
     params.push(`sortDirect=${sortDirect}`);
   }
 
-  return `?${params.join('&')}`;
+  const search = `?${params.join('&')}`;
+
+  return search.length > 1 ? search : '';
 };

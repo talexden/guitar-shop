@@ -3,7 +3,7 @@ import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 import {render, screen} from '@testing-library/react';
-import {mockGuitar, mockGuitars} from '../../common/mock-guitars';
+import {mockGuitar, mockGuitars} from '../../common/mock/mock-guitars';
 import ProductScreen from './product-screen';
 
 const mockStore = configureMockStore();

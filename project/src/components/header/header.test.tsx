@@ -4,7 +4,7 @@ import {Router} from 'react-router-dom';
 import Header from './header';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import { Provider } from 'react-redux';
-import { mockGuitars } from '../../common/mock-guitars';
+import { mockGuitars } from '../../common/mock/mock-guitars';
 
 const history = createMemoryHistory();
 const mockStore = configureMockStore();

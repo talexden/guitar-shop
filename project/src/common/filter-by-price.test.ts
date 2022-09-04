@@ -1,5 +1,5 @@
 import {filterByPrice} from './filter-by-price';
-import {mockGuitarsFilterByPrice, mockGuitarsLongArray} from './mock-guitars';
+import {mockGuitarsFilterByPrice, mockGuitarsLongArray} from './mock/mock-guitars';
 
 describe('Function: filterByPrice', () => {
   it('should be filter structure GUITARS by min end max price', () => {

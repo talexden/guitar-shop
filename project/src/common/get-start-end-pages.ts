@@ -1,5 +1,5 @@
-import {GuitarType} from '../../../types/stateType';
-import {CURRENT_PAGE_INIT, PAGINATION_COUNT} from '../../../common/const';
+import {GuitarType} from '../types/stateType';
+import {CURRENT_PAGE_INIT, PAGINATION_COUNT} from './const';
 
 export const getStartEndPage = (page: number, sortedByPages: GuitarType[][]) => {
   const paginationCenter = Math.round(PAGINATION_COUNT / 2);
