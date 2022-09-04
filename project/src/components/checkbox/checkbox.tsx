@@ -1,7 +1,7 @@
 import {CheckboxType} from '../../types/const-type';
 import {useDispatch, useSelector} from 'react-redux';
 import {getCheckboxStore} from '../../store/app-filter/selectors';
-import {setCheckboxStore} from '../../store/action';
+import {setFilter} from '../../store/action';
 
 type CheckboxProps = {
   checkbox: CheckboxType,
@@ -16,8 +16,9 @@ function Checkbox ({checkbox}: CheckboxProps): JSX.Element {
   const handleOnChange = () => {
     if (!checkboxStore[name].isDisabled) {
       const currentCheckbox = {...checkboxStore[name], isChecked: !checkboxStore[name].isChecked};
-      const state = {...checkboxStore, [name]: currentCheckbox};
-      dispatch(setCheckboxStore(state));
+      const currentCheckboxStore = {...checkboxStore, [name]: currentCheckbox};
+      // dispatch(setCheckboxStore(state));
+      dispatch(setFilter({checkboxStore: currentCheckboxStore}));
     }
   };
 

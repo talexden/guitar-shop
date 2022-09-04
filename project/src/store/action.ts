@@ -11,8 +11,6 @@ export const redirectToRoute = createAction(
     {payload: url}
   ));
 
-export const resetFilters = createAction(ActionType.ResetFilters);
-
 export const setCartItem = createAction(ActionType.SetCartItem);
 
 export const setSelectedGuitar = createAction(
@@ -25,18 +23,6 @@ export const setGuitars = createAction(
   ActionType.SetGuitars,
   (guitars: GuitarType[])=>(
     {payload: guitars}
-  ));
-
-export const setPaginationPages = createAction(
-  ActionType.SetPaginationPages,
-  (paginationPages: number[])=>(
-    {payload: paginationPages}
-  ));
-
-export const setCurrentPage = createAction(
-  ActionType.SetCurrentPage,
-  (currentPage: number)=>(
-    {payload: currentPage}
   ));
 
 export const setCurrentGuitar = createAction(
@@ -57,18 +43,6 @@ export const setSearchedGuitars = createAction(
     {payload: guitars}
   ));
 
-export const setSortKey = createAction(
-  ActionType.SetSortKey,
-  (sortKey: SortKey)=>(
-    {payload: sortKey}
-  ));
-
-export const setSortDirect = createAction(
-  ActionType.SetSortDirect,
-  (sortDirect: SortDirect)=>(
-    {payload: sortDirect}
-  ));
-
 export const setCurrentNavigationLabel = createAction(
   ActionType.SetCurrentNavigationLabel,
   (navigationLabel: string)=>(
@@ -84,11 +58,6 @@ export const setSearchKey = createAction(
 export const setIsLoading = createAction(ActionType.SetIsLoading);
 export const setIsLoaded = createAction(ActionType.SetIsLoaded);
 
-export const setUserPrice = createAction(
-  ActionType.SetUserPrice,
-  (price: PriceType)=>(
-    {payload: price}
-  ));
 
 export const setCheckboxStore = createAction(
   ActionType.SetCheckboxStore,
@@ -96,8 +65,24 @@ export const setCheckboxStore = createAction(
     {payload: checkboxStore}
   ));
 
-export const setSearchUrl = createAction(
-  ActionType.SetSearchUrl,
+export type FilterType = {
+  checkboxStore?: CheckboxStoreType,
+  userPrice?: PriceType,
+  isFilter?: boolean,
+  sortKey?: SortKey,
+  sortDirect?: SortDirect,
+  currentPage?: number,
+  reset?: boolean,
+}
+
+export const setFilter = createAction(
+  ActionType.SetFilter,
+  (filter: FilterType)=>(
+    {payload: filter}
+  ));
+
+export const setUrlSearch = createAction(
+  ActionType.SetUrlSearch,
   (searchUrl: string)=>(
     {payload: searchUrl}
   ));

@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from 'react-redux';
 import {SortDirect, SortKey} from '../../common/const';
-import {setSortDirect, setSortKey} from '../../store/action';
+import {setFilter} from '../../store/action';
 import { getIsFilter, getSortDirect, getSortKey} from '../../store/app-filter/selectors';
 
 const SORT_TYPE_BUTTON_ACTIVE = ' catalog-sort__type-button--active';
@@ -19,14 +19,14 @@ function  CatalogSort(): JSX.Element {
         <button
           className={`catalog-sort__type-button${sortKey === SortKey.Price && isFilter ? SORT_TYPE_BUTTON_ACTIVE : ''}`}
           aria-label='по цене'
-          onClick={() => dispatch(setSortKey(SortKey.Price))}
+          onClick={() => dispatch(setFilter({sortKey: SortKey.Price}))}
         >
           по цене
         </button>
         <button
           className={`catalog-sort__type-button${sortKey === SortKey.Rating && isFilter ? SORT_TYPE_BUTTON_ACTIVE : ''}`}
           aria-label='по популярности'
-          onClick={() => dispatch(setSortKey(SortKey.Rating))}
+          onClick={() => dispatch(setFilter({sortKey: SortKey.Rating}))}
         >
           по популярности
         </button>
@@ -36,13 +36,13 @@ function  CatalogSort(): JSX.Element {
           className={`catalog-sort__order-button catalog-sort__order-button--up${sortDirect === SortDirect.LowToHigh && isFilter ? SORT_ORDER_BUTTON_ACTIVE : ''}`}
           aria-label='По возрастанию'
           // tabIndex={SORT_TAB_INDEX}
-          onClick={() => dispatch(setSortDirect(SortDirect.LowToHigh))}
+          onClick={() => dispatch(setFilter({sortDirect: SortDirect.LowToHigh}))}
           data-testid = 'sortDirectLowToHigh'
         />
         <button
           className={`catalog-sort__order-button catalog-sort__order-button--down${sortDirect === SortDirect.HighToLow && isFilter ? SORT_ORDER_BUTTON_ACTIVE : ''}`}
           aria-label='По убыванию'
-          onClick={() => dispatch(setSortDirect(SortDirect.HighToLow))}
+          onClick={() => dispatch(setFilter({sortDirect: SortDirect.HighToLow}))}
           data-testid = 'sortDirectHighToLow'
 
         />

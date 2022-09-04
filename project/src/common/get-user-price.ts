@@ -1,8 +1,6 @@
 import {PriceType} from '../store/app-filter/app-filter';
 
-export const getUserPrice = (price: PriceType, checkboxPrice: PriceType) => {
-  // const guitars = state.guitarsFilteredByCheckbox;
-
+export const getUserPrice = ({...price}: PriceType, checkboxPrice: PriceType) => {
   if (price.priceMin === '') {
     price.priceMin = checkboxPrice.priceMin;
   }
@@ -27,7 +25,7 @@ export const getUserPrice = (price: PriceType, checkboxPrice: PriceType) => {
     price.priceMax = checkboxPrice.priceMax;
   }
 
-  const realUserPrice = {...price};
+  const realUserPrice = Object.assign({},price);
 
   if (price.priceMin === checkboxPrice.priceMin) {
     price.priceMin = '';

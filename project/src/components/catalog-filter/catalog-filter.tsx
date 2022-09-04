@@ -1,22 +1,20 @@
 import {
   CHECKBOX_GUITAR_TYPE,
-  CHECKBOX_STRING_TYPE, FilterBlockTitle,
-  priceInput
+  CHECKBOX_STRING_TYPE,
+  FilterBlockTitle,
+  priceInput, RESET_FILTER
 } from '../../common/const';
 
 import CatalogFilterPrice from '../catalog-filter-price/catalog-filter-price';
 import CheckboxList from '../checkbox-list/checkbox-list';
 import CatalogFilterBlock from '../catalog-filter-block/catalog-filter-block';
 import { useDispatch } from 'react-redux';
-import {resetFilters, setCheckboxStore} from '../../store/action';
-import {checkboxStoreInit} from '../../store/app-filter/app-filter';
-
+import {setFilter} from '../../store/action';
 
 function    CatalogFilter(): JSX.Element {
   const dispatch = useDispatch();
   const handleResetFilters = () => {
-    dispatch(resetFilters());
-    dispatch(setCheckboxStore(checkboxStoreInit));
+    dispatch(setFilter(RESET_FILTER));
   };
 
   return (

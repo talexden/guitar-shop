@@ -1,6 +1,6 @@
 import {ChangeEvent, KeyboardEvent, useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {setUserPrice} from '../../store/action';
+import {setFilter} from '../../store/action';
 import {
   getUserPrice,
   getCheckboxPrice
@@ -36,7 +36,7 @@ function CatalogFilterPrice ({inputType}: CatalogFilterPriceProps): JSX.Element 
 
   const handleSetUserPrice = () =>{
     const price = {...userPrice, [inputPriceName]: priceState};
-    dispatch(setUserPrice(price));
+    dispatch(setFilter({userPrice: price}));
   };
 
   const handlePressEnter = ( evt: KeyboardEvent<HTMLInputElement>) => {

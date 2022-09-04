@@ -2,7 +2,7 @@ import {GuitarType} from '../../../types/stateType';
 import {getStartEndPage} from './get-start-end-pages';
 import {getIntegersArrayFromTo} from '../../../common/utils';
 
-export const runPages = (page: number, sortedByPages: GuitarType[][]) => {
+export const createPagination = (page: number, sortedByPages: GuitarType[][]) => {
 
   if (sortedByPages.length > 0 && sortedByPages.length < page) {
     page = sortedByPages.length;

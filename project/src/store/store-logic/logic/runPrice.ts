@@ -4,7 +4,7 @@ import {getUserPrice} from '../../../common/get-user-price';
 import {filterByPrice} from '../../../common/filter-by-price';
 import {GuitarType} from '../../../types/stateType';
 
-export const runPrice = (filteredByCheckbox: GuitarType[], price: PriceStoreType) => {
+export const runPrice = (filteredByCheckbox: GuitarType[], {...price}: PriceStoreType) => {
   const checkboxPrice = getMinMaxPrice(filteredByCheckbox);
   const {userPrice, realUserPrice} =  getUserPrice(price.userPrice, checkboxPrice);
   const filteredByPrice = filterByPrice(filteredByCheckbox, realUserPrice);

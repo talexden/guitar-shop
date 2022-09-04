@@ -67,32 +67,32 @@ describe('Component: CatalogSort', () => {
     expect(dispatch).toHaveBeenCalledTimes(2);
     expect(dispatch).nthCalledWith(2,
       {
-        type: ActionType.SetSortKey,
-        payload: SortKey.Price,
+        type: ActionType.SetFilter,
+        payload: {sortKey: SortKey.Price},
       },
     );
 
     userEvent.click(screen.getByText(/по популярности/i));
     expect(dispatch).nthCalledWith(3,
       {
-        type: ActionType.SetSortKey,
-        payload: SortKey.Rating,
+        type: ActionType.SetFilter,
+        payload: {sortKey: SortKey.Rating},
       },
     );
 
     userEvent.click(screen.getByTestId(/sortDirectLowToHigh/i));
     expect(dispatch).nthCalledWith(4,
       {
-        type: ActionType.SetSortDirect,
-        payload: SortDirect.LowToHigh,
+        type: ActionType.SetFilter,
+        payload: {sortDirect: SortDirect.LowToHigh},
       },
     );
 
     userEvent.click(screen.getByTestId(/sortDirectLowToHigh/i));
     expect(dispatch).nthCalledWith(4,
       {
-        type: ActionType.SetSortDirect,
-        payload: SortDirect.LowToHigh,
+        type: ActionType.SetFilter,
+        payload: {sortDirect: SortDirect.LowToHigh},
       },
     );
   });

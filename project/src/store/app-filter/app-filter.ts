@@ -2,32 +2,26 @@ import {createReducer} from '@reduxjs/toolkit';
 import {CheckboxType} from '../../types/const-type';
 import {
   CHECKBOX_GUITAR_TYPE,
-  CHECKBOX_STRING_TYPE,
+  CHECKBOX_STRING_TYPE, COMMENT_COUNT_INIT, CURRENT_PAGE_INIT,
   SortDirect,
   SortKey
 } from '../../common/const';
 import {CommentPostType, CouponPostType, GuitarType, OrderPostType} from '../../types/stateType';
 
 import {
-  setCheckboxStore,
-  setUserPrice,
   setGuitars,
   setIsLoading,
   setIsLoaded,
-  setPaginationPages,
   setCurrentGuitar,
-  setCurrentPage,
   setSearchedGuitars,
-  setSortKey,
-  setSortDirect,
   setCurrentNavigationLabel,
-  setSearchKey,
-  setSearchUrl,
-  setCommentCount, resetFilters, redirectToRoute
+  setUrlSearch,
+  setCommentCount, redirectToRoute, setFilter
 } from '../action';
 import {sortCommentsByDate} from '../../common/sort';
-import {CatalogLogic} from '../store-logic/catalog-logic';
-import {search} from '../../common/search';
+import {Filter} from '../store-logic/filter';
+import {createUrlSearch} from '../store-logic/logic/create-url-search';
+import browserHistory from '../../browser-history';
 
 
 export type CheckboxStoreType = {
@@ -95,21 +89,20 @@ export const checkboxStoreInit: CheckboxStoreType = {
   ...getCheckboxesInit(CHECKBOX_STRING_TYPE),
 };
 
-const priceInit = {
-  userPrice: {
-    priceMin: '',
-    priceMax: '',
-  },
-  checkboxPrice: {
-    priceMin: '',
-    priceMax: '',
-  },
+export const PRICE_INIT: PriceType = {
+  priceMin: '',
+  priceMax: '',
+};
+
+export const PRICE_STORE_INIT: PriceStoreType = {
+  userPrice: PRICE_INIT,
+  checkboxPrice: PRICE_INIT,
 };
 
 const initialStore: AppFilterType = {
   guitars: [],
   isLoading: false,
-  price: priceInit,
+  price: PRICE_STORE_INIT,
   filteredByCheckbox: [],
   checkboxStore: checkboxStoreInit,
   isStringChecked: false,
@@ -125,8 +118,8 @@ const initialStore: AppFilterType = {
   isFilter: false,
   sortedByPages: [],
   currentGuitar: null,
-  commentCount: 0,
-  currentPage: 1,
+  commentCount: COMMENT_COUNT_INIT,
+  currentPage: CURRENT_PAGE_INIT,
   redirectUrl: '',
   paginationPages: [],
   currentNavigationLabel: '',
@@ -138,70 +131,53 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
   builder
 
     .addCase(redirectToRoute, (state) => {
-      state.currentGuitar = null;
+      if (!state.currentGuitar) {
+        state.currentGuitar = null;
+      }
     })
 
     .addCase(setGuitars, (state, action) => {
       state.guitars = action.payload;
     })
 
-    .addCase(resetFilters, (state) => {
-      state.isFilter = false;
-      state.price = priceInit;
-      state.currentPage = 1;
-    })
+    .addCase(setFilter, (state, action) => {
+      const filter = action.payload;
+      const {checkboxStore, userPrice, isFilter, sortKey, sortDirect, currentPage, reset} = filter;
 
-    .addCase(setCheckboxStore, (state, action) => {
-      state.checkboxStore = action.payload;
-      const resultCheckboxChain = CatalogLogic.checkboxChain(state);
-      state.filteredByCheckbox = resultCheckboxChain.filteredByCheckbox;
-      state.checkboxStore = resultCheckboxChain.checkboxStore;
-      state.price = resultCheckboxChain.price;
-      state.filteredByPrice = resultCheckboxChain.filteredByPrice;
-      state.sortedGuitars = resultCheckboxChain.sortedGuitars;
-      state.sortedByPages = resultCheckboxChain.sortedByPages;
-      state.currentPage = resultCheckboxChain.page;
-      state.paginationPages = resultCheckboxChain.paginationPages;
-    })
+      if (reset) {
+        state.checkboxStore = checkboxStoreInit;
+        state.price = PRICE_STORE_INIT;
+        state.isFilter = false;
+        state.currentPage = CURRENT_PAGE_INIT;
+      }
 
-    .addCase(setUserPrice, (state, action) => {
-      state.price.userPrice = action.payload;
-      const resultPriceChain = CatalogLogic.priceChain(state);
-      state.price = resultPriceChain.price;
-      state.filteredByPrice = resultPriceChain.filteredByPrice;
-      state.sortedGuitars = resultPriceChain.sortedGuitars;
-      state.sortedByPages = resultPriceChain.sortedByPages;
-      state.currentPage = resultPriceChain.page;
-      state.paginationPages = resultPriceChain.paginationPages;
-    })
+      if (checkboxStore) { state.checkboxStore = checkboxStore;}
+      const resultCheckbox = Filter.checkbox(state);
+      state.checkboxStore = resultCheckbox.checkboxStore;
+      state.filteredByCheckbox = resultCheckbox.filteredByCheckbox;
 
-    .addCase(setSortKey, (state, action) => {
-      state.sortKey = action.payload;
-      state.isFilter = true;
-      const resultSortChain = CatalogLogic.sortChain(state);
-      state.sortedGuitars = resultSortChain.sortedGuitars;
-      state.sortedByPages = resultSortChain.sortedByPages;
-      state.currentPage = resultSortChain.page;
-      state.paginationPages = resultSortChain.paginationPages;
-    })
+      if (userPrice) { state.price = {...state.price, userPrice};}
+      const resultPrice = Filter.price(state);
+      state.price = resultPrice.price;
+      state.filteredByPrice = resultPrice.filteredByPrice;
 
-    .addCase(setSortDirect, (state, action) => {
-      state.sortDirect = action.payload;
-      state.isFilter = true;
-      const resultRunSort = CatalogLogic.sortChain(state);
-      state.sortedGuitars = resultRunSort.sortedGuitars;
-      state.sortedByPages = resultRunSort.sortedByPages;
-      state.currentPage = resultRunSort.page;
-      state.paginationPages = resultRunSort.paginationPages;
+      if (isFilter) { state.isFilter = isFilter;}
+      if (sortKey) { state.sortKey = sortKey;}
+      if (sortDirect) { state.sortDirect = sortDirect;}
+      const resultSort = Filter.sort(state);
+      state.sortedGuitars = resultSort.sortedGuitars;
+      state.sortedByPages = resultSort.sortedByPages;
+
+      if (currentPage) { state.currentPage = currentPage;}
+      const resultPagination = Filter.pagination(state);
+      state.currentPage = resultPagination.page;
+      state.paginationPages = resultPagination.paginationPages;
+      state.urlSearch = createUrlSearch(state);
+      browserHistory.push(state.urlSearch);
     })
 
     .addCase(setIsLoading, (state) => {state.isLoading = true;})
-
     .addCase(setIsLoaded, (state) => {state.isLoading = false;})
-
-    .addCase(setPaginationPages, (state, action) => {
-      state.paginationPages = action.payload;
-    })
 
     .addCase(setCurrentGuitar, (state, action) => {
       const currentGuitar = action.payload;
@@ -213,14 +189,6 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
       state.commentCount = action.payload;
     })
 
-    .addCase(setCurrentPage, (state, action) => {
-      state.currentPage = action.payload;
-      const resultPagesChain = CatalogLogic.pagesChain(state);
-      state.currentPage = resultPagesChain.page;
-      state.paginationPages = resultPagesChain.paginationPages;
-    })
-
-
     .addCase(setSearchedGuitars, (state, action) => {
       state.searchedGuitars = action.payload;
     })
@@ -229,13 +197,7 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
       state.currentNavigationLabel = action.payload;
     })
 
-    .addCase(setSearchKey, (state, action) => {
-      const searchKey = action.payload;
-      state.searchKey = searchKey;
-      state.searchedGuitars = searchKey ? search(state.guitars, searchKey) : [];
-    })
-
-    .addCase(setSearchUrl, (state) => {
-      state.urlSearch = '';
+    .addCase(setUrlSearch, (state, action) => {
+      state.urlSearch = action.payload;
     });
 });

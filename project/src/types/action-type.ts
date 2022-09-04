@@ -4,27 +4,22 @@ import {StateType} from './stateType';
 import {Action} from 'redux';
 
 export enum ActionType {
+  CloseModal = '/closeModalReview',
+  OpenModal = '/openModalReview',
   RedirectToRoute = '/redirectToRoute',
-  ResetFilters = '/resetFilters',
+  SetFilter = '/setFilter',
   SetIsLoading = '/setIsLoading',
   SetIsLoaded = '/setIsLoaded',
   SetCartItem = '/setCartItem',
   SetSelectGuitar = '/setSelectGuitar',
   SetGuitars = '/setGuitars',
-  SetPaginationPages = '/setPaginationPages',
   SetCurrentGuitar = '/setCurrentGuitar',
   SetCommentCount = '/setCommentCount',
-  SetCurrentPage = '/setCurrentPage',
-  SetSortKey = '/setSortKey',
-  SetSortDirect = '/setSortDirect',
   SetCurrentNavigationLabel = '/setCurrentNavigationLabel',
   SetSearchKey = '/setSearchKey',
   SetSearchedGuitars = '/setSearchedGuitars',
-  SetUserPrice = '/setUserPrice',
   SetCheckboxStore = '/setCheckboxStore',
-  SetSearchUrl = '/setSearchUrl',
-  OpenModal = '/openModalReview',
-  CloseModal = '/closeModalReview',
+  SetUrlSearch = '/setUrlSearch',
 }
 
 export type ThunkActionResult<R = Promise<void>> = ThunkAction<R, StateType, AxiosInstance, Action>;
