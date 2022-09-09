@@ -1,7 +1,7 @@
 import {CommentType, GuitarType} from '../types/stateType';
 import {SortDirect, SortKey} from './const';
 
-export const sort = (guitars: GuitarType[], sortKey: SortKey, sortDirect: SortDirect, isFilter: boolean): GuitarType[] => {
+export const sort = (guitars: GuitarType[], isFilter: boolean, sortKey: SortKey, sortDirect: SortDirect): GuitarType[] => {
   if (isFilter) {
     return [...guitars].sort((a, b) => (a[sortKey] > b[sortKey] ? 1 : -1) * sortDirect);
   }

@@ -1,6 +1,6 @@
 import {PriceType} from '../store/app-filter/app-filter';
 
-export const getUserPrice = ({...price}: PriceType, checkboxPrice: PriceType) => {
+export const correctUserPrice = ({...price}: PriceType, checkboxPrice: PriceType) => {
   if (price.priceMin === '') {
     price.priceMin = checkboxPrice.priceMin;
   }

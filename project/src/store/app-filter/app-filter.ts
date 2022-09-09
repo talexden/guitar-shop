@@ -4,7 +4,7 @@ import {
   CHECKBOX_GUITAR_TYPE,
   CHECKBOX_STRING_TYPE,
   COMMENT_COUNT_INIT,
-  CURRENT_PAGE_INIT,
+  CURRENT_PAGE_INIT, NO_PARAMS,
   SortDirect,
   SortKey
 } from '../../common/const';
@@ -23,6 +23,7 @@ import {sortCommentsByDate} from '../../common/sort';
 import {Filter} from '../store-logic/filter';
 import {createUrlSearch} from '../../common/create-url-search';
 import browserHistory from '../../browser-history';
+import {parseUrlParams} from '../../common/parse-url-params';
 
 
 export type CheckboxStoreType = {
@@ -146,19 +147,27 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
     .addCase(setFilter, (state, action) => {
       const filter = action.payload;
       const {checkboxStore, userPrice, isFilter, sortKey, sortDirect, currentPage, locationSearch, reset} = filter;
-      let resetFilter = reset;
+      const resetFilter = reset || false;
+      let isFilterChain = false;
 
       if (locationSearch) {
         state.locationSearch = locationSearch;
-        // state.checkboxStore = checkboxStoreInit;
-        // state.price = PRICE_STORE_INIT;
-        // state.isFilter = isFilter;
-        // state.sortKey = sortKey;
-        // state.sortDirect = sortDirect;
-        // state.currentPage = CURRENT_PAGE_INIT;
-      } else {
+        const parseResult = parseUrlParams(locationSearch);
+
+        state.checkboxStore = parseResult.checkboxStore;
+        state.price = {...state.price, userPrice: parseResult.userPrice};
+        state.isFilter = parseResult.isFilter;
+        state.sortKey = parseResult.sortKey;
+        state.sortDirect = parseResult.sortDirect;
+        state.currentPage = parseResult.currentPage;
+
+        // eslint-disable-next-line no-console
+        console.log(parseResult);
+      }
+
+      if (locationSearch === NO_PARAMS) {
         state.locationSearch = '';
-        resetFilter = true;
+        isFilterChain = true;
       }
 
       if (resetFilter) {
@@ -166,30 +175,39 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
         state.price = PRICE_STORE_INIT;
         state.isFilter = false;
         state.currentPage = CURRENT_PAGE_INIT;
+        isFilterChain = true;
       }
 
-      if (checkboxStore) { state.checkboxStore = checkboxStore;}
-      const resultCheckbox = Filter.checkbox(state);
-      state.checkboxStore = resultCheckbox.checkboxStore;
-      state.filteredByCheckbox = resultCheckbox.filteredByCheckbox;
+      if (checkboxStore || isFilterChain) {
+        const resultCheckbox = Filter.checkbox(state, checkboxStore);
+        state.checkboxStore = resultCheckbox.checkboxStore;
+        state.filteredByCheckbox = resultCheckbox.filteredByCheckbox;
+        isFilterChain = true;
+      }
 
-      if (userPrice) { state.price = {...state.price, userPrice};}
-      const resultPrice = Filter.price(state);
-      state.price = resultPrice.price;
-      state.filteredByPrice = resultPrice.filteredByPrice;
+      if (userPrice || isFilterChain) {
+        const resultPrice = Filter.price(state, userPrice);
+        state.price = resultPrice.price;
+        state.filteredByPrice = resultPrice.filteredByPrice;
+        isFilterChain = true;
+      }
 
       if (isFilter) { state.isFilter = isFilter;}
       if (sortKey) { state.sortKey = sortKey;}
       if (sortDirect) { state.sortDirect = sortDirect;}
-      const resultSort = Filter.sort(state);
-      state.sortedGuitars = resultSort.sortedGuitars;
-      state.sortedByPages = resultSort.sortedByPages;
 
-      if (currentPage) { state.currentPage = currentPage;}
-      const resultPagination = Filter.pagination(state);
-      state.currentPage = resultPagination.page;
+      if (sortKey || sortDirect || isFilterChain) {
+        const resultSort = Filter.sort(state);
+        state.sortedGuitars = resultSort.sortedGuitars;
+        state.sortedByPages = resultSort.sortedByPages;
+      }
+
+      const resultPagination = Filter.pagination(state, currentPage);
+      state.currentPage = resultPagination.currentPage;
       state.paginationPages = resultPagination.paginationPages;
       state.urlSearch = createUrlSearch(state);
+
+
       if ( locationSearch && state.locationSearch !== state.urlSearch) {
         // eslint-disable-next-line no-console
         console.log('wrong parsing');

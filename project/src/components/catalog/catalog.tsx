@@ -7,6 +7,7 @@ import {setFilter} from '../../store/action';
 import {
   getUrlSearch
 } from '../../store/app-filter/selectors';
+import {NO_PARAMS} from '../../common/const';
 
 function Catalog ():JSX.Element {
   const dispatch = useDispatch();
@@ -14,7 +15,7 @@ function Catalog ():JSX.Element {
 
   // EventListener for parseUrlSearch
   window.onpopstate = function() {
-    const locationSearch = window.location.search;
+    const locationSearch = window.location.search || NO_PARAMS;
     if (locationSearch !== urlSearch) {
       dispatch(setFilter({locationSearch}));
     }

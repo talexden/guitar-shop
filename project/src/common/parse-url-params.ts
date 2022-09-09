@@ -1,28 +1,31 @@
-import {checkboxStoreInit, CheckboxStoreType} from '../store/app-filter/app-filter';
+import {checkboxStoreInit} from '../store/app-filter/app-filter';
+import {CURRENT_PAGE_INIT, SortDirect, SortKey} from './const';
 import {FilterType} from '../store/action';
-import {SortDirect, SortKey} from './const';
 
 
-export const parseUrlParams = (searchUrl: string, checkboxStore: CheckboxStoreType): FilterType => {
+export const parseUrlParams = (searchUrl: string): Required<FilterType> => {
   const urlSearchParams = new URLSearchParams(searchUrl);
   const params = Object.fromEntries(urlSearchParams.entries());
+  let checkboxStore = checkboxStoreInit;
   if (params !== {}) {
     Object.keys(params).forEach((param)=>{
       const checkboxIsChecked = {...checkboxStore[param], isChecked: true};
       checkboxStore = {...checkboxStore, [param]: checkboxIsChecked};
     });
-  } else {
-    checkboxStore = {...checkboxStoreInit};
   }
 
   const urlPriceMin = params.priceMin ? params.priceMin : '';
   const urlPriceMax = params.priceMax ? params.priceMin : '';
+  const isFilter = Boolean(params.isFilter);
+  const sortKey = params.sortKey === 'rating' ? SortKey.Rating : SortKey.Price;
+  const sortDirect = params.sortDirect === '-1' ? SortDirect.LowToHigh : SortDirect.HighToLow;
+  const currentPage = params.currentPage ? Number(params.currentPage) : CURRENT_PAGE_INIT;
+
   const userPrice = {
     priceMin: urlPriceMin,
     priceMax: urlPriceMax,
   };
-  delete params.priceMin;
-  delete params.priceMax;
 
-  return {checkboxStore, userPrice, isFilter: true, sortKey: SortKey.Price, sortDirect: SortDirect.HighToLow, currentPage: 1};
+  // необходимо типизировать без "заглушки"
+  return {checkboxStore, userPrice, isFilter, sortKey, sortDirect, currentPage, locationSearch: '', reset: false};
 };
