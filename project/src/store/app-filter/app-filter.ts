@@ -4,7 +4,7 @@ import {
   CHECKBOX_GUITAR_TYPE,
   CHECKBOX_STRING_TYPE,
   COMMENT_COUNT_INIT,
-  CURRENT_PAGE_INIT, NO_PARAMS,
+  CURRENT_PAGE_INIT,
   SortDirect,
   SortKey
 } from '../../common/const';
@@ -153,20 +153,12 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
       if (locationSearch) {
         state.locationSearch = locationSearch;
         const parseResult = parseUrlParams(locationSearch);
-
         state.checkboxStore = parseResult.checkboxStore;
         state.price = {...state.price, userPrice: parseResult.userPrice};
         state.isFilter = parseResult.isFilter;
         state.sortKey = parseResult.sortKey;
         state.sortDirect = parseResult.sortDirect;
         state.currentPage = parseResult.currentPage;
-
-        // eslint-disable-next-line no-console
-        console.log(parseResult);
-      }
-
-      if (locationSearch === NO_PARAMS) {
-        state.locationSearch = '';
         isFilterChain = true;
       }
 

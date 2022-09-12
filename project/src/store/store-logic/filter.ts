@@ -1,5 +1,4 @@
-import {AppFilterType, CheckboxStoreType} from '../app-filter/app-filter';
-import {parseUrlParams} from '../../common/parse-url-params';
+import {AppFilterType} from '../app-filter/app-filter';
 import {disableCheckbox} from '../../common/disable-checkbox';
 import {CARD_COUNT, CHECKBOX_GUITAR_TYPE, CHECKBOX_STRING_TYPE} from '../../common/const';
 import {getCheckboxStrings} from '../../common/get-checkbox-strings';
@@ -42,7 +41,4 @@ export class Filter {
     const paginationPages = getIntegersArrayFromTo(startEndPage.startPage, startEndPage.endPage);
     return {currentPage, paginationPages};
   };
-
-  static parseUrl = (searchUrl: string, checkbox: CheckboxStoreType) => parseUrlParams (searchUrl, checkbox);
-
 }
