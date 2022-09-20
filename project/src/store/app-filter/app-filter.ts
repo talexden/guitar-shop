@@ -5,7 +5,7 @@ import {
   CHECKBOX_GUITAR_TYPE,
   CHECKBOX_STRING_TYPE,
   COMMENT_COUNT_INIT,
-  CURRENT_PAGE_INIT,
+  CURRENT_PAGE_INIT, NO_PARAMS,
   SortDirect,
   SortKey
 } from '../../common/const';
@@ -151,6 +151,7 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
       const resetFilter = reset || false;
       let isFilterChain = false;
 
+
       if (locationSearch) {
         state.locationSearch = locationSearch;
         const parseResult = parseUrlParams(locationSearch);
@@ -207,13 +208,8 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
       state.currentPage = resultPagination.currentPage;
       state.paginationPages = resultPagination.paginationPages;
       state.urlSearch = createUrlSearch(state);
-
-
-      if ( locationSearch && state.locationSearch !== state.urlSearch) {
-      } else {
-        if (state.urlSearch && !locationSearch) {
-          browserHistory.push(state.urlSearch);
-        }
+      if (locationSearch !== NO_PARAMS) {
+        browserHistory.push(state.urlSearch);
       }
     })
 

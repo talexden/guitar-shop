@@ -9,13 +9,15 @@ export const parseUrlParams = (searchUrl: string): Required<FilterType> => {
   let checkboxStore = checkboxStoreInit;
   if (params !== {}) {
     Object.keys(params).forEach((param)=>{
-      const checkboxIsChecked = {...checkboxStore[param], isChecked: true};
-      checkboxStore = {...checkboxStore, [param]: checkboxIsChecked};
+      if (checkboxStore[param]) {
+        const checkboxIsChecked = {...checkboxStore[param], isChecked: true};
+        checkboxStore = {...checkboxStore, [param]: checkboxIsChecked};
+      }
     });
   }
 
   const urlPriceMin = params.priceMin ? params.priceMin : '';
-  const urlPriceMax = params.priceMax ? params.priceMin : '';
+  const urlPriceMax = params.priceMax ? params.priceMax : '';
   const isFilter = Boolean(params.isFilter);
   const sortKey = params.sortKey === 'rating' ? SortKey.Rating : SortKey.Price;
   const sortDirect = params.sortDirect === '-1' ? SortDirect.HighToLow : SortDirect.LowToHigh;

@@ -165,7 +165,7 @@ export const priceInput = {
   },
 };
 
-export const NO_PARAMS = 'no params';
+export const NO_PARAMS = 'no-params=true';
 export const CURRENT_PAGE_INIT = 1;
 export const COMMENT_COUNT_INIT = 0;
 export const PAGINATION_COUNT = 3;

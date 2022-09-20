@@ -14,7 +14,6 @@ export const fetchGuitars = (): ThunkActionResult =>
       const guitars = data.map(Adapter.adaptToClient);
       dispatch(setGuitars(guitars));
       const locationSearch = window.location.search || NO_PARAMS;
-
       dispatch(setFilter({locationSearch}));
       dispatch(setIsLoaded());
     } catch (error) {
