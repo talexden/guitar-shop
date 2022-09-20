@@ -1,7 +1,7 @@
 import {toast} from 'react-toastify';
 import {mockGuitarsLongArray} from '../common/mock/mock-guitars';
 import {Adapter} from '../components/adapter/adapter';
-import {APIRoute, ErrorTexts, RESET_FILTER} from '../common/const';
+import {APIRoute, ErrorTexts, NO_PARAMS} from '../common/const';
 import {ThunkActionResult} from '../types/action-type';
 import {setCheckboxStore, setCurrentGuitar, setFilter, setGuitars, setIsLoaded, setIsLoading} from './action';
 import {checkboxStoreInit} from './app-filter/app-filter';
@@ -13,7 +13,9 @@ export const fetchGuitars = (): ThunkActionResult =>
       const {data} = await api.get(`${APIRoute.Guitars}?_embed=comments`);
       const guitars = data.map(Adapter.adaptToClient);
       dispatch(setGuitars(guitars));
-      dispatch(setFilter(RESET_FILTER));
+      const locationSearch = window.location.search || NO_PARAMS;
+
+      dispatch(setFilter({locationSearch}));
       dispatch(setIsLoaded());
     } catch (error) {
       dispatch(setGuitars(mockGuitarsLongArray)); // моки, удалить

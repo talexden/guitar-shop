@@ -18,7 +18,7 @@ export const parseUrlParams = (searchUrl: string): Required<FilterType> => {
   const urlPriceMax = params.priceMax ? params.priceMin : '';
   const isFilter = Boolean(params.isFilter);
   const sortKey = params.sortKey === 'rating' ? SortKey.Rating : SortKey.Price;
-  const sortDirect = params.sortDirect === '-1' ? SortDirect.LowToHigh : SortDirect.HighToLow;
+  const sortDirect = params.sortDirect === '-1' ? SortDirect.HighToLow : SortDirect.LowToHigh;
   const currentPage = params.currentPage ? Number(params.currentPage) : CURRENT_PAGE_INIT;
 
   const userPrice = {

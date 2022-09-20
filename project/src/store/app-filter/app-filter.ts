@@ -1,6 +1,7 @@
 import {createReducer} from '@reduxjs/toolkit';
 import {CheckboxType} from '../../types/const-type';
 import {
+  AppRoute,
   CHECKBOX_GUITAR_TYPE,
   CHECKBOX_STRING_TYPE,
   COMMENT_COUNT_INIT,
@@ -146,7 +147,7 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
 
     .addCase(setFilter, (state, action) => {
       const filter = action.payload;
-      const {checkboxStore, userPrice, isFilter, sortKey, sortDirect, currentPage, locationSearch, reset} = filter;
+      const {checkboxStore, userPrice, sortKey, sortDirect, currentPage, locationSearch, reset} = filter;
       const resetFilter = reset || false;
       let isFilterChain = false;
 
@@ -167,6 +168,7 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
         state.price = PRICE_STORE_INIT;
         state.isFilter = false;
         state.currentPage = CURRENT_PAGE_INIT;
+        browserHistory.push(`${AppRoute.Catalog}${state.currentPage}`);
         isFilterChain = true;
       }
 
@@ -184,11 +186,18 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
         isFilterChain = true;
       }
 
-      if (isFilter) { state.isFilter = isFilter;}
-      if (sortKey) { state.sortKey = sortKey;}
-      if (sortDirect) { state.sortDirect = sortDirect;}
+      if (sortKey) {
+        state.sortKey = sortKey;
+        state.isFilter = true;
+        isFilterChain = true;
+      }
+      if (sortDirect) {
+        state.sortDirect = sortDirect;
+        state.isFilter = true;
+        isFilterChain = true;
+      }
 
-      if (sortKey || sortDirect || isFilterChain) {
+      if (isFilterChain) {
         const resultSort = Filter.sort(state);
         state.sortedGuitars = resultSort.sortedGuitars;
         state.sortedByPages = resultSort.sortedByPages;
@@ -201,12 +210,6 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
 
 
       if ( locationSearch && state.locationSearch !== state.urlSearch) {
-        // eslint-disable-next-line no-console
-        console.log('wrong parsing');
-        // eslint-disable-next-line no-console
-        console.log(state.locationSearch);
-        // eslint-disable-next-line no-console
-        console.log(state.urlSearch);
       } else {
         if (state.urlSearch && !locationSearch) {
           browserHistory.push(state.urlSearch);

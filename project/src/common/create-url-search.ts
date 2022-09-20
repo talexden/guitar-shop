@@ -20,6 +20,7 @@ export const createUrlSearch = ({checkboxStore, price, isFilter, sortKey, sortDi
   if (isFilter) {
     params.push(`sortKey=${sortKey}`);
     params.push(`sortDirect=${sortDirect}`);
+    params.push(`isFilter=${isFilter}`);
   }
 
   const search = `?${params.join('&')}`;
