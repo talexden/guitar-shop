@@ -4,7 +4,8 @@ import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 import {render, screen} from '@testing-library/react';
 import {mockGuitar, mockGuitars} from '../../common/mock/mock-guitars';
-import MainScreen from './main-screen';
+import ScreenTemplate from './screen-template';
+import {ScreenTemplateTitle} from '../../common/const';
 
 const mockStore = configureMockStore();
 const history = createMemoryHistory();
@@ -41,7 +42,7 @@ describe('Component: CatalogSort', () => {
     render(
       <Provider store={store}>
         <Router history={history}>
-          <MainScreen />
+          <ScreenTemplate title={ScreenTemplateTitle.Catalog}/>
         </Router>
       </Provider>);
 

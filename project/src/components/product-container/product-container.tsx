@@ -1,9 +1,10 @@
 import {getTripleNumberString} from '../../common/utils';
 import {StarRating} from '../star-rating/star-rating';
-import {StarRatingClassName} from '../../common/const';
-import {GuitarType} from '../../types/stateType';
+import {GUITAR_NULL, StarRatingClassName} from '../../common/const';
 import {MouseEvent} from 'react';
 import Tabs from '../tabs/tabs';
+import {useSelector} from 'react-redux';
+import {getCurrentGuitar} from '../../store/app-filter/selectors';
 
 const STYLE = {
   height: 'inherit',
@@ -11,11 +12,9 @@ const STYLE = {
   margin: 'auto',
 };
 
-type ProductContainerType = {
-  currentGuitar: GuitarType,
-}
 
-function  ProductContainer({currentGuitar}: ProductContainerType): JSX.Element {
+function  ProductContainer(): JSX.Element {
+  const currentGuitar = useSelector(getCurrentGuitar) || GUITAR_NULL;
   const {previewImg, name, rating, price, comments} = currentGuitar;
 
   const handleOnClickCart = (evt: MouseEvent<HTMLElement>) => {

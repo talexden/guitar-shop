@@ -3,15 +3,26 @@ import {render, screen} from '@testing-library/react';
 import {Router} from 'react-router-dom';
 import ProductContainer from './product-container';
 import {mockGuitar} from '../../common/mock/mock-guitars';
+import {Provider} from 'react-redux';
+import {configureMockStore} from '@jedmao/redux-mock-store';
 
+const mockStore = configureMockStore();
 const history = createMemoryHistory();
 
 describe('Component: ProductContainer', () => {
   it('should render correctly', () => {
+    const store = mockStore({
+      FILTER: {
+        currentGuitar: mockGuitar,
+      },
+    });
+
     render(
-      <Router history={history}>
-        <ProductContainer currentGuitar={mockGuitar}/>
-      </Router>);
+      <Provider store={store}>
+        <Router history={history}>
+          <ProductContainer/>
+        </Router>
+      </Provider>);
 
     expect(screen.getByText(/CURT Z300/i)).toBeInTheDocument();
     expect(screen.getByText('1')).toBeInTheDocument();
@@ -32,10 +43,18 @@ describe('Component: ProductContainer', () => {
   });
 
   it('should render correctly with loading', () => {
+    const store = mockStore({
+      FILTER: {
+        currentGuitar: mockGuitar,
+      },
+    });
+
     render(
-      <Router history={history}>
-        <ProductContainer currentGuitar={mockGuitar}/>
-      </Router>);
+      <Provider store={store}>
+        <Router history={history}>
+          <ProductContainer />
+        </Router>
+      </Provider>);
 
     expect(screen.getByText(/Loading .../i)).toBeInTheDocument();
   });

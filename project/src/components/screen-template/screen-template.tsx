@@ -6,13 +6,18 @@ import Footer from '../footer/footer';
 import LoadingScreen from '../loading-screen/loading-screen';
 import ModalScreen from '../modal-screen/modal-screen';
 import {getModal} from '../../store/app-process/selector';
-import Catalog from '../catalog/catalog';
+import {ReactNode} from 'react';
+import {ScreenTemplateTitle} from '../../common/const';
 
-const GOOD = 'Товар';
+type MainScreenProps = {
+  children?: ReactNode,
+  title: ScreenTemplateTitle,
+}
 
-function  MainScreen(): JSX.Element {
+function  ScreenTemplate({children, title}: MainScreenProps): JSX.Element {
   const isLoading = useSelector(getIsLoading);
   const modal = useSelector(getModal);
+
   if (isLoading) {
     return (<LoadingScreen />);
   } else {
@@ -21,9 +26,9 @@ function  MainScreen(): JSX.Element {
         <Header />
         <main className='page-content'>
           <div className='container'>
-            <h1 className='page-content__title title title--bigger'>Каталог гитар</h1>
-            <Breadcrumbs breadcrumbs={GOOD}/>
-            <Catalog />
+            <h1 className='page-content__title title title--bigger'>{title}</h1>
+            <Breadcrumbs screenTemplateTitle={title}/>
+            {children}
           </div>
         </main>
         <Footer />
@@ -33,4 +38,4 @@ function  MainScreen(): JSX.Element {
   }
 }
 
-export default  MainScreen;
+export default  ScreenTemplate;

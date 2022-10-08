@@ -52,7 +52,7 @@ function  ReviewsList(): JSX.Element {
 
   // When the user scrolls down - click button
   window.onscroll = function() {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 1) {
       handleShowMore();
     }
   };

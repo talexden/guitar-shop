@@ -26,6 +26,13 @@ export enum NavigationLabel {
   Shops = 'Где купить',
 }
 
+export enum ScreenTemplateTitle {
+  Catalog = 'Каталог гитар',
+  Product = 'Товар',
+  Cart = 'Корзина',
+}
+
+
 export const navigationItems = [
   {
     url: AppRoute.Catalog,

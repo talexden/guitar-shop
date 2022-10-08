@@ -55,9 +55,17 @@ export const setSearchKey = createAction(
     {payload: searchKey}
   ));
 
-export const setIsLoading = createAction(ActionType.SetIsLoading);
-export const setIsLoaded = createAction(ActionType.SetIsLoaded);
+export const setIsLoading = createAction(
+  ActionType.SetIsLoading,
+  (isLoading: boolean)=>(
+    {payload: isLoading}
+  ));
 
+export const setIsCurrentGuitarLoading = createAction(
+  ActionType.SetIsCurrentGuitarLoading,
+  (isLoading: boolean)=>(
+    {payload: isLoading}
+  ));
 
 export const setCheckboxStore = createAction(
   ActionType.SetCheckboxStore,

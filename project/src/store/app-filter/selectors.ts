@@ -12,6 +12,7 @@ export const getCommentCount = (state: StateType): number => state[NameSpace.Fil
 export const getCurrentGuitar = (state: StateType): GuitarType | null => state[NameSpace.Filter].currentGuitar;
 export const getCurrentNavigationLabel = (state: StateType): string => state[NameSpace.Filter].currentNavigationLabel;
 export const getCurrentPage = (state: StateType): number => state[NameSpace.Filter].currentPage;
+export const getIsCurrentGuitarLoading = (state: StateType): boolean => state[NameSpace.Filter].isCurrentGuitarLoading;
 export const getIsFilter = (state: StateType): boolean => state[NameSpace.Filter].isFilter;
 export const getIsLoading = (state: StateType): boolean => state[NameSpace.Filter].isLoading;
 export const getPaginationPages = (state: StateType): number[] => state[NameSpace.Filter].paginationPages;

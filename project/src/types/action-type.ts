@@ -9,7 +9,7 @@ export enum ActionType {
   RedirectToRoute = '/redirectToRoute',
   SetFilter = '/setFilter',
   SetIsLoading = '/setIsLoading',
-  SetIsLoaded = '/setIsLoaded',
+  SetIsCurrentGuitarLoading = '/setIsCurrentGuitarLoading',
   SetCartItem = '/setCartItem',
   SetSelectGuitar = '/setSelectGuitar',
   SetGuitars = '/setGuitars',

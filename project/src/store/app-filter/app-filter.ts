@@ -14,17 +14,21 @@ import {CommentPostType, CouponPostType, GuitarType, OrderPostType} from '../../
 import {
   setGuitars,
   setIsLoading,
-  setIsLoaded,
   setCurrentGuitar,
   setSearchedGuitars,
   setCurrentNavigationLabel,
-  setCommentCount, redirectToRoute, setFilter
+  setCommentCount,
+  redirectToRoute,
+  setFilter,
+  setIsCurrentGuitarLoading,
+  setSearchKey
 } from '../action';
 import {sortCommentsByDate} from '../../common/sort';
 import {Filter} from '../store-logic/filter';
 import {createUrlSearch} from '../../common/create-url-search';
 import browserHistory from '../../browser-history';
 import {parseUrlParams} from '../../common/parse-url-params';
+import {search} from '../../common/search';
 
 
 export type CheckboxStoreType = {
@@ -46,12 +50,12 @@ export type PriceStoreType = {
 
 export type AppFilterType = {
   guitars: GuitarType[],
+  isFilter: boolean,
   isLoading: boolean,
+  isCurrentGuitarLoading: boolean,
   price: PriceStoreType
   filteredByCheckbox: GuitarType[],
   checkboxStore: CheckboxStoreType,
-  isStringChecked: boolean,
-  isTypeChecked: boolean,
   filteredByPrice: GuitarType[];
   sortedGuitars: GuitarType[],
   searchedGuitars: GuitarType[],
@@ -60,7 +64,6 @@ export type AppFilterType = {
   orderPost: OrderPostType | null,
   sortKey: SortKey,
   sortDirect: SortDirect,
-  isFilter: boolean,
   sortedByPages: GuitarType[][],
   currentGuitar: GuitarType | null,
   commentCount: number;
@@ -105,12 +108,12 @@ export const PRICE_STORE_INIT: PriceStoreType = {
 
 const initialStore: AppFilterType = {
   guitars: [],
+  isCurrentGuitarLoading: false,
+  isFilter: false,
   isLoading: false,
   price: PRICE_STORE_INIT,
   filteredByCheckbox: [],
   checkboxStore: checkboxStoreInit,
-  isStringChecked: false,
-  isTypeChecked: false,
   filteredByPrice: [],
   sortedGuitars: [],
   searchedGuitars: [],
@@ -119,7 +122,6 @@ const initialStore: AppFilterType = {
   orderPost: null,
   sortKey: SortKey.Price,
   sortDirect: SortDirect.LowToHigh,
-  isFilter: false,
   sortedByPages: [],
   currentGuitar: null,
   commentCount: COMMENT_COUNT_INIT,
@@ -213,8 +215,14 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
       }
     })
 
-    .addCase(setIsLoading, (state) => {state.isLoading = true;})
-    .addCase(setIsLoaded, (state) => {state.isLoading = false;})
+    .addCase(setIsLoading, (state, action) => {
+      state.isLoading = action.payload;
+    })
+
+    .addCase(setIsCurrentGuitarLoading, (state, action) => {
+      state.isCurrentGuitarLoading = action.payload;
+    })
+
 
     .addCase(setCurrentGuitar, (state, action) => {
       const currentGuitar = action.payload;
@@ -228,6 +236,13 @@ export const AppFilter = createReducer(initialStore, (builder)=>{
 
     .addCase(setSearchedGuitars, (state, action) => {
       state.searchedGuitars = action.payload;
+    })
+
+    .addCase(setSearchKey, (state, action) => {
+      const searchKey = action.payload;
+      const searchedGuitars = search(state.guitars, searchKey);
+      state.searchKey = searchKey;
+      state.searchedGuitars = searchedGuitars;
     })
 
     .addCase(setCurrentNavigationLabel, (state, action) => {

@@ -3,16 +3,15 @@ import {render, screen} from '@testing-library/react';
 import {Route, Router, Switch} from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import Breadcrumbs from './breadcrumbs';
-import {AppRoute, NavigationLabel} from '../../common/const';
+import {AppRoute, ScreenTemplateTitle, NavigationLabel} from '../../common/const';
 
 const history = createMemoryHistory();
 describe('Component: Breadcrumbs', () => {
   it('should render correctly', () => {
-    const GOOD = 'Товар';
 
     render(
       <Router history={history}>
-        <Breadcrumbs breadcrumbs={GOOD}/>
+        <Breadcrumbs screenTemplateTitle={ScreenTemplateTitle.Catalog}/>
       </Router>);
 
 
@@ -22,7 +21,6 @@ describe('Component: Breadcrumbs', () => {
   });
 
   it('should redirect to root url when user clicked to link', () => {
-    const GOOD = 'Товар';
     render(
       <Router history={history}>
         <Switch>
@@ -36,7 +34,7 @@ describe('Component: Breadcrumbs', () => {
             <h1>This is about page</h1>
           </Route>
           <Route>
-            <Breadcrumbs breadcrumbs={GOOD}/>
+            <Breadcrumbs screenTemplateTitle={ScreenTemplateTitle.Catalog}/>
           </Route>
         </Switch>
       </Router>);

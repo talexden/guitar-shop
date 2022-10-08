@@ -1,8 +1,7 @@
 import {Link} from 'react-router-dom';
-import {AppRoute, NavigationLabel} from '../../common/const';
-import {useDispatch} from 'react-redux';
-import {MouseEvent} from 'react';
-import {redirectToRoute} from '../../store/action';
+import {AppRoute, ScreenTemplateTitle, NavigationLabel} from '../../common/const';
+import {useSelector} from 'react-redux';
+import {getCurrentGuitar} from '../../store/app-filter/selectors';
 
 const BreadcrumbsItem = [
   {
@@ -16,16 +15,24 @@ const BreadcrumbsItem = [
 ];
 
 type breadcrumbsProps = {
-  breadcrumbs: string;
+  screenTemplateTitle: ScreenTemplateTitle;
 }
 
-function  Breadcrumbs({breadcrumbs}: breadcrumbsProps): JSX.Element {
-  const dispatch = useDispatch();
+function  Breadcrumbs({screenTemplateTitle}: breadcrumbsProps): JSX.Element {
+  const currentGuitar = useSelector(getCurrentGuitar);
+  let breadcrumbsTitle = '';
 
-  const handleRedirectToCatalog = (evt: MouseEvent<HTMLAnchorElement>) => {
-    evt.preventDefault();
-    dispatch(redirectToRoute(AppRoute.Catalog));
-  };
+  switch (screenTemplateTitle) {
+    case ScreenTemplateTitle.Catalog:
+      breadcrumbsTitle = ScreenTemplateTitle.Catalog;
+      break;
+    case ScreenTemplateTitle.Product:
+      if (currentGuitar) {
+        breadcrumbsTitle = currentGuitar.name;
+      }
+      break;
+  }
+
 
   return (
     <ul className='breadcrumbs page-content__breadcrumbs' data-testid={'breadcrumbs'}>
@@ -37,10 +44,9 @@ function  Breadcrumbs({breadcrumbs}: breadcrumbsProps): JSX.Element {
       <li className='breadcrumbs__item'>
         <a
           className='link'
-          onClick={handleRedirectToCatalog}
           href={'#top'}
         >
-          {breadcrumbs}
+          {breadcrumbsTitle}
         </a>
       </li>
     </ul>
