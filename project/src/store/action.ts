@@ -1,9 +1,17 @@
 import {createAction} from '@reduxjs/toolkit';
-import {APIRoute, Modal, SortDirect, SortKey} from '../common/const';
+import {APIRoute, Modal, Quantity, SortDirect, SortKey} from '../common/const';
 import {ActionType} from '../types/action-type';
 import {GuitarType} from '../types/stateType';
 import {CheckboxStoreType, PriceType} from './app-filter/app-filter';
 
+
+export const closeModal = createAction(ActionType.CloseModal);
+
+export const removeCardItem = createAction(
+  ActionType.RemoveCardItem,
+  (guitarId: number) => (
+    {payload: guitarId}
+  ));
 
 export const redirectToRoute = createAction(
   ActionType.RedirectToRoute,
@@ -11,14 +19,20 @@ export const redirectToRoute = createAction(
     {payload: url}
   ));
 
-export const setCartItem = createAction(ActionType.SetCartItem);
+export const addCartItem = createAction(ActionType.AddCartItem);
 
-export const setSelectedGuitar = createAction(
-  ActionType.SetSelectGuitar,
+export const setCartItemQuantity = createAction(
+  ActionType.SetCartItemQuantity,
+  (guitarId: number, quantityCmd: Quantity, quantityCount: number | undefined)=>(
+    {payload: {quantityCmd, quantityCount, guitarId}}
+  ));
+
+
+export const setGuitarForCart = createAction(
+  ActionType.SetGuitarForCart,
   (guitar: GuitarType)=>(
     {payload: guitar}
   ));
-
 export const setGuitars = createAction(
   ActionType.SetGuitars,
   (guitars: GuitarType[])=>(
@@ -90,7 +104,6 @@ export const setFilter = createAction(
     {payload: filter}
   ));
 
-export const closeModal = createAction(ActionType.CloseModal);
 export const openModal = createAction(
   ActionType.OpenModal,
   (modal: Modal) => ({payload: modal}));

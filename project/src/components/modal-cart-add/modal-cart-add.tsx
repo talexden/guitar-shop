@@ -1,16 +1,17 @@
 import {useDispatch, useSelector} from 'react-redux';
 import ModalCloseButton from '../modal-close-button/modal-close-button';
-import {openModal, setCartItem} from '../../store/action';
+import {openModal, addCartItem} from '../../store/action';
 import {Modal} from '../../common/const';
-import {getSelectedGuitar} from '../../store/app-cart/selector';
+import {getGuitarForCart} from '../../store/app-cart/selector';
+import {getTripleNumberString} from '../../common/utils';
 
 
 function ModalCartAdd (): JSX.Element {
   const dispatch = useDispatch();
-  const selectedGuitar = useSelector(getSelectedGuitar);
+  const {previewImg, name, type, vendorCode, stringCount, price} = useSelector(getGuitarForCart);
 
   const handleAddToCart = () => {
-    dispatch(setCartItem);
+    dispatch(addCartItem());
     dispatch(openModal(Modal.SuccessAdd));
   };
 
@@ -18,14 +19,14 @@ function ModalCartAdd (): JSX.Element {
     <div className='modal__content'>
       <h2 className='modal__header title title--medium'>Добавить товар в корзину</h2>
       <div className='modal__info'>
-        <img className='modal__img' src={selectedGuitar.previewImg} width='67' height='137' alt={selectedGuitar.name} />
+        <img className='modal__img' src={previewImg} width='67' height='137' alt={name} />
         <div className='modal__info-wrapper'>
-          <h3 className='modal__product-name title title--little title--uppercase'>{`Гитара ${selectedGuitar.name}`}</h3>
-          <p className='modal__product-params modal__product-params--margin-11'>{`Артикул: ${selectedGuitar.vendorCode}`}</p>
-          <p className='modal__product-params'>{`${selectedGuitar.type}, ${selectedGuitar.stringCount} струнная`}</p>
+          <h3 className='modal__product-name title title--little title--uppercase'>{`Гитара ${name}`}</h3>
+          <p className='modal__product-params modal__product-params--margin-11'>{`Артикул: ${vendorCode}`}</p>
+          <p className='modal__product-params'>{`${type}, ${stringCount} струнная`}</p>
           <p className='modal__price-wrapper'>
             <span className='modal__price'>Цена:</span>
-            <span className='modal__price'>{selectedGuitar.price}</span>
+            <span className='modal__price'>{getTripleNumberString(price)} ₽</span>
           </p>
         </div>
       </div>

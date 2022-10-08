@@ -18,6 +18,7 @@ export const AppProcess = createReducer(initialState, (builder)=>{
 
     .addCase(closeModal, (state) => {
       state.modal = '';
+
     })
 
     .addCase(openModal, (state, action) => {

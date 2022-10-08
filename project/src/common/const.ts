@@ -78,6 +78,12 @@ export enum ErrorTexts {
   CommentPostFailMessage = 'Не удалось отправить комментарий. Попробуйте попозже',
 }
 
+export enum Quantity {
+  Inc = 'Increment',
+  Dec = 'Decrement',
+  Set = 'Setup',
+}
+
 export const RATING_STAR_COUNT = 5;
 
 export const FORM_SEARCH_ITEM_TAB_INDEX = 0;

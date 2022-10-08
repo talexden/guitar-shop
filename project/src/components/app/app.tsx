@@ -5,6 +5,7 @@ import browserHistory from '../../browser-history';
 import {AppRoute, CURRENT_PAGE_INIT, ScreenTemplateTitle} from '../../common/const';
 import ProductScreen from '../product-screen/product-screen';
 import Catalog from '../catalog/catalog';
+import CartScreen from '../cart-screen/cart-screen';
 
 function App(): JSX.Element {
   return (
@@ -24,6 +25,11 @@ function App(): JSX.Element {
         <Route exact path={`${AppRoute.ProductInfo}/:guitarId`}>
           <ScreenTemplate title={ScreenTemplateTitle.Product}>
             <ProductScreen />
+          </ScreenTemplate>
+        </Route>
+        <Route exact path={AppRoute.Cart}>
+          <ScreenTemplate title={ScreenTemplateTitle.Cart}>
+            <CartScreen />
           </ScreenTemplate>
         </Route>
         <Route>

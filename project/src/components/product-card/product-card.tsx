@@ -2,7 +2,7 @@ import {GuitarType} from '../../types/stateType';
 import {capitalizedString, getTripleNumberString} from '../../common/utils';
 import {StarRating} from '../star-rating/star-rating';
 import {AppRoute, Modal, StarRatingClassName} from '../../common/const';
-import {openModal, redirectToRoute, setCurrentGuitar, setSelectedGuitar} from '../../store/action';
+import {openModal, redirectToRoute, setCurrentGuitar, setGuitarForCart} from '../../store/action';
 import {useDispatch} from 'react-redux';
 import {MouseEvent} from 'react';
 import {fetchCurrentGuitar} from '../../store/api-action';
@@ -17,7 +17,7 @@ function  ProductCard({guitar}: ProductCardProps): JSX.Element {
 
   const handleAddToCart = (evt: MouseEvent<HTMLAnchorElement>) => {
     evt.preventDefault();
-    dispatch(setSelectedGuitar(guitar));
+    dispatch(setGuitarForCart(guitar));
     dispatch(openModal(Modal.CartAdd));
   };
 

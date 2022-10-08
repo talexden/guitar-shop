@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
-import {getCurrentNavigationLabel} from '../../store/app-filter/selectors';
 import {setCurrentNavigationLabel} from '../../store/action';
+import {getCurrentNavigationLabel} from '../../store/app-filter/selectors';
 
 type HeaderNavigationItemProps = {
   url: string,

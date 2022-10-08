@@ -2,18 +2,24 @@ import {useDispatch} from 'react-redux';
 import {closeModal, redirectToRoute} from '../../store/action';
 import {AppRoute} from '../../common/const';
 import ModalCloseButton from '../modal-close-button/modal-close-button';
+import {noScrollRemove} from '../../common/no-scroll';
 
 
 function ModalSuccessAdd ():JSX.Element {
   const dispatch = useDispatch();
 
-  const handleRedirectToCart  = () => {
+  const setCloseModal = () => {
+    noScrollRemove();
     dispatch(closeModal());
+  };
+
+  const handleRedirectToCart  = () => {
+    setCloseModal();
     dispatch(redirectToRoute(AppRoute.Cart));
   };
 
   const handleRedirectToCatalog = () => {
-    dispatch(closeModal());
+    setCloseModal();
     dispatch(redirectToRoute(AppRoute.Catalog));
   };
 

@@ -1,7 +1,8 @@
 import {Link} from 'react-router-dom';
-import {AppRoute, ScreenTemplateTitle, NavigationLabel} from '../../common/const';
-import {useSelector} from 'react-redux';
+import {AppRoute, NavigationLabel, RESET_FILTER, ScreenTemplateTitle} from '../../common/const';
+import {useDispatch, useSelector} from 'react-redux';
 import {getCurrentGuitar} from '../../store/app-filter/selectors';
+import {setFilter} from '../../store/action';
 
 const BreadcrumbsItem = [
   {
@@ -20,7 +21,15 @@ type breadcrumbsProps = {
 
 function  Breadcrumbs({screenTemplateTitle}: breadcrumbsProps): JSX.Element {
   const currentGuitar = useSelector(getCurrentGuitar);
+  const dispatch = useDispatch();
   let breadcrumbsTitle = '';
+
+  const  handleOnClick = (route: AppRoute) => {
+    if (route === AppRoute.Catalog) {
+      dispatch(setFilter(RESET_FILTER));
+
+    }
+  };
 
   switch (screenTemplateTitle) {
     case ScreenTemplateTitle.Catalog:
@@ -38,7 +47,13 @@ function  Breadcrumbs({screenTemplateTitle}: breadcrumbsProps): JSX.Element {
     <ul className='breadcrumbs page-content__breadcrumbs' data-testid={'breadcrumbs'}>
       {BreadcrumbsItem.map((item) => (
         <li className='breadcrumbs__item' key={`BreadcrumbsItem-${item.route}`}>
-          <Link className='link' to={item.route}>{item.label}</Link>
+          <Link
+            className='link'
+            to={item.route}
+            onClick={() => handleOnClick(item.route)}
+          >
+            {item.label}
+          </Link>
         </li>
       ))}
       <li className='breadcrumbs__item'>
